@@ -1,14 +1,24 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: 2664284991ade24499e41e08966c91d1
 ModelImporter:
   serializedVersion: 20200
+=======
+guid: 0383c60dcb9611a42978e0d373d2043b
+ModelImporter:
+  serializedVersion: 20101
+>>>>>>> Stashed changes
   internalIDToNameTable:
   - first:
       74: 1989289236423521904
     second: Default Take
   externalObjects: {}
   materials:
+<<<<<<< Updated upstream
     materialImportMode: 2
+=======
+    materialImportMode: 1
+>>>>>>> Stashed changes
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -98,7 +108,10 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+<<<<<<< Updated upstream
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+=======
+>>>>>>> Stashed changes
   additionalBone: 0
   userData: 
   assetBundleName: 

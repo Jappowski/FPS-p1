@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: 84f62bd2fc9c9b2419cac5c8dc25ebb4
 ModelImporter:
   serializedVersion: 20200
@@ -6,6 +7,15 @@ ModelImporter:
   externalObjects: {}
   materials:
     materialImportMode: 2
+=======
+guid: 6c3a9312e28b6544da066cb1122b763f
+ModelImporter:
+  serializedVersion: 20101
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+>>>>>>> Stashed changes
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -95,7 +105,10 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+<<<<<<< Updated upstream
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+=======
+>>>>>>> Stashed changes
   additionalBone: 0
   userData: 
   assetBundleName: 
