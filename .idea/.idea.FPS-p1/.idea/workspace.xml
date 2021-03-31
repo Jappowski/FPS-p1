@@ -20,22 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/New Scene.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/New Scene.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Blend/witharmature.blend.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Blend/witharmature.blend.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/Packages-Update.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Packages-Update.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/InputManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Testing.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Testing.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,8 +43,8 @@
         <option value="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" />
         <option value="$PROJECT_DIR$/Assets/_scripts/CsController.cs" />
         <option value="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
         <option value="$PROJECT_DIR$/Assets/_scripts/Target.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
       </list>
     </option>
   </component>
@@ -112,6 +99,8 @@
       <workItem from="1616710401651" duration="2018000" />
       <workItem from="1617142362103" duration="4000" />
       <workItem from="1617142405614" duration="4657000" />
+      <workItem from="1617206181665" duration="2315000" />
+      <workItem from="1617210727057" duration="748000" />
     </task>
     <servers />
   </component>
