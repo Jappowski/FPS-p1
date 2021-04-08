@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class GunShot : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class GunShot : MonoBehaviour
     private float maxAmmo = 30f;
     public float reloadTime = 3f;
     private bool isReloading = false;
+    public Text ammoUI;
+    public float maxReloadAmmo = 90f;
+    
     void start()
     {
         currentAmmo = maxAmmo;
@@ -26,6 +30,7 @@ public class GunShot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ammoUI.text = currentAmmo.ToString() + " / " + maxReloadAmmo.ToString();
         if (isReloading)
             return;
         
@@ -48,7 +53,23 @@ public class GunShot : MonoBehaviour
         yield return new WaitForSeconds(reloadTime-.25f);
         animator.SetBool("Reload", false);
         yield return new WaitForSeconds(.25f);
-        currentAmmo = maxAmmo;
+        
+
+        if (maxReloadAmmo >= 30)
+        {
+            maxReloadAmmo -= (maxAmmo - currentAmmo);
+            currentAmmo = maxAmmo;
+        }
+        else if (maxReloadAmmo == 0)
+        {
+            currentAmmo = 0;
+        }
+        else if (maxReloadAmmo < 30 && maxReloadAmmo > 0)
+        {
+            currentAmmo = maxReloadAmmo;
+            maxReloadAmmo = 0;
+        }
+        
         isReloading = false;
         animator.SetBool("Reload", false);
         
