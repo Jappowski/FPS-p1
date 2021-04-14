@@ -1,5 +1,6 @@
 
 using System.Collections;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -20,17 +21,26 @@ public class GunShot : MonoBehaviour
     private float maxAmmo = 30f;
     public float reloadTime = 3f;
     private bool isReloading = false;
-    public Text ammoUI;
+    GameObject canvas;
+    private Text ammoUi;
     public float maxReloadAmmo = 90f;
     
     void start()
     {
         currentAmmo = maxAmmo;
+
     }
-    // Update is called once per frame
+
+    void Awake()
+    {
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        Transform textTr = canvas.transform.Find("AmmoCount"); 
+        ammoUi = textTr.GetComponent<Text>();
+    }
     void Update()
     {
-        ammoUI.text = currentAmmo.ToString() + " / " + maxReloadAmmo.ToString();
+
+        ammoUi.text = currentAmmo + " / " + maxReloadAmmo; 
         if (isReloading)
             return;
         
