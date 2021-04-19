@@ -19,8 +19,6 @@ public class Target : MonoBehaviour
     void Die()
     {
         MeshRenderer my_renderer = GetComponent<MeshRenderer>();
-        my_renderer.material = Material;
-       
-        Destroy(gameObject,3);
+        Destroy(gameObject,1);
     }
 }
