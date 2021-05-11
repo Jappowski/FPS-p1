@@ -1,73 +1,70 @@
-
 using System.Collections;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GunShot : MonoBehaviour
 {
+    private Text ammoUi;
+    public Animator animator;
+    private GameObject canvas;
+
+    public float currentAmmo;
     public float damage = 25f;
     public float fireRate = 15f;
     public Camera fpsCam;
-    public ParticleSystem muzzleFlash;
     public GameObject hitEffect;
-    public Animator animator;
     public float impactForce = 100f;
-
-    private float nextShoot = 0f;
-
-    public float currentAmmo;
-    private float maxAmmo = 30f;
-    public float reloadTime = 3f;
-    private bool isReloading = false;
-    GameObject canvas;
-    private Text ammoUi;
+    private bool isReloading;
+    private readonly float maxAmmo = 30f;
     public float maxReloadAmmo = 90f;
-    
-    void start()
+    public ParticleSystem muzzleFlash;
+
+    private float nextShoot;
+    public float reloadTime = 3f;
+
+    private void start()
     {
         currentAmmo = maxAmmo;
-
     }
 
-    void Awake()
+    private void Awake()
     {
         canvas = GameObject.FindGameObjectWithTag("Canvas");
-        Transform textTr = canvas.transform.Find("AmmoCount"); 
+        var textTr = canvas.transform.Find("AmmoCount");
         ammoUi = textTr.GetComponent<Text>();
     }
-    void Update()
-    {
 
-        ammoUi.text = currentAmmo + " / " + maxReloadAmmo; 
+    private void Update()
+    {
+        ammoUi.text = currentAmmo + " / " + maxReloadAmmo;
         if (isReloading)
             return;
-        
+
         if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reload());
             return;
         }
+
         if (Input.GetButton("Fire1") && Time.time >= nextShoot)
         {
             nextShoot = Time.time + 1f / fireRate;
             Shoot();
         }
     }
-  
-    IEnumerator Reload()
+
+    private IEnumerator Reload()
     {
         isReloading = true;
         animator.SetBool("Reload", true);
-        yield return new WaitForSeconds(reloadTime-.25f);
+        yield return new WaitForSeconds(reloadTime - .25f);
         animator.SetBool("Reload", false);
         yield return new WaitForSeconds(.25f);
-        
+
 
         if (maxReloadAmmo >= 30)
         {
-            maxReloadAmmo -= (maxAmmo - currentAmmo);
+            maxReloadAmmo -= maxAmmo - currentAmmo;
             currentAmmo = maxAmmo;
         }
         else if (maxReloadAmmo == 0)
@@ -79,31 +76,24 @@ public class GunShot : MonoBehaviour
             currentAmmo = maxReloadAmmo;
             maxReloadAmmo = 0;
         }
-        
+
         isReloading = false;
         animator.SetBool("Reload", false);
-        
     }
 
-    void Shoot()
+    private void Shoot()
     {
         currentAmmo--;
         muzzleFlash.Play();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
         {
-            Target target = hit.transform.GetComponent<Target>();
-            if (target != null)
-            {
-                target.TakeDamage(damage);
-            }
+            var target = hit.transform.GetComponent<Target>();
+            if (target != null) target.TakeDamage(damage);
 
-            if (hit.rigidbody != null)
-            {
-                hit.rigidbody.AddForce(-hit.normal * impactForce);
-            }
-           GameObject ImpactGO =  Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
-           Destroy(ImpactGO, 3f);
+            if (hit.rigidbody != null) hit.rigidbody.AddForce(-hit.normal * impactForce);
+            var ImpactGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(ImpactGO, 3f);
         }
     }
 }

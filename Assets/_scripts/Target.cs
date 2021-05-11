@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Target : MonoBehaviour
@@ -10,15 +8,12 @@ public class Target : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         health -= dmg;
-        if (health <= 0f)
-        {
-            Die();
-        }
+        if (health <= 0f) Die();
     }
 
-    void Die()
+    private void Die()
     {
-        MeshRenderer my_renderer = GetComponent<MeshRenderer>();
-        Destroy(gameObject,1);
+        var my_renderer = GetComponent<MeshRenderer>();
+        Destroy(gameObject, 1);
     }
 }

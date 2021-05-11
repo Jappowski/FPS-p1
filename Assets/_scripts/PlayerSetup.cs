@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using MLAPI;
-using UnityEngine;
 
-public class PlayerSetup : NetworkBehaviour
+
+/*
+public class PlayerSetup 
 {
     [SerializeField] Behaviour[] componentsToDisable;
     [SerializeField] private GameObject playerBody;
@@ -24,3 +22,4 @@ public class PlayerSetup : NetworkBehaviour
         
     }
 }
+*/

@@ -1,290 +1,287 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CsController : MonoBehaviour
 {
-	public CharacterController controller;
-	public Transform GroundCheck;
-	public LayerMask GroundMask;
+    private float accel;
+    private float accelspeed;
+    private float addspeed;
+    public float airAcceleration = 2.0f; // Air accel
+    public float airControl = 0.3f; // How precise air control is
+    public float airDeacceleration = 2.0f; // Deacceleration experienced when opposite strafing
+    private float control;
+    public CharacterController controller;
+    private float currentspeed;
+    private float dot;
+    private float drop;
+    public float friction = 6f;
+    private readonly float gravity = -20f;
+    public Transform GroundCheck;
 
-	private float wishspeed2;
-	private float gravity = -20f;
-	float wishspeed;
+    public float GroundDistance = 0.4f;
+    public LayerMask GroundMask;
 
-	public float GroundDistance = 0.4f;
-	public float moveSpeed = 7.0f;  // Ground move speed
-	public float runAcceleration = 14f;   // Ground accel
-	public float runDeacceleration = 10f;   // Deacceleration that occurs when running on the ground
-	public float airAcceleration = 2.0f;  // Air accel
-	public float airDeacceleration = 2.0f;    // Deacceleration experienced when opposite strafing
-	public float airControl = 0.3f;  // How precise air control is
-	public float sideStrafeAcceleration = 50f;   // How fast acceleration occurs to get up to sideStrafeSpeed when side strafing
-	public float sideStrafeSpeed = 1f;    // What the max speed to generate when side strafing
-	public float jumpSpeed = 8.0f;
-	public float friction = 6f;
-	private float playerTopVelocity = 0;
-	public float playerFriction = 0f;
-	float addspeed;
-	float accelspeed;
-	float currentspeed;
-	float zspeed;
-	float speed;
-	float dot;
-	float k;
-	float accel;
-	float newspeed;
-	float control;
-	float drop;
+    public bool IsGrounded;
 
-	public bool JumpQueue = false;
-	public bool wishJump = false;
+    public bool JumpQueue;
+    public float jumpSpeed = 8.0f;
+    private float k;
 
     //UI
-	private Vector3 lastPos;
-	private Vector3 moved;
-	public Vector3 PlayerVel;
-	public float ModulasSpeed;
-	public float ZVelocity;
-	public float XVelocity;
-	//End UI
+    private Vector3 lastPos;
+    public float ModulasSpeed;
 
-	public Vector3 moveDirection;
-	public Vector3 moveDirectionNorm;
-	private Vector3 playerVelocity;
-	Vector3 wishdir;
-	Vector3 vec;
-	
-	public Transform playerView;
+    private Vector3 moved;
+    //End UI
 
-	public float x;
-	public float z;
+    public Vector3 moveDirection;
+    public Vector3 moveDirectionNorm;
+    public float moveSpeed = 7.0f; // Ground move speed
+    private float newspeed;
 
-	public bool IsGrounded;
+    public Transform player;
+    public float playerFriction;
+    private float playerTopVelocity;
+    public Vector3 PlayerVel;
+    private Vector3 playerVelocity;
 
-	public Transform player;
-	Vector3 udp;
+    public Transform playerView;
+    public float runAcceleration = 14f; // Ground accel
+    public float runDeacceleration = 10f; // Deacceleration that occurs when running on the ground
+
+    public float
+        sideStrafeAcceleration = 50f; // How fast acceleration occurs to get up to sideStrafeSpeed when side strafing
+
+    public float sideStrafeSpeed = 1f; // What the max speed to generate when side strafing
+    private float speed;
+    private Vector3 udp;
+    private Vector3 vec;
+    private Vector3 wishdir;
+    public bool wishJump;
+    private float wishspeed;
+
+    private float wishspeed2;
+
+    public float x;
+    public float XVelocity;
+    public float z;
+    private float zspeed;
+    public float ZVelocity;
 
 
     private void Start()
     {
         //This is for UI, feel free to remove the Start() function.
-		lastPos = player.position;
-	}
+        lastPos = player.position;
+    }
 
     // Update is called once per frame
-    void Update()
-	{
-		#region //UI, Feel free to remove the region.
+    private void Update()
+    {
+        #region //UI, Feel free to remove the region.
 
-		moved = player.position - lastPos;
-		lastPos = player.position;
-		PlayerVel = moved / Time.fixedDeltaTime;
+        moved = player.position - lastPos;
+        lastPos = player.position;
+        PlayerVel = moved / Time.fixedDeltaTime;
 
-		ZVelocity = Mathf.Abs(PlayerVel.z);
-		XVelocity = Mathf.Abs(PlayerVel.x);
+        ZVelocity = Mathf.Abs(PlayerVel.z);
+        XVelocity = Mathf.Abs(PlayerVel.x);
 
 
-		ModulasSpeed = Mathf.Sqrt(PlayerVel.z * PlayerVel.z + PlayerVel.x * PlayerVel.x);
+        ModulasSpeed = Mathf.Sqrt(PlayerVel.z * PlayerVel.z + PlayerVel.x * PlayerVel.x);
 
-		#endregion
+        #endregion
 
-		IsGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
+        IsGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
-		QueueJump();
+        QueueJump();
 
-		/* Movement, here's the important part */
-		if (controller.isGrounded)
-			GroundMove();
-		else if (!controller.isGrounded)
-			AirMove();
+        /* Movement, here's the important part */
+        if (controller.isGrounded)
+            GroundMove();
+        else if (!controller.isGrounded)
+            AirMove();
 
-		// Move the controller
-		controller.Move(playerVelocity * Time.deltaTime);
+        // Move the controller
+        controller.Move(playerVelocity * Time.deltaTime);
 
-		// Calculate top velocity
-		udp = playerVelocity;
-		udp.y = 0;
-		if (udp.magnitude > playerTopVelocity)
-			playerTopVelocity = udp.magnitude;
-	}
-	public void SetMovementDir()
-	{
-		x = Input.GetAxis("Horizontal");
-		z = Input.GetAxis("Vertical");
-	}
+        // Calculate top velocity
+        udp = playerVelocity;
+        udp.y = 0;
+        if (udp.magnitude > playerTopVelocity)
+            playerTopVelocity = udp.magnitude;
+    }
 
-	//Queues the next jump
-	void QueueJump()
-	{
-		if (Input.GetButtonDown("Jump") && IsGrounded)
-		{
-			wishJump = true;
-		}
+    public void SetMovementDir()
+    {
+        x = Input.GetAxis("Horizontal");
+        z = Input.GetAxis("Vertical");
+    }
 
-		if (!IsGrounded && Input.GetButtonDown("Jump"))
-		{
-			JumpQueue = true;
-		}
-		if (IsGrounded && JumpQueue)
-		{
-			wishJump = true;
-			JumpQueue = false;
-		}
-	}
+    //Queues the next jump
+    private void QueueJump()
+    {
+        if (Input.GetButtonDown("Jump") && IsGrounded) wishJump = true;
 
-	//Calculates wish acceleration
-	public void Accelerate(Vector3 wishdir, float wishspeed, float accel)
-	{
-		currentspeed = Vector3.Dot(playerVelocity, wishdir);
-		addspeed = wishspeed - currentspeed;
-		if (addspeed <= 0)
-			return;
-		accelspeed = accel * Time.deltaTime * wishspeed;
-		if (accelspeed > addspeed)
-			accelspeed = addspeed;
+        if (!IsGrounded && Input.GetButtonDown("Jump")) JumpQueue = true;
+        if (IsGrounded && JumpQueue)
+        {
+            wishJump = true;
+            JumpQueue = false;
+        }
+    }
 
-		playerVelocity.x += accelspeed * wishdir.x;
-		playerVelocity.z += accelspeed * wishdir.z;
-	}
+    //Calculates wish acceleration
+    public void Accelerate(Vector3 wishdir, float wishspeed, float accel)
+    {
+        currentspeed = Vector3.Dot(playerVelocity, wishdir);
+        addspeed = wishspeed - currentspeed;
+        if (addspeed <= 0)
+            return;
+        accelspeed = accel * Time.deltaTime * wishspeed;
+        if (accelspeed > addspeed)
+            accelspeed = addspeed;
 
-	//Execs when the player is in the air
-	public void AirMove()
-	{
-		SetMovementDir();
+        playerVelocity.x += accelspeed * wishdir.x;
+        playerVelocity.z += accelspeed * wishdir.z;
+    }
 
-		wishdir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		wishdir = transform.TransformDirection(wishdir);
+    //Execs when the player is in the air
+    public void AirMove()
+    {
+        SetMovementDir();
 
-		wishspeed = wishdir.magnitude;
+        wishdir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        wishdir = transform.TransformDirection(wishdir);
 
-		wishspeed *= 7f;
+        wishspeed = wishdir.magnitude;
 
-		wishdir.Normalize();
-		moveDirectionNorm = wishdir;
+        wishspeed *= 7f;
 
-		// Aircontrol
-		wishspeed2 = wishspeed;
-		if (Vector3.Dot(playerVelocity, wishdir) < 0)
-			accel = airDeacceleration;
-		else
-			accel = airAcceleration;
+        wishdir.Normalize();
+        moveDirectionNorm = wishdir;
 
-		// If the player is ONLY strafing left or right
-		if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") != 0)
-		{
-			if (wishspeed > sideStrafeSpeed)
-				wishspeed = sideStrafeSpeed;
-			accel = sideStrafeAcceleration;
-		}
+        // Aircontrol
+        wishspeed2 = wishspeed;
+        if (Vector3.Dot(playerVelocity, wishdir) < 0)
+            accel = airDeacceleration;
+        else
+            accel = airAcceleration;
 
-		Accelerate(wishdir, wishspeed, accel);
+        // If the player is ONLY strafing left or right
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") != 0)
+        {
+            if (wishspeed > sideStrafeSpeed)
+                wishspeed = sideStrafeSpeed;
+            accel = sideStrafeAcceleration;
+        }
 
-		AirControl(wishdir, wishspeed2);
+        Accelerate(wishdir, wishspeed, accel);
 
-		// !Aircontrol
+        AirControl(wishdir, wishspeed2);
 
-		// Apply gravity
-		playerVelocity.y += gravity * Time.deltaTime;
+        // !Aircontrol
 
-		/**
-			* Air control occurs when the player is in the air, it allows
-			* players to move side to side much faster rather than being
-			* 'sluggish' when it comes to cornering.
-			*/
+        // Apply gravity
+        playerVelocity.y += gravity * Time.deltaTime;
 
-		void AirControl(Vector3 wishdir, float wishspeed)
-		{
-			// Can't control movement if not moving forward or backward
-			if (Input.GetAxis("Horizontal") == 0 || wishspeed == 0)
-				return;
+        /**
+            * Air control occurs when the player is in the air, it allows
+            * players to move side to side much faster rather than being
+            * 'sluggish' when it comes to cornering.
+            */
 
-			zspeed = playerVelocity.y;
-			playerVelocity.y = 0;
-			/* Next two lines are equivalent to idTech's VectorNormalize() */
-			speed = playerVelocity.magnitude;
-			playerVelocity.Normalize();
+        void AirControl(Vector3 wishdir, float wishspeed)
+        {
+            // Can't control movement if not moving forward or backward
+            if (Input.GetAxis("Horizontal") == 0 || wishspeed == 0)
+                return;
 
-			dot = Vector3.Dot(playerVelocity, wishdir);
-			k = 32;
-			k *= airControl * dot * dot * Time.deltaTime;
+            zspeed = playerVelocity.y;
+            playerVelocity.y = 0;
+            /* Next two lines are equivalent to idTech's VectorNormalize() */
+            speed = playerVelocity.magnitude;
+            playerVelocity.Normalize();
 
-			// Change direction while slowing down
-			if (dot > 0)
-			{
-				playerVelocity.x = playerVelocity.x * speed + wishdir.x * k;
-				playerVelocity.y = playerVelocity.y * speed + wishdir.y * k;
-				playerVelocity.z = playerVelocity.z * speed + wishdir.z * k;
+            dot = Vector3.Dot(playerVelocity, wishdir);
+            k = 32;
+            k *= airControl * dot * dot * Time.deltaTime;
 
-				playerVelocity.Normalize();
-				moveDirectionNorm = playerVelocity;
-			}
+            // Change direction while slowing down
+            if (dot > 0)
+            {
+                playerVelocity.x = playerVelocity.x * speed + wishdir.x * k;
+                playerVelocity.y = playerVelocity.y * speed + wishdir.y * k;
+                playerVelocity.z = playerVelocity.z * speed + wishdir.z * k;
 
-			playerVelocity.x *= speed;
-			playerVelocity.y = zspeed; // Note this line
-			playerVelocity.z *= speed;
+                playerVelocity.Normalize();
+                moveDirectionNorm = playerVelocity;
+            }
 
-		}
-	}
-	/**
+            playerVelocity.x *= speed;
+            playerVelocity.y = zspeed; // Note this line
+            playerVelocity.z *= speed;
+        }
+    }
+
+    /**
 		* Called every frame when the engine detects that the player is on the ground
 		*/
-	public void GroundMove()
-	{
-		// Do not apply friction if the player is queueing up the next jump
-		if (!wishJump)
-			ApplyFriction(1.0f);
-		else
-			ApplyFriction(0);
+    public void GroundMove()
+    {
+        // Do not apply friction if the player is queueing up the next jump
+        if (!wishJump)
+            ApplyFriction(1.0f);
+        else
+            ApplyFriction(0);
 
-		SetMovementDir();
+        SetMovementDir();
 
-		wishdir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		wishdir = transform.TransformDirection(wishdir);
-		wishdir.Normalize();
-		moveDirectionNorm = wishdir;
+        wishdir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        wishdir = transform.TransformDirection(wishdir);
+        wishdir.Normalize();
+        moveDirectionNorm = wishdir;
 
-		wishspeed = wishdir.magnitude;
-		wishspeed *= moveSpeed;
+        wishspeed = wishdir.magnitude;
+        wishspeed *= moveSpeed;
 
-		Accelerate(wishdir, wishspeed, runAcceleration);
+        Accelerate(wishdir, wishspeed, runAcceleration);
 
-		// Reset the gravity velocity
-		playerVelocity.y = 0;
+        // Reset the gravity velocity
+        playerVelocity.y = 0;
 
-		if (wishJump)
-		{
-			playerVelocity.y = jumpSpeed;
-			wishJump = false;
-		}
+        if (wishJump)
+        {
+            playerVelocity.y = jumpSpeed;
+            wishJump = false;
+        }
 
-		/**
-			* Applies friction to the player, called in both the air and on the ground
-			*/
-		void ApplyFriction(float t)
-		{
-			vec = playerVelocity; // Equivalent to: VectorCopy();
-			vec.y = 0f;
-			speed = vec.magnitude;
-			drop = 0f;
+        /**
+            * Applies friction to the player, called in both the air and on the ground
+            */
+        void ApplyFriction(float t)
+        {
+            vec = playerVelocity; // Equivalent to: VectorCopy();
+            vec.y = 0f;
+            speed = vec.magnitude;
+            drop = 0f;
 
-			/* Only if the player is on the ground then apply friction */
-			if (controller.isGrounded)
-			{
-				control = speed < runDeacceleration ? runDeacceleration : speed;
-				drop = control * friction * Time.deltaTime * t;
-			}
+            /* Only if the player is on the ground then apply friction */
+            if (controller.isGrounded)
+            {
+                control = speed < runDeacceleration ? runDeacceleration : speed;
+                drop = control * friction * Time.deltaTime * t;
+            }
 
-			newspeed = speed - drop;
-			playerFriction = newspeed;
-			if (newspeed < 0)
-				newspeed = 0;
-			if (speed > 0)
-				newspeed /= speed;
+            newspeed = speed - drop;
+            playerFriction = newspeed;
+            if (newspeed < 0)
+                newspeed = 0;
+            if (speed > 0)
+                newspeed /= speed;
 
-			playerVelocity.x *= newspeed;
-			// playerVelocity.y *= newspeed;
-			playerVelocity.z *= newspeed;
-		}
-	}
+            playerVelocity.x *= newspeed;
+            // playerVelocity.y *= newspeed;
+            playerVelocity.z *= newspeed;
+        }
+    }
 }

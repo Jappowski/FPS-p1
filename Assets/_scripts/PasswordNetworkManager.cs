@@ -1,12 +1,6 @@
 
-using System;
-using System.Text;
-using TMPro;
-using UnityEngine;
-using UnityEngine.Networking.Types;
-using MLAPI;
-using UnityEngine.UIElements;
 
+/*
 public class PasswordNetworkManager : MonoBehaviour
 {
   [SerializeField] TMP_InputField passwordInputField;
@@ -114,3 +108,4 @@ public class PasswordNetworkManager : MonoBehaviour
     }
   }
 }
+*/
