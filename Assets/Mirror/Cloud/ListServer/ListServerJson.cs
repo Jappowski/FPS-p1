@@ -19,49 +19,43 @@ namespace Mirror.Cloud.ListServerService
         public int maxPlayerCount;
 
         /// <summary>
-        ///     optional
+        /// optional
         /// </summary>
         public string displayName;
 
         /// <summary>
-        ///     Uri string of the ip and port of the server.
-        ///     <para>The ip is calculated by the request to the API</para>
-        ///     <para>This is returns from the api, any incoming address fields will be ignored</para>
+        /// Uri string of the ip and port of the server.
+        /// <para>The ip is calculated by the request to the API</para>
+        /// <para>This is returns from the api, any incoming address fields will be ignored</para>
         /// </summary>
         public string address;
 
         /// <summary>
-        ///     Can be used to set custom uri
-        ///     <para>optional</para>
+        /// Can be used to set custom uri
+        /// <para>optional</para>
         /// </summary>
         public string customAddress;
 
         /// <summary>
-        ///     Array of custom data, use SetCustomData to set values
-        ///     <para>optional</para>
+        /// Array of custom data, use SetCustomData to set values
+        /// <para>optional</para>
         /// </summary>
         public KeyValue[] customData;
 
         /// <summary>
-        ///     Uri from address field
+        /// Uri from address field
         /// </summary>
         /// <returns></returns>
-        public Uri GetServerUri()
-        {
-            return new Uri(address);
-        }
+        public Uri GetServerUri() => new Uri(address);
 
         /// <summary>
-        ///     Uri from customAddress field
+        /// Uri from customAddress field
         /// </summary>
         /// <returns></returns>
-        public Uri GetCustomUri()
-        {
-            return new Uri(customAddress);
-        }
+        public Uri GetCustomUri() => new Uri(customAddress);
 
         /// <summary>
-        ///     Updates the customData array
+        /// Updates the customData array
         /// </summary>
         /// <param name="data"></param>
         public void SetCustomData(Dictionary<string, string> data)
@@ -107,23 +101,23 @@ namespace Mirror.Cloud.ListServerService
     public struct PartialServerJson : ICanBeJson
     {
         /// <summary>
-        ///     optional
+        /// optional
         /// </summary>
         public int playerCount;
 
         /// <summary>
-        ///     optional
+        /// optional
         /// </summary>
         public int maxPlayerCount;
 
         /// <summary>
-        ///     optional
+        /// optional
         /// </summary>
         public string displayName;
 
         /// <summary>
-        ///     Array of custom data, use SetCustomData to set values
-        ///     <para>optional</para>
+        /// Array of custom data, use SetCustomData to set values
+        /// <para>optional</para>
         /// </summary>
         public KeyValue[] customData;
 
@@ -149,13 +143,12 @@ namespace Mirror.Cloud.ListServerService
 
     public static class CustomDataHelper
     {
-        private const int MaxCustomData = 16;
+        const int MaxCustomData = 16;
 
         public static Dictionary<string, string> ToDictionary(this KeyValue[] keyValues)
         {
             return keyValues.ToDictionary(x => x.key, x => x.value);
         }
-
         public static KeyValue[] ToKeyValueArray(this Dictionary<string, string> dictionary)
         {
             return dictionary.Select(kvp => new KeyValue(kvp.Key, kvp.Value)).ToArray();
@@ -163,24 +156,29 @@ namespace Mirror.Cloud.ListServerService
 
         public static void ValidateCustomData(KeyValue[] customData)
         {
-            if (customData == null) return;
+            if (customData == null)
+            {
+                return;
+            }
 
             if (customData.Length > MaxCustomData)
             {
-                Logger.LogError(
-                    $"There can only be {MaxCustomData} custom data but there was {customData.Length} values given");
+                Logger.LogError($"There can only be {MaxCustomData} custom data but there was {customData.Length} values given");
                 Array.Resize(ref customData, MaxCustomData);
             }
 
-            foreach (var item in customData) item.Validate();
+            foreach (KeyValue item in customData)
+            {
+                item.Validate();
+            }
         }
     }
 
     [Serializable]
     public struct KeyValue
     {
-        private const int MaxKeySize = 32;
-        private const int MaxValueSize = 256;
+        const int MaxKeySize = 32;
+        const int MaxValueSize = 256;
 
         public string key;
         public string value;

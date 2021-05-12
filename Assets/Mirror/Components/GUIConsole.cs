@@ -12,13 +12,12 @@
 //
 // Note: normal Debug.Log messages can be shown by building in Debug/Development
 //       mode.
-
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Mirror
 {
-    internal struct LogEntry
+    struct LogEntry
     {
         public string message;
         public LogType type;
@@ -34,23 +33,23 @@ namespace Mirror
     {
         public int height = 150;
 
+        // only keep the recent 'n' entries. otherwise memory would grow forever
+        // and drawing would get slower and slower.
+        public int maxLogCount = 50;
+
+        // log as queue so we can remove the first entry easily
+        Queue<LogEntry> log = new Queue<LogEntry>();
+
         // hotkey to show/hide at runtime for easier debugging
         // (sometimes we need to temporarily hide/show it)
         // => F12 makes sense. nobody can find ^ in other games.
         public KeyCode hotKey = KeyCode.F12;
 
-        // log as queue so we can remove the first entry easily
-        private readonly Queue<LogEntry> log = new Queue<LogEntry>();
-
-        // only keep the recent 'n' entries. otherwise memory would grow forever
-        // and drawing would get slower and slower.
-        public int maxLogCount = 50;
-        private Vector2 scroll = Vector2.zero;
-
         // GUI
-        private bool visible;
+        bool visible;
+        Vector2 scroll = Vector2.zero;
 
-        private void Awake()
+        void Awake()
         {
             Application.logMessageReceived += OnLog;
         }
@@ -58,10 +57,10 @@ namespace Mirror
         // OnLog logs everything, even Debug.Log messages in release builds
         // => this makes a lot of things easier. e.g. addon initialization logs.
         // => it's really better to have than not to have those
-        private void OnLog(string message, string stackTrace, LogType type)
+        void OnLog(string message, string stackTrace, LogType type)
         {
             // is this important?
-            var isImportant = type == LogType.Error || type == LogType.Exception;
+            bool isImportant = type == LogType.Error || type == LogType.Exception;
 
             // use stack trace only if important
             // (otherwise users would have to find and search the log file.
@@ -86,18 +85,18 @@ namespace Mirror
             scroll.y = float.MaxValue;
         }
 
-        private void Update()
+        void Update()
         {
             if (Input.GetKeyDown(hotKey))
                 visible = !visible;
         }
 
-        private void OnGUI()
+        void OnGUI()
         {
             if (!visible) return;
 
             scroll = GUILayout.BeginScrollView(scroll, "Box", GUILayout.Width(Screen.width), GUILayout.Height(height));
-            foreach (var entry in log)
+            foreach (LogEntry entry in log)
             {
                 if (entry.type == LogType.Error || entry.type == LogType.Exception)
                     GUI.color = Color.red;
@@ -107,7 +106,6 @@ namespace Mirror
                 GUILayout.Label(entry.message);
                 GUI.color = Color.white;
             }
-
             GUILayout.EndScrollView();
         }
     }

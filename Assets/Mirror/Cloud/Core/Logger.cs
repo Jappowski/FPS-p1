@@ -11,20 +11,24 @@ namespace Mirror.Cloud
         public static void LogRequest(string page, string method, bool hasJson, string json)
         {
             if (hasJson)
+            {
                 Debug.LogFormat("Request: {0} {1} {2}", method, page, json);
+            }
             else
+            {
                 Debug.LogFormat("Request: {0} {1}", method, page);
+            }
         }
 
         public static void LogResponse(UnityWebRequest statusRequest)
         {
-            var code = statusRequest.responseCode;
+            long code = statusRequest.responseCode;
 
-            var format = "Response: {0} {1} {2} {3}";
+            string format = "Response: {0} {1} {2} {3}";
             // we split path like this to make sure api key doesn't leak
-            var uri = new Uri(statusRequest.url);
-            var path = string.Join("", uri.Segments);
-            var msg = string.Format(format, statusRequest.method, code, path, statusRequest.downloadHandler.text);
+            Uri uri = new Uri(statusRequest.url);
+            string path = string.Join("", uri.Segments);
+            string msg = string.Format(format, statusRequest.method, code, path, statusRequest.downloadHandler.text);
             Debug.Log(msg);
 
             if (!string.IsNullOrEmpty(statusRequest.error))

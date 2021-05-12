@@ -4,7 +4,7 @@ using Mono.CecilX.Cil;
 namespace Mirror.Weaver
 {
     /// <summary>
-    ///     Processes [TargetRpc] methods in NetworkBehaviour
+    /// Processes [TargetRpc] methods in NetworkBehaviour
     /// </summary>
     public static class TargetRpcProcessor
     {
@@ -15,16 +15,15 @@ namespace Mirror.Weaver
                    md.Parameters[0].ParameterType.Is<NetworkConnection>();
         }
 
-        public static MethodDefinition ProcessTargetRpcInvoke(TypeDefinition td, MethodDefinition md,
-            MethodDefinition rpcCallFunc)
+        public static MethodDefinition ProcessTargetRpcInvoke(TypeDefinition td, MethodDefinition md, MethodDefinition rpcCallFunc)
         {
-            var rpc = new MethodDefinition(Weaver.InvokeRpcPrefix + md.Name, MethodAttributes.Family |
-                                                                             MethodAttributes.Static |
-                                                                             MethodAttributes.HideBySig,
+            MethodDefinition rpc = new MethodDefinition(Weaver.InvokeRpcPrefix + md.Name, MethodAttributes.Family |
+                    MethodAttributes.Static |
+                    MethodAttributes.HideBySig,
                 WeaverTypes.Import(typeof(void)));
 
-            var worker = rpc.Body.GetILProcessor();
-            var label = worker.Create(OpCodes.Nop);
+            ILProcessor worker = rpc.Body.GetILProcessor();
+            Instruction label = worker.Create(OpCodes.Nop);
 
             NetworkBehaviourProcessor.WriteClientActiveCheck(worker, md.Name, label, "TargetRPC");
 
@@ -34,6 +33,7 @@ namespace Mirror.Weaver
 
             // NetworkConnection parameter is optional
             if (HasNetworkConnectionParameter(md))
+            {
                 // on server, the NetworkConnection parameter is a connection to client.
                 // when the rpc is invoked on the client, it still has the same
                 // function signature. we pass in the connection to server,
@@ -44,6 +44,7 @@ namespace Mirror.Weaver
                 // a) .connectionToServer = best solution. no doubt.
                 // b) NetworkClient.connection for now. add TODO to not use static later.
                 worker.Emit(OpCodes.Call, WeaverTypes.ReadyConnectionReference);
+            }
 
             // process reader parameters and skip first one if first one is NetworkConnection
             if (!NetworkBehaviourProcessor.ReadArguments(md, worker, RemoteCallType.TargetRpc))
@@ -91,12 +92,11 @@ namespace Mirror.Weaver
             correctly in dependent assemblies
 
         */
-        public static MethodDefinition ProcessTargetRpcCall(TypeDefinition td, MethodDefinition md,
-            CustomAttribute targetRpcAttr)
+        public static MethodDefinition ProcessTargetRpcCall(TypeDefinition td, MethodDefinition md, CustomAttribute targetRpcAttr)
         {
-            var rpc = MethodProcessor.SubstituteMethod(td, md);
+            MethodDefinition rpc = MethodProcessor.SubstituteMethod(td, md);
 
-            var worker = md.Body.GetILProcessor();
+            ILProcessor worker = md.Body.GetILProcessor();
 
             NetworkBehaviourProcessor.WriteSetupLocals(worker);
 
@@ -107,17 +107,21 @@ namespace Mirror.Weaver
             if (!NetworkBehaviourProcessor.WriteArguments(worker, md, RemoteCallType.TargetRpc))
                 return null;
 
-            var rpcName = md.Name;
+            string rpcName = md.Name;
 
             // invoke SendInternal and return
             // this
             worker.Emit(OpCodes.Ldarg_0);
             if (HasNetworkConnectionParameter(md))
+            {
                 // connection
                 worker.Emit(OpCodes.Ldarg_1);
+            }
             else
+            {
                 // null
                 worker.Emit(OpCodes.Ldnull);
+            }
             worker.Emit(OpCodes.Ldtoken, td);
             // invokerClass
             worker.Emit(OpCodes.Call, WeaverTypes.getTypeFromHandleReference);

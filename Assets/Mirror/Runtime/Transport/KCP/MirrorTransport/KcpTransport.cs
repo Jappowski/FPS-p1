@@ -1,10 +1,9 @@
 //#if MIRROR <- commented out because MIRROR isn't defined on first import yet
-
 using System;
 using System.Linq;
 using System.Net;
-using Mirror;
 using UnityEngine;
+using Mirror;
 
 namespace kcp2k
 {
@@ -13,48 +12,37 @@ namespace kcp2k
     {
         // scheme used by this transport
         public const string Scheme = "kcp";
-        private KcpClient client;
-
-        [Tooltip(
-            "KCP congestion window. Enabled in normal mode, disabled in turbo mode. Disable this for high scale games if connections get choked regularly.")]
-        public bool
-            CongestionWindow =
-                false; // KCP 'NoCongestionWindow' is false by default. here we negate it for ease of use.
-
-        // debugging
-        [Header("Debug")] public bool debugLog;
-
-        [Header("Advanced")]
-        [Tooltip(
-            "KCP fastresend parameter. Faster resend for the cost of higher bandwidth. 0 in normal mode, 2 in turbo mode.")]
-        public int FastResend = 2;
-
-        [Tooltip(
-            "KCP internal update interval. 100ms is KCP default, but a lower interval is recommended to minimize latency and to scale to more networked entities.")]
-        public uint Interval = 10;
-
-        [Tooltip("NoDelay is recommended to reduce latency. This also scales better without buffers getting full.")]
-        public bool NoDelay = true;
 
         // common
-        [Header("Transport Configuration")] public ushort Port = 7777;
-
+        [Header("Transport Configuration")]
+        public ushort Port = 7777;
+        [Tooltip("NoDelay is recommended to reduce latency. This also scales better without buffers getting full.")]
+        public bool NoDelay = true;
+        [Tooltip("KCP internal update interval. 100ms is KCP default, but a lower interval is recommended to minimize latency and to scale to more networked entities.")]
+        public uint Interval = 10;
+        [Header("Advanced")]
+        [Tooltip("KCP fastresend parameter. Faster resend for the cost of higher bandwidth. 0 in normal mode, 2 in turbo mode.")]
+        public int FastResend = 2;
+        [Tooltip("KCP congestion window. Enabled in normal mode, disabled in turbo mode. Disable this for high scale games if connections get choked regularly.")]
+        public bool CongestionWindow = false; // KCP 'NoCongestionWindow' is false by default. here we negate it for ease of use.
+        [Tooltip("KCP window size can be modified to support higher loads.")]
+        public uint SendWindowSize = 4096; //Kcp.WND_SND; 32 by default. Mirror sends a lot, so we need a lot more.
         [Tooltip("KCP window size can be modified to support higher loads.")]
         public uint ReceiveWindowSize = 4096; //Kcp.WND_RCV; 128 by default. Mirror sends a lot, so we need a lot more.
 
-        [Tooltip("KCP window size can be modified to support higher loads.")]
-        public uint SendWindowSize = 4096; //Kcp.WND_SND; 32 by default. Mirror sends a lot, so we need a lot more.
-
         // server & client
-        private KcpServer server;
+        KcpServer server;
+        KcpClient client;
 
+        // debugging
+        [Header("Debug")]
+        public bool debugLog;
         // show statistics in OnGUI
         public bool statisticsGUI;
-
         // log statistics for headless servers that can't show them in GUI
         public bool statisticsLog;
 
-        private void Awake()
+        void Awake()
         {
             // logging
             //   Log.Info should use Debug.Log if enabled, or nothing otherwise
@@ -62,22 +50,22 @@ namespace kcp2k
             if (debugLog)
                 Log.Info = Debug.Log;
             else
-                Log.Info = _ => { };
+                Log.Info = _ => {};
             Log.Warning = Debug.LogWarning;
             Log.Error = Debug.LogError;
 
             // client
             client = new KcpClient(
                 () => OnClientConnected.Invoke(),
-                message => OnClientDataReceived.Invoke(message, Channels.Reliable),
+                (message) => OnClientDataReceived.Invoke(message, Channels.Reliable),
                 () => OnClientDisconnected.Invoke()
             );
 
             // server
             server = new KcpServer(
-                connectionId => OnServerConnected.Invoke(connectionId),
+                (connectionId) => OnServerConnected.Invoke(connectionId),
                 (connectionId, message) => OnServerDataReceived.Invoke(connectionId, message, Channels.Reliable),
-                connectionId => OnServerDisconnected.Invoke(connectionId),
+                (connectionId) => OnServerDisconnected.Invoke(connectionId),
                 NoDelay,
                 Interval,
                 FastResend,
@@ -93,23 +81,15 @@ namespace kcp2k
         }
 
         // all except WebGL
-        public override bool Available()
-        {
-            return Application.platform != RuntimePlatform.WebGLPlayer;
-        }
+        public override bool Available() =>
+            Application.platform != RuntimePlatform.WebGLPlayer;
 
         // client
-        public override bool ClientConnected()
-        {
-            return client.connected;
-        }
-
+        public override bool ClientConnected() => client.connected;
         public override void ClientConnect(string address)
         {
-            client.Connect(address, Port, NoDelay, Interval, FastResend, CongestionWindow, SendWindowSize,
-                ReceiveWindowSize);
+            client.Connect(address, Port, NoDelay, Interval, FastResend, CongestionWindow, SendWindowSize, ReceiveWindowSize);
         }
-
         public override void ClientSend(int channelId, ArraySegment<byte> segment)
         {
             // switch to kcp channel.
@@ -125,12 +105,7 @@ namespace kcp2k
                     break;
             }
         }
-
-        public override void ClientDisconnect()
-        {
-            client.Disconnect();
-        }
-
+        public override void ClientDisconnect() => client.Disconnect();
         // process incoming in early update
         public override void ClientEarlyUpdate()
         {
@@ -141,26 +116,22 @@ namespace kcp2k
             // (see also: https://github.com/vis2k/Mirror/pull/379)
             if (enabled) client.TickIncoming();
         }
-
         // process outgoing in late update
-        public override void ClientLateUpdate()
-        {
-            client.TickOutgoing();
-        }
+        public override void ClientLateUpdate() => client.TickOutgoing();
 
         // scene change message will disable transports.
         // kcp processes messages in an internal loop which should be
         // stopped immediately after scene change (= after disabled)
         // => kcp has tests to guaranteed that calling .Pause() during the
         //    receive loop stops the receive loop immediately, not after.
-        private void OnEnable()
+        void OnEnable()
         {
             // unpause when enabled again
             client?.Unpause();
             server?.Unpause();
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             // pause immediately when not enabled anymore
             client?.Pause();
@@ -170,23 +141,14 @@ namespace kcp2k
         // server
         public override Uri ServerUri()
         {
-            var builder = new UriBuilder();
+            UriBuilder builder = new UriBuilder();
             builder.Scheme = Scheme;
             builder.Host = Dns.GetHostName();
             builder.Port = Port;
             return builder.Uri;
         }
-
-        public override bool ServerActive()
-        {
-            return server.IsActive();
-        }
-
-        public override void ServerStart()
-        {
-            server.Start(Port);
-        }
-
+        public override bool ServerActive() => server.IsActive();
+        public override void ServerStart() => server.Start(Port);
         public override void ServerSend(int connectionId, int channelId, ArraySegment<byte> segment)
         {
             // switch to kcp channel.
@@ -202,23 +164,13 @@ namespace kcp2k
                     break;
             }
         }
-
         public override bool ServerDisconnect(int connectionId)
         {
             server.Disconnect(connectionId);
             return true;
         }
-
-        public override string ServerGetClientAddress(int connectionId)
-        {
-            return server.GetClientAddress(connectionId);
-        }
-
-        public override void ServerStop()
-        {
-            server.Stop();
-        }
-
+        public override string ServerGetClientAddress(int connectionId) => server.GetClientAddress(connectionId);
+        public override void ServerStop() => server.Stop();
         public override void ServerEarlyUpdate()
         {
             // scene change messages disable transports to stop them from
@@ -228,17 +180,11 @@ namespace kcp2k
             // (see also: https://github.com/vis2k/Mirror/pull/379)
             if (enabled) server.TickIncoming();
         }
-
         // process outgoing in late update
-        public override void ServerLateUpdate()
-        {
-            server.TickOutgoing();
-        }
+        public override void ServerLateUpdate() => server.TickOutgoing();
 
         // common
-        public override void Shutdown()
-        {
-        }
+        public override void Shutdown() {}
 
         // max message size
         public override int GetMaxPacketSize(int channelId = Channels.Reliable)
@@ -263,45 +209,26 @@ namespace kcp2k
         // network.
         // => instead we always use MTU sized batches.
         // => people can still send maxed size if needed.
-        public override int GetMaxBatchSize(int channelId)
-        {
-            return KcpConnection.UnreliableMaxMessageSize;
-        }
+        public override int GetMaxBatchSize(int channelId) =>
+            KcpConnection.UnreliableMaxMessageSize;
 
         // server statistics
-        public int GetAverageMaxSendRate()
-        {
-            return server.connections.Count > 0
-                ? server.connections.Values.Sum(conn => (int) conn.MaxSendRate) / server.connections.Count
+        public int GetAverageMaxSendRate() =>
+            server.connections.Count > 0
+                ? server.connections.Values.Sum(conn => (int)conn.MaxSendRate) / server.connections.Count
                 : 0;
-        }
-
-        public int GetAverageMaxReceiveRate()
-        {
-            return server.connections.Count > 0
-                ? server.connections.Values.Sum(conn => (int) conn.MaxReceiveRate) / server.connections.Count
+        public int GetAverageMaxReceiveRate() =>
+            server.connections.Count > 0
+                ? server.connections.Values.Sum(conn => (int)conn.MaxReceiveRate) / server.connections.Count
                 : 0;
-        }
-
-        private int GetTotalSendQueue()
-        {
-            return server.connections.Values.Sum(conn => conn.SendQueueCount);
-        }
-
-        private int GetTotalReceiveQueue()
-        {
-            return server.connections.Values.Sum(conn => conn.ReceiveQueueCount);
-        }
-
-        private int GetTotalSendBuffer()
-        {
-            return server.connections.Values.Sum(conn => conn.SendBufferCount);
-        }
-
-        private int GetTotalReceiveBuffer()
-        {
-            return server.connections.Values.Sum(conn => conn.ReceiveBufferCount);
-        }
+        int GetTotalSendQueue() =>
+            server.connections.Values.Sum(conn => conn.SendQueueCount);
+        int GetTotalReceiveQueue() =>
+            server.connections.Values.Sum(conn => conn.ReceiveQueueCount);
+        int GetTotalSendBuffer() =>
+            server.connections.Values.Sum(conn => conn.SendBufferCount);
+        int GetTotalReceiveBuffer() =>
+            server.connections.Values.Sum(conn => conn.ReceiveBufferCount);
 
         // PrettyBytes function from DOTSNET
         // pretty prints bytes as KB/MB/GB/etc.
@@ -313,16 +240,16 @@ namespace kcp2k
             if (bytes < 1024)
                 return $"{bytes} B";
             // kilobytes
-            if (bytes < 1024L * 1024L)
-                return $"{bytes / 1024f:F2} KB";
+            else if (bytes < 1024L * 1024L)
+                return $"{(bytes / 1024f):F2} KB";
             // megabytes
-            if (bytes < 1024 * 1024L * 1024L)
-                return $"{bytes / (1024f * 1024f):F2} MB";
+            else if (bytes < 1024 * 1024L * 1024L)
+                return $"{(bytes / (1024f * 1024f)):F2} MB";
             // gigabytes
-            return $"{bytes / (1024f * 1024f * 1024f):F2} GB";
+            return $"{(bytes / (1024f * 1024f * 1024f)):F2} GB";
         }
 
-        private void OnGUI()
+        void OnGUI()
         {
             if (!statisticsGUI) return;
 
@@ -358,11 +285,11 @@ namespace kcp2k
             GUILayout.EndArea();
         }
 
-        private void OnLogStatistics()
+        void OnLogStatistics()
         {
             if (ServerActive())
             {
-                var log = "kcp SERVER @ time: " + NetworkTime.time + "\n";
+                string log = "kcp SERVER @ time: " + NetworkTime.time + "\n";
                 log += $"  connections: {server.connections.Count}\n";
                 log += $"  MaxSendRate (avg): {PrettyBytes(GetAverageMaxSendRate())}/s\n";
                 log += $"  MaxRecvRate (avg): {PrettyBytes(GetAverageMaxReceiveRate())}/s\n";
@@ -375,7 +302,7 @@ namespace kcp2k
 
             if (ClientConnected())
             {
-                var log = "kcp CLIENT @ time: " + NetworkTime.time + "\n";
+                string log = "kcp CLIENT @ time: " + NetworkTime.time + "\n";
                 log += $"  MaxSendRate: {PrettyBytes(client.connection.MaxSendRate)}/s\n";
                 log += $"  MaxRecvRate: {PrettyBytes(client.connection.MaxReceiveRate)}/s\n";
                 log += $"  SendQueue: {client.connection.SendQueueCount}\n";
@@ -386,10 +313,7 @@ namespace kcp2k
             }
         }
 
-        public override string ToString()
-        {
-            return "KCP";
-        }
+        public override string ToString() => "KCP";
     }
 }
 //#endif MIRROR <- commented out because MIRROR isn't defined on first import yet

@@ -5,8 +5,11 @@ namespace Mirror
     // https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
     public class ExponentialMovingAverage
     {
-        private readonly float alpha;
-        private bool initialized;
+        readonly float alpha;
+        bool initialized;
+
+        public double Value { get; private set; }
+        public double Var { get; private set; }
 
         public ExponentialMovingAverage(int n)
         {
@@ -14,16 +17,13 @@ namespace Mirror
             alpha = 2.0f / (n + 1);
         }
 
-        public double Value { get; private set; }
-        public double Var { get; private set; }
-
         public void Add(double newValue)
         {
             // simple algorithm for EMA described here:
             // https://en.wikipedia.org/wiki/Moving_average#Exponentially_weighted_moving_variance_and_standard_deviation
             if (initialized)
             {
-                var delta = newValue - Value;
+                double delta = newValue - Value;
                 Value += alpha * delta;
                 Var = (1 - alpha) * (Var + alpha * delta * delta);
             }

@@ -10,31 +10,30 @@ namespace Mirror.Examples.MultipleMatch
 #pragma warning restore 618
     public class MatchController : NetworkBehaviour
     {
+        internal readonly SyncDictionary<NetworkIdentity, MatchPlayerData> matchPlayerData = new SyncDictionary<NetworkIdentity, MatchPlayerData>();
         internal readonly Dictionary<CellValue, CellGUI> MatchCells = new Dictionary<CellValue, CellGUI>();
 
-        internal readonly SyncDictionary<NetworkIdentity, MatchPlayerData> matchPlayerData =
-            new SyncDictionary<NetworkIdentity, MatchPlayerData>();
+        CellValue boardScore = CellValue.None;
+        bool playAgain = false;
 
-        private CellValue boardScore = CellValue.None;
-
-        [Header("Diagnostics - Do Not Modify")]
-        public CanvasController canvasController;
-
-        [Header("GUI References")] public CanvasGroup canvasGroup;
-
-        [SyncVar(hook = nameof(UpdateGameUI))] public NetworkIdentity currentPlayer;
-
-        public Button exitButton;
+        [Header("GUI References")]
+        public CanvasGroup canvasGroup;
         public Text gameText;
-        private bool playAgain;
+        public Button exitButton;
         public Button playAgainButton;
-        public NetworkIdentity player1;
-        public NetworkIdentity player2;
-        public NetworkIdentity startingPlayer;
         public Text winCountLocal;
         public Text winCountOpponent;
 
-        private void Awake()
+        [Header("Diagnostics - Do Not Modify")]
+        public CanvasController canvasController;
+        public NetworkIdentity player1;
+        public NetworkIdentity player2;
+        public NetworkIdentity startingPlayer;
+
+        [SyncVar(hook = nameof(UpdateGameUI))]
+        public NetworkIdentity currentPlayer;
+
+        void Awake()
         {
             canvasController = FindObjectOfType<CanvasController>();
         }
@@ -46,16 +45,12 @@ namespace Mirror.Examples.MultipleMatch
 
         // For the SyncDictionary to properly fire the update callback, we must
         // wait a frame before adding the players to the already spawned MatchController
-        private IEnumerator AddPlayersToMatchController()
+        IEnumerator AddPlayersToMatchController()
         {
             yield return null;
 
-            matchPlayerData.Add(player1,
-                new MatchPlayerData
-                    {playerIndex = CanvasController.playerInfos[player1.connectionToClient].playerIndex});
-            matchPlayerData.Add(player2,
-                new MatchPlayerData
-                    {playerIndex = CanvasController.playerInfos[player2.connectionToClient].playerIndex});
+            matchPlayerData.Add(player1, new MatchPlayerData { playerIndex = CanvasController.playerInfos[player1.connectionToClient].playerIndex });
+            matchPlayerData.Add(player2, new MatchPlayerData { playerIndex = CanvasController.playerInfos[player2.connectionToClient].playerIndex });
         }
 
 
@@ -87,13 +82,16 @@ namespace Mirror.Examples.MultipleMatch
             }
         }
 
-        public void UpdateWins(SyncIDictionary<NetworkIdentity, MatchPlayerData>.Operation op, NetworkIdentity key,
-            MatchPlayerData matchPlayerData)
+        public void UpdateWins(SyncDictionary<NetworkIdentity, MatchPlayerData>.Operation op, NetworkIdentity key, MatchPlayerData matchPlayerData)
         {
             if (key.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer)
+            {
                 winCountLocal.text = $"Player {matchPlayerData.playerIndex}\n{matchPlayerData.wins}";
+            }
             else
+            {
                 winCountOpponent.text = $"Player {matchPlayerData.playerIndex}\n{matchPlayerData.wins}";
+            }
         }
 
         [Command(requiresAuthority = false)]
@@ -106,7 +104,7 @@ namespace Mirror.Examples.MultipleMatch
             MatchCells[cellValue].playerIdentity = currentPlayer;
             RpcUpdateCell(cellValue, currentPlayer);
 
-            var mpd = matchPlayerData[currentPlayer];
+            MatchPlayerData mpd = matchPlayerData[currentPlayer];
             mpd.currentScore = mpd.currentScore | cellValue;
             matchPlayerData[currentPlayer] = mpd;
 
@@ -129,9 +127,10 @@ namespace Mirror.Examples.MultipleMatch
                 // Set currentPlayer SyncVar so clients know whose turn it is
                 currentPlayer = currentPlayer == player1 ? player2 : player1;
             }
+
         }
 
-        private bool CheckWinner(CellValue currentScore)
+        bool CheckWinner(CellValue currentScore)
         {
             if ((currentScore & CellValue.TopRow) == CellValue.TopRow)
                 return true;
@@ -162,7 +161,8 @@ namespace Mirror.Examples.MultipleMatch
         [ClientRpc]
         public void RpcShowWinner(NetworkIdentity winner)
         {
-            foreach (var cellGUI in MatchCells.Values)
+
+            foreach (CellGUI cellGUI in MatchCells.Values)
                 cellGUI.GetComponent<Button>().interactable = false;
 
             if (winner == null)
@@ -180,7 +180,6 @@ namespace Mirror.Examples.MultipleMatch
                 gameText.text = "Loser!";
                 gameText.color = Color.red;
             }
-
             exitButton.gameObject.SetActive(true);
             playAgainButton.gameObject.SetActive(true);
         }
@@ -210,17 +209,17 @@ namespace Mirror.Examples.MultipleMatch
         [Server]
         public void RestartGame()
         {
-            foreach (var cellGUI in MatchCells.Values)
+            foreach (CellGUI cellGUI in MatchCells.Values)
                 cellGUI.SetPlayer(null);
 
             boardScore = CellValue.None;
 
-            var keys = new NetworkIdentity[matchPlayerData.Keys.Count];
+            NetworkIdentity[] keys = new NetworkIdentity[matchPlayerData.Keys.Count];
             matchPlayerData.Keys.CopyTo(keys, 0);
 
-            foreach (var identity in keys)
+            foreach (NetworkIdentity identity in keys)
             {
-                var mpd = matchPlayerData[identity];
+                MatchPlayerData mpd = matchPlayerData[identity];
                 mpd.currentScore = CellValue.None;
                 matchPlayerData[identity] = mpd;
             }
@@ -234,7 +233,7 @@ namespace Mirror.Examples.MultipleMatch
         [ClientRpc]
         public void RpcRestartGame()
         {
-            foreach (var cellGUI in MatchCells.Values)
+            foreach (CellGUI cellGUI in MatchCells.Values)
                 cellGUI.SetPlayer(null);
 
             exitButton.gameObject.SetActive(false);
@@ -259,7 +258,10 @@ namespace Mirror.Examples.MultipleMatch
         public void OnPlayerDisconnected(NetworkConnection conn)
         {
             // Check that the disconnecting client is a player in this match
-            if (player1 == conn.identity || player2 == conn.identity) StartCoroutine(ServerEndMatch(conn, true));
+            if (player1 == conn.identity || player2 == conn.identity)
+            {
+                StartCoroutine(ServerEndMatch(conn, true));
+            }
         }
 
         public IEnumerator ServerEndMatch(NetworkConnection conn, bool disconnected)

@@ -16,7 +16,6 @@
 // * Only way for smooth movement is to use a fixed movement speed during
 //   interpolation. interpolation over time is never that good.
 //
-
 using System;
 using UnityEngine;
 
@@ -24,115 +23,136 @@ namespace Mirror.Experimental
 {
     public abstract class NetworkTransformBase : NetworkBehaviour
     {
+        // target transform to sync. can be on a child.
+        protected abstract Transform targetTransform { get; }
+
         [Header("Authority")]
+
         [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
         [SyncVar]
         public bool clientAuthority;
 
-        // We need to store this locally on the server so clients can't request Authority when ever they like
-        private bool clientAuthorityBeforeTeleport;
-
-        [Tooltip("Set to true if updates from server should be ignored by owner")] [SyncVar]
+        [Tooltip("Set to true if updates from server should be ignored by owner")]
+        [SyncVar]
         public bool excludeOwnerUpdate = true;
 
-        public DataPoint goal;
+        [Header("Synchronization")]
 
-        [Header("Interpolation")] [Tooltip("Set to true if position should be interpolated")] [SyncVar]
+        [Tooltip("Set to true if position should be synchronized")]
+        [SyncVar]
+        public bool syncPosition = true;
+
+        [Tooltip("Set to true if rotation should be synchronized")]
+        [SyncVar]
+        public bool syncRotation = true;
+
+        [Tooltip("Set to true if scale should be synchronized")]
+        [SyncVar]
+        public bool syncScale = true;
+
+        [Header("Interpolation")]
+
+        [Tooltip("Set to true if position should be interpolated")]
+        [SyncVar]
         public bool interpolatePosition = true;
 
-        [Tooltip("Set to true if rotation should be interpolated")] [SyncVar]
+        [Tooltip("Set to true if rotation should be interpolated")]
+        [SyncVar]
         public bool interpolateRotation = true;
 
-        [Tooltip("Set to true if scale should be interpolated")] [SyncVar]
+        [Tooltip("Set to true if scale should be interpolated")]
+        [SyncVar]
         public bool interpolateScale = true;
+
+        // Sensitivity is added for VR where human players tend to have micro movements so this can quiet down
+        // the network traffic.  Additionally, rigidbody drift should send less traffic, e.g very slow sliding / rolling.
+        [Header("Sensitivity")]
+
+        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
+        [SyncVar]
+        public float localPositionSensitivity = .01f;
+
+        [Tooltip("If rotation exceeds this angle, it will be transmitted on the network")]
+        [SyncVar]
+        public float localRotationSensitivity = .01f;
+
+        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
+        [SyncVar]
+        public float localScaleSensitivity = .01f;
 
         [Header("Diagnostics")]
 
         // server
         public Vector3 lastPosition;
-
         public Quaternion lastRotation;
         public Vector3 lastScale;
 
-        // Sensitivity is added for VR where human players tend to have micro movements so this can quiet down
-        // the network traffic.  Additionally, rigidbody drift should send less traffic, e.g very slow sliding / rolling.
-        [Header("Sensitivity")]
-        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
-        [SyncVar]
-        public float localPositionSensitivity = .01f;
+        // client
+        // use local position/rotation for VR support
+        [Serializable]
+        public struct DataPoint
+        {
+            public float timeStamp;
+            public Vector3 localPosition;
+            public Quaternion localRotation;
+            public Vector3 localScale;
+            public float movementSpeed;
 
-        [Tooltip("If rotation exceeds this angle, it will be transmitted on the network")] [SyncVar]
-        public float localRotationSensitivity = .01f;
-
-        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")] [SyncVar]
-        public float localScaleSensitivity = .01f;
-
-        // interpolation start and goal
-        public DataPoint start;
-
-        [Header("Synchronization")] [Tooltip("Set to true if position should be synchronized")] [SyncVar]
-        public bool syncPosition = true;
-
-        [Tooltip("Set to true if rotation should be synchronized")] [SyncVar]
-        public bool syncRotation = true;
-
-        [Tooltip("Set to true if scale should be synchronized")] [SyncVar]
-        public bool syncScale = true;
-
-        // target transform to sync. can be on a child.
-        protected abstract Transform targetTransform { get; }
+            public bool isValid => timeStamp != 0;
+        }
 
         // Is this a client with authority over this transform?
         // This component could be on the player object or any object that has been assigned authority to this client.
-        private bool IsOwnerWithClientAuthority => hasAuthority && clientAuthority;
+        bool IsOwnerWithClientAuthority => hasAuthority && clientAuthority;
 
-        // local position/rotation for VR support
-        // SqrMagnitude is faster than Distance per Unity docs
-        // https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
+        // interpolation start and goal
+        public DataPoint start = new DataPoint();
+        public DataPoint goal = new DataPoint();
 
-        private bool HasMoved => syncPosition && Vector3.SqrMagnitude(lastPosition - targetTransform.localPosition) >
-            localPositionSensitivity * localPositionSensitivity;
+        // We need to store this locally on the server so clients can't request Authority when ever they like
+        bool clientAuthorityBeforeTeleport;
 
-        private bool HasRotated => syncRotation &&
-                                   Quaternion.Angle(lastRotation, targetTransform.localRotation) >
-                                   localRotationSensitivity;
-
-        private bool HasScaled => syncScale && Vector3.SqrMagnitude(lastScale - targetTransform.localScale) >
-            localScaleSensitivity * localScaleSensitivity;
-
-        private void FixedUpdate()
+        void FixedUpdate()
         {
             // if server then always sync to others.
             // let the clients know that this has moved
-            if (isServer && HasEitherMovedRotatedScaled()) ServerUpdate();
+            if (isServer && HasEitherMovedRotatedScaled())
+            {
+                ServerUpdate();
+            }
 
             if (isClient)
             {
                 // send to server if we have local authority (and aren't the server)
                 // -> only if connectionToServer has been initialized yet too
                 if (IsOwnerWithClientAuthority)
+                {
                     ClientAuthorityUpdate();
-                else if (goal.isValid) ClientRemoteUpdate();
+                }
+                else if (goal.isValid)
+                {
+                    ClientRemoteUpdate();
+                }
             }
         }
 
-        private void ServerUpdate()
+        void ServerUpdate()
         {
-            RpcMove(targetTransform.localPosition, Compression.CompressQuaternion(targetTransform.localRotation),
-                targetTransform.localScale);
+            RpcMove(targetTransform.localPosition, Compression.CompressQuaternion(targetTransform.localRotation), targetTransform.localScale);
         }
 
-        private void ClientAuthorityUpdate()
+        void ClientAuthorityUpdate()
         {
             if (!isServer && HasEitherMovedRotatedScaled())
+            {
                 // serialize
                 // local position/rotation for VR support
                 // send to server
-                CmdClientToServerSync(targetTransform.localPosition,
-                    Compression.CompressQuaternion(targetTransform.localRotation), targetTransform.localScale);
+                CmdClientToServerSync(targetTransform.localPosition, Compression.CompressQuaternion(targetTransform.localRotation), targetTransform.localScale);
+            }
         }
 
-        private void ClientRemoteUpdate()
+        void ClientRemoteUpdate()
         {
             // teleport or interpolate
             if (NeedsTeleport())
@@ -148,18 +168,18 @@ namespace Mirror.Experimental
             {
                 // local position/rotation for VR support
                 ApplyPositionRotationScale(InterpolatePosition(start, goal, targetTransform.localPosition),
-                    InterpolateRotation(start, goal, targetTransform.localRotation),
-                    InterpolateScale(start, goal, targetTransform.localScale));
+                                           InterpolateRotation(start, goal, targetTransform.localRotation),
+                                           InterpolateScale(start, goal, targetTransform.localScale));
             }
         }
 
         // moved or rotated or scaled since last time we checked it?
-        private bool HasEitherMovedRotatedScaled()
+        bool HasEitherMovedRotatedScaled()
         {
             // Save last for next frame to compare only if change was detected, otherwise
             // slow moving objects might never sync because of C#'s float comparison tolerance.
             // See also: https://github.com/vis2k/Mirror/pull/428)
-            var changed = HasMoved || HasRotated || HasScaled;
+            bool changed = HasMoved || HasRotated || HasScaled;
             if (changed)
             {
                 // local position/rotation for VR support
@@ -167,26 +187,33 @@ namespace Mirror.Experimental
                 if (syncRotation) lastRotation = targetTransform.localRotation;
                 if (syncScale) lastScale = targetTransform.localScale;
             }
-
             return changed;
         }
+
+        // local position/rotation for VR support
+        // SqrMagnitude is faster than Distance per Unity docs
+        // https://docs.unity3d.com/ScriptReference/Vector3-sqrMagnitude.html
+
+        bool HasMoved => syncPosition && Vector3.SqrMagnitude(lastPosition - targetTransform.localPosition) > localPositionSensitivity * localPositionSensitivity;
+        bool HasRotated => syncRotation && Quaternion.Angle(lastRotation, targetTransform.localRotation) > localRotationSensitivity;
+        bool HasScaled => syncScale && Vector3.SqrMagnitude(lastScale - targetTransform.localScale) > localScaleSensitivity * localScaleSensitivity;
 
         // teleport / lag / stuck detection
         // - checking distance is not enough since there could be just a tiny fence between us and the goal
         // - checking time always works, this way we just teleport if we still didn't reach the goal after too much time has elapsed
-        private bool NeedsTeleport()
+        bool NeedsTeleport()
         {
             // calculate time between the two data points
-            var startTime = start.isValid ? start.timeStamp : Time.time - Time.fixedDeltaTime;
-            var goalTime = goal.isValid ? goal.timeStamp : Time.time;
-            var difference = goalTime - startTime;
-            var timeSinceGoalReceived = Time.time - goalTime;
+            float startTime = start.isValid ? start.timeStamp : Time.time - Time.fixedDeltaTime;
+            float goalTime = goal.isValid ? goal.timeStamp : Time.time;
+            float difference = goalTime - startTime;
+            float timeSinceGoalReceived = Time.time - goalTime;
             return timeSinceGoalReceived > difference * 5;
         }
 
         // local authority client sends sync message to server for broadcasting
         [Command(channel = Channels.Unreliable)]
-        private void CmdClientToServerSync(Vector3 position, uint packedRotation, Vector3 scale)
+        void CmdClientToServerSync(Vector3 position, uint packedRotation, Vector3 scale)
         {
             // Ignore messages from client if not in client authority mode
             if (!clientAuthority)
@@ -203,7 +230,7 @@ namespace Mirror.Experimental
         }
 
         [ClientRpc(channel = Channels.Unreliable)]
-        private void RpcMove(Vector3 position, uint packedRotation, Vector3 scale)
+        void RpcMove(Vector3 position, uint packedRotation, Vector3 scale)
         {
             if (hasAuthority && excludeOwnerUpdate) return;
 
@@ -212,10 +239,10 @@ namespace Mirror.Experimental
         }
 
         // serialization is needed by OnSerialize and by manual sending from authority
-        private void SetGoal(Vector3 position, Quaternion rotation, Vector3 scale)
+        void SetGoal(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             // put it into a data point immediately
-            var temp = new DataPoint
+            DataPoint temp = new DataPoint
             {
                 // deserialize position
                 localPosition = position,
@@ -271,8 +298,8 @@ namespace Mirror.Experimental
             //
             else
             {
-                var oldDistance = Vector3.Distance(start.localPosition, goal.localPosition);
-                var newDistance = Vector3.Distance(goal.localPosition, temp.localPosition);
+                float oldDistance = Vector3.Distance(start.localPosition, goal.localPosition);
+                float newDistance = Vector3.Distance(goal.localPosition, temp.localPosition);
 
                 start = goal;
 
@@ -295,20 +322,17 @@ namespace Mirror.Experimental
         // - if this is the first time ever then we use our best guess:
         //     - delta based on transform.localPosition
         //     - elapsed based on send interval hoping that it roughly matches
-        private static float EstimateMovementSpeed(DataPoint from, DataPoint to, Transform transform,
-            float sendInterval)
+        static float EstimateMovementSpeed(DataPoint from, DataPoint to, Transform transform, float sendInterval)
         {
-            var delta = to.localPosition - (from.localPosition != transform.localPosition
-                ? from.localPosition
-                : transform.localPosition);
-            var elapsed = from.isValid ? to.timeStamp - from.timeStamp : sendInterval;
+            Vector3 delta = to.localPosition - (from.localPosition != transform.localPosition ? from.localPosition : transform.localPosition);
+            float elapsed = from.isValid ? to.timeStamp - from.timeStamp : sendInterval;
 
             // avoid NaN
             return elapsed > 0 ? delta.magnitude / elapsed : 0;
         }
 
         // set position carefully depending on the target component
-        private void ApplyPositionRotationScale(Vector3 position, Quaternion rotation, Vector3 scale)
+        void ApplyPositionRotationScale(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             // local position/rotation for VR support
             if (syncPosition) targetTransform.localPosition = position;
@@ -317,7 +341,7 @@ namespace Mirror.Experimental
         }
 
         // where are we in the timeline between start and goal? [0,1]
-        private Vector3 InterpolatePosition(DataPoint start, DataPoint goal, Vector3 currentPosition)
+        Vector3 InterpolatePosition(DataPoint start, DataPoint goal, Vector3 currentPosition)
         {
             if (!interpolatePosition)
                 return currentPosition;
@@ -332,91 +356,75 @@ namespace Mirror.Experimental
 
                 // Option 2: always += speed
                 // speed is 0 if we just started after idle, so always use max for best results
-                var speed = Mathf.Max(start.movementSpeed, goal.movementSpeed);
+                float speed = Mathf.Max(start.movementSpeed, goal.movementSpeed);
                 return Vector3.MoveTowards(currentPosition, goal.localPosition, speed * Time.deltaTime);
             }
 
             return currentPosition;
         }
 
-        private Quaternion InterpolateRotation(DataPoint start, DataPoint goal, Quaternion defaultRotation)
+        Quaternion InterpolateRotation(DataPoint start, DataPoint goal, Quaternion defaultRotation)
         {
             if (!interpolateRotation)
                 return defaultRotation;
 
             if (start.localRotation != goal.localRotation)
             {
-                var t = CurrentInterpolationFactor(start, goal);
+                float t = CurrentInterpolationFactor(start, goal);
                 return Quaternion.Slerp(start.localRotation, goal.localRotation, t);
             }
 
             return defaultRotation;
         }
 
-        private Vector3 InterpolateScale(DataPoint start, DataPoint goal, Vector3 currentScale)
+        Vector3 InterpolateScale(DataPoint start, DataPoint goal, Vector3 currentScale)
         {
             if (!interpolateScale)
                 return currentScale;
 
             if (start.localScale != goal.localScale)
             {
-                var t = CurrentInterpolationFactor(start, goal);
+                float t = CurrentInterpolationFactor(start, goal);
                 return Vector3.Lerp(start.localScale, goal.localScale, t);
             }
 
             return currentScale;
         }
 
-        private static float CurrentInterpolationFactor(DataPoint start, DataPoint goal)
+        static float CurrentInterpolationFactor(DataPoint start, DataPoint goal)
         {
             if (start.isValid)
             {
-                var difference = goal.timeStamp - start.timeStamp;
+                float difference = goal.timeStamp - start.timeStamp;
 
                 // the moment we get 'goal', 'start' is supposed to start, so elapsed time is based on:
-                var elapsed = Time.time - goal.timeStamp;
+                float elapsed = Time.time - goal.timeStamp;
 
                 // avoid NaN
                 return difference > 0 ? elapsed / difference : 1;
             }
-
             return 1;
-        }
-
-        // client
-        // use local position/rotation for VR support
-        [Serializable]
-        public struct DataPoint
-        {
-            public float timeStamp;
-            public Vector3 localPosition;
-            public Quaternion localRotation;
-            public Vector3 localScale;
-            public float movementSpeed;
-
-            public bool isValid => timeStamp != 0;
         }
 
         #region Server Teleport (force move player)
 
         /// <summary>
-        ///     This method will override this GameObject's current Transform.localPosition to the specified Vector3  and update
-        ///     all clients.
-        ///     <para>NOTE: position must be in LOCAL space if the transform has a parent</para>
+        /// This method will override this GameObject's current Transform.localPosition to the specified Vector3  and update all clients.
+        /// <para>NOTE: position must be in LOCAL space if the transform has a parent</para>
         /// </summary>
         /// <param name="localPosition">Where to teleport this GameObject</param>
         [Server]
         public void ServerTeleport(Vector3 localPosition)
         {
-            var localRotation = targetTransform.localRotation;
+            Quaternion localRotation = targetTransform.localRotation;
             ServerTeleport(localPosition, localRotation);
         }
 
         /// <summary>
-        ///     This method will override this GameObject's current Transform.localPosition and Transform.localRotation
-        ///     to the specified Vector3 and Quaternion and update all clients.
-        ///     <para>NOTE: localPosition must be in LOCAL space if the transform has a parent</para>
-        ///     <para>NOTE: localRotation must be in LOCAL space if the transform has a parent</para>
+        /// This method will override this GameObject's current Transform.localPosition and Transform.localRotation
+        /// to the specified Vector3 and Quaternion and update all clients.
+        /// <para>NOTE: localPosition must be in LOCAL space if the transform has a parent</para>
+        /// <para>NOTE: localRotation must be in LOCAL space if the transform has a parent</para>
         /// </summary>
         /// <param name="localPosition">Where to teleport this GameObject</param>
         /// <param name="localRotation">Which rotation to set this GameObject</param>
@@ -435,7 +443,7 @@ namespace Mirror.Experimental
             RpcTeleport(localPosition, Compression.CompressQuaternion(localRotation), clientAuthorityBeforeTeleport);
         }
 
-        private void DoTeleport(Vector3 newLocalPosition, Quaternion newLocalRotation)
+        void DoTeleport(Vector3 newLocalPosition, Quaternion newLocalRotation)
         {
             targetTransform.localPosition = newLocalPosition;
             targetTransform.localRotation = newLocalRotation;
@@ -449,7 +457,7 @@ namespace Mirror.Experimental
         }
 
         [ClientRpc(channel = Channels.Unreliable)]
-        private void RpcTeleport(Vector3 newPosition, uint newPackedRotation, bool isClientAuthority)
+        void RpcTeleport(Vector3 newPosition, uint newPackedRotation, bool isClientAuthority)
         {
             DoTeleport(newPosition, Compression.DecompressQuaternion(newPackedRotation));
 
@@ -459,11 +467,11 @@ namespace Mirror.Experimental
         }
 
         /// <summary>
-        ///     This RPC will be invoked on server after client finishes overriding the position.
+        /// This RPC will be invoked on server after client finishes overriding the position.
         /// </summary>
         /// <param name="initialAuthority"></param>
         [Command(channel = Channels.Unreliable)]
-        private void CmdTeleportFinished()
+        void CmdTeleportFinished()
         {
             if (clientAuthorityBeforeTeleport)
             {
@@ -483,7 +491,7 @@ namespace Mirror.Experimental
         #region Debug Gizmos
 
         // draw the data points for easier debugging
-        private void OnDrawGizmos()
+        void OnDrawGizmos()
         {
             // draw start and goal points and a line between them
             if (start.localPosition != goal.localPosition)
@@ -494,10 +502,10 @@ namespace Mirror.Experimental
             }
         }
 
-        private static void DrawDataPointGizmo(DataPoint data, Color color)
+        static void DrawDataPointGizmo(DataPoint data, Color color)
         {
             // use a little offset because transform.localPosition might be in the ground in many cases
-            var offset = Vector3.up * 0.01f;
+            Vector3 offset = Vector3.up * 0.01f;
 
             // draw position
             Gizmos.color = color;
@@ -510,7 +518,7 @@ namespace Mirror.Experimental
             Gizmos.DrawRay(data.localPosition + offset, data.localRotation * Vector3.up);
         }
 
-        private static void DrawLineBetweenDataPoints(DataPoint data1, DataPoint data2, Color color)
+        static void DrawLineBetweenDataPoints(DataPoint data1, DataPoint data2, Color color)
         {
             Gizmos.color = color;
             Gizmos.DrawLine(data1.localPosition, data2.localPosition);

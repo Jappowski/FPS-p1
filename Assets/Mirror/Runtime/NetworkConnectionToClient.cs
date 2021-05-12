@@ -5,14 +5,44 @@ namespace Mirror
 {
     public class NetworkConnectionToClient : NetworkConnection
     {
-        private readonly Dictionary<int, Batch> batches = new Dictionary<int, Batch>();
+        public override string address =>
+            Transport.activeTransport.ServerGetClientAddress(connectionId);
+
+        // batching from server to client.
+        // fewer transport calls give us significantly better performance/scale.
+        //
+        // for a 64KB max message transport and 64 bytes/message on average, we
+        // reduce transport calls by a factor of 1000.
+        //
+        // depending on the transport, this can give 10x performance.
+        //
+        // Dictionary<channelId, batch> because we have multiple channels.
+        internal class Batch
+        {
+            // batched messages
+            internal Queue<PooledNetworkWriter> messages = new Queue<PooledNetworkWriter>();
+
+            // each channel's batch has its own lastSendTime.
+            // (use NetworkTime for maximum precision over days)
+            //
+            // channel batches are full and flushed at different times. using
+            // one global time wouldn't make sense.
+            // -> we want to be able to reset a channels send time after Send()
+            //    flushed it because full. global time wouldn't allow that, so
+            //    we would often flush in Send() and then flush again in Update
+            //    even though we just flushed in Send().
+            // -> initialize with current NetworkTime so first update doesn't
+            //    calculate elapsed via 'now - 0'
+            internal double lastSendTime = NetworkTime.time;
+        }
+        Dictionary<int, Batch> batches = new Dictionary<int, Batch>();
 
         // batch messages and send them out in LateUpdate (or after batchInterval)
-        private readonly bool batching;
+        bool batching;
 
         // batch interval is 0 by default, meaning that we send immediately.
         // (useful to run tests without waiting for intervals too)
-        private readonly float batchInterval;
+        float batchInterval;
 
         public NetworkConnectionToClient(int networkConnectionId, bool batching, float batchInterval)
             : base(networkConnectionId)
@@ -21,10 +51,7 @@ namespace Mirror
             this.batchInterval = batchInterval;
         }
 
-        public override string address =>
-            Transport.activeTransport.ServerGetClientAddress(connectionId);
-
-        private Batch GetBatchForChannelId(int channelId)
+        Batch GetBatchForChannelId(int channelId)
         {
             // get existing or create new writer for the channelId
             Batch batch;
@@ -33,7 +60,6 @@ namespace Mirror
                 batch = new Batch();
                 batches[channelId] = batch;
             }
-
             return batch;
         }
 
@@ -41,17 +67,17 @@ namespace Mirror
         internal void SendBatch(int channelId, Batch batch)
         {
             // get max batch size for this channel
-            var max = Transport.activeTransport.GetMaxBatchSize(channelId);
+            int max = Transport.activeTransport.GetMaxBatchSize(channelId);
 
             // we need a writer to merge queued messages into a batch
-            using (var writer = NetworkWriterPool.GetWriter())
+            using (PooledNetworkWriter writer = NetworkWriterPool.GetWriter())
             {
                 // for each queued message
                 while (batch.messages.Count > 0)
                 {
                     // get it
-                    var message = batch.messages.Dequeue();
-                    var segment = message.ToArraySegment();
+                    PooledNetworkWriter message = batch.messages.Dequeue();
+                    ArraySegment<byte> segment = message.ToArraySegment();
 
                     // IF adding to writer would end up >= MTU then we should
                     // flush first. the goal is to always flush < MTU packets.
@@ -110,18 +136,15 @@ namespace Mirror
                     // -> WriteBytes instead of WriteSegment because the latter
                     //    would add a size header. we want to write directly.
                     // -> will be returned to pool when sending!
-                    var writer = NetworkWriterPool.GetWriter();
+                    PooledNetworkWriter writer = NetworkWriterPool.GetWriter();
                     writer.WriteBytes(segment.Array, segment.Offset, segment.Count);
 
                     // add to batch queue
-                    var batch = GetBatchForChannelId(channelId);
+                    Batch batch = GetBatchForChannelId(channelId);
                     batch.messages.Enqueue(writer);
                 }
                 // otherwise send directly to minimize latency
-                else
-                {
-                    Transport.activeTransport.ServerSend(connectionId, channelId, segment);
-                }
+                else Transport.activeTransport.ServerSend(connectionId, channelId, segment);
             }
         }
 
@@ -132,17 +155,21 @@ namespace Mirror
         {
             // batching?
             if (batching)
+            {
                 // go through batches for all channels
-                foreach (var kvp in batches)
+                foreach (KeyValuePair<int, Batch> kvp in batches)
                 {
                     // enough time elapsed to flush this channel's batch?
                     // and not empty?
-                    var elapsed = NetworkTime.time - kvp.Value.lastSendTime;
+                    double elapsed = NetworkTime.time - kvp.Value.lastSendTime;
                     if (elapsed >= batchInterval && kvp.Value.messages.Count > 0)
+                    {
                         // send the batch. time will be reset internally.
                         //Debug.Log($"sending batch of {kvp.Value.writer.Position} bytes for channel={kvp.Key} connId={connectionId}");
                         SendBatch(kvp.Key, kvp.Value);
+                    }
                 }
+            }
         }
 
         /// <summary>Disconnects this connection.</summary>
@@ -153,34 +180,6 @@ namespace Mirror
             isReady = false;
             Transport.activeTransport.ServerDisconnect(connectionId);
             RemoveObservers();
-        }
-
-        // batching from server to client.
-        // fewer transport calls give us significantly better performance/scale.
-        //
-        // for a 64KB max message transport and 64 bytes/message on average, we
-        // reduce transport calls by a factor of 1000.
-        //
-        // depending on the transport, this can give 10x performance.
-        //
-        // Dictionary<channelId, batch> because we have multiple channels.
-        internal class Batch
-        {
-            // each channel's batch has its own lastSendTime.
-            // (use NetworkTime for maximum precision over days)
-            //
-            // channel batches are full and flushed at different times. using
-            // one global time wouldn't make sense.
-            // -> we want to be able to reset a channels send time after Send()
-            //    flushed it because full. global time wouldn't allow that, so
-            //    we would often flush in Send() and then flush again in Update
-            //    even though we just flushed in Send().
-            // -> initialize with current NetworkTime so first update doesn't
-            //    calculate elapsed via 'now - 0'
-            internal double lastSendTime = NetworkTime.time;
-
-            // batched messages
-            internal Queue<PooledNetworkWriter> messages = new Queue<PooledNetworkWriter>();
         }
     }
 }

@@ -5,22 +5,19 @@ using UnityEngine.UI;
 
 public class NetworkRoomPlayerLobby : NetworkBehaviour
 {
+    [Header("UI")] [SerializeField] private GameObject lobbyUI = null;
+    [SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
+    [SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
+    [SerializeField] private Button startGameButton = null;
+    
     [SyncVar(hook = nameof(HandleDisplayNameChanged))]
     public string DisplayName = "Loading...";
-
-    private bool isLeader;
-
     [SyncVar(hook = nameof(HandleReadyStatusChanged))]
-    public bool IsReady;
-
-    [Header("UI")] [SerializeField] private readonly GameObject lobbyUI = null;
-
-    [SerializeField] private readonly TMP_Text[] playerNameTexts = new TMP_Text[4];
-    [SerializeField] private readonly TMP_Text[] playerReadyTexts = new TMP_Text[4];
-
+    
+    public bool IsReady = false;
+    private bool isLeader;
+    
     private NetworkManagerGame room;
-    [SerializeField] private readonly Button startGameButton = null;
-
     public bool IsLeader
     {
         set
@@ -72,10 +69,10 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
 
     private void UpdateDisplay()
     {
-        if (!hasAuthority)
+        if (!isLocalPlayer)
         {
             foreach (var player in Room.RoomPlayers)
-                if (player.hasAuthority)
+                if (player.isLocalPlayer)
                 {
                     player.UpdateDisplay();
                     break;
@@ -118,11 +115,14 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
         IsReady = !IsReady;
 
         Room.NotifyPlayersOfReadyState();
+        
     }
 
     [Command]
     public void CmdStartGame()
     {
         if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
+        
+        Room.StartGame();
     }
 }

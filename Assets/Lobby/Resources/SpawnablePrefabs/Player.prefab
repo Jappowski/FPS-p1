@@ -101,6 +101,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &407970023597439750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551001987868405945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &2013770232247247856
 GameObject:
   m_ObjectHideFlags: 0
@@ -10017,7 +10034,6 @@ GameObject:
   - component: {fileID: 7397066735618302099}
   - component: {fileID: 881942908458438668}
   - component: {fileID: 7277479531089705297}
-  - component: {fileID: -6127025935023074669}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -10072,14 +10088,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b255c5c431d46f47beef4ef32a9fe59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 7.5
-  runningSpeed: 11.5
-  jumpSpeed: 8
+  canMove: 1
   gravity: 20
-  playerCamera: {fileID: 7397066735184746251}
+  jumpSpeed: 8
   lookSpeed: 2
   lookXLimit: 45
-  canMove: 1
+  playerCamera: {fileID: 7397066735184746251}
+  runningSpeed: 11.5
+  walkingSpeed: 7.5
 --- !u!114 &881942908458438668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10111,27 +10127,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &-6127025935023074669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7397066735618302101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 1
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
-  compressRotation: 0
-  interpolateScale: 1
-  syncScale: 1
 --- !u!1 &7397066736004910734
 GameObject:
   m_ObjectHideFlags: 0
@@ -10179,16 +10174,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f891fbeb5f8014487d965ceebaf065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 7397066736431994103}
+  currentAmmo: 30
   damage: 10
   fireRate: 10
   fpsCam: {fileID: 7397066735184746251}
-  muzzleFlash: {fileID: 7397066735113701053}
   hitEffect: {fileID: 6470172321951213, guid: c9293ad23ee17c84cae2ec5480a51a59, type: 3}
-  animator: {fileID: 7397066736431994103}
   impactForce: 20
-  currentAmmo: 30
-  reloadTime: 1.5
   maxReloadAmmo: 90
+  muzzleFlash: {fileID: 7397066735113701053}
+  reloadTime: 1.5
 --- !u!1 &7397066736863930183
 GameObject:
   m_ObjectHideFlags: 0

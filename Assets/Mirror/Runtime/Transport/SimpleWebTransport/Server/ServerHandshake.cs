@@ -6,28 +6,26 @@ using System.Text;
 namespace Mirror.SimpleWeb
 {
     /// <summary>
-    ///     Handles Handshakes from new clients on the server
-    ///     <para>The server handshake has buffers to reduce allocations when clients connect</para>
+    /// Handles Handshakes from new clients on the server
+    /// <para>The server handshake has buffers to reduce allocations when clients connect</para>
     /// </summary>
     internal class ServerHandshake
     {
-        private const int GetSize = 3;
-        private const int ResponseLength = 129;
-        private const int KeyLength = 24;
-        private const int MergedKeyLength = 60;
-        private const string KeyHeaderString = "Sec-WebSocket-Key: ";
-
-        private readonly BufferPool bufferPool;
-
+        const int GetSize = 3;
+        const int ResponseLength = 129;
+        const int KeyLength = 24;
+        const int MergedKeyLength = 60;
+        const string KeyHeaderString = "Sec-WebSocket-Key: ";
         // this isn't an official max, just a reasonable size for a websocket handshake
-        private readonly int maxHttpHeaderSize = 3000;
+        readonly int maxHttpHeaderSize = 3000;
 
-        private readonly SHA1 sha1 = SHA1.Create();
+        readonly SHA1 sha1 = SHA1.Create();
+        readonly BufferPool bufferPool;
 
         public ServerHandshake(BufferPool bufferPool, int handshakeMaxSize)
         {
             this.bufferPool = bufferPool;
-            maxHttpHeaderSize = handshakeMaxSize;
+            this.maxHttpHeaderSize = handshakeMaxSize;
         }
 
         ~ServerHandshake()
@@ -37,9 +35,9 @@ namespace Mirror.SimpleWeb
 
         public bool TryHandshake(Connection conn)
         {
-            var stream = conn.stream;
+            Stream stream = conn.stream;
 
-            using (var getHeader = bufferPool.Take(GetSize))
+            using (ArrayBuffer getHeader = bufferPool.Take(GetSize))
             {
                 if (!ReadHelper.TryRead(stream, getHeader.array, 0, GetSize))
                     return false;
@@ -48,14 +46,13 @@ namespace Mirror.SimpleWeb
 
                 if (!IsGet(getHeader.array))
                 {
-                    Log.Warn(
-                        $"First bytes from client was not 'GET' for handshake, instead was {Log.BufferToString(getHeader.array, 0, GetSize)}");
+                    Log.Warn($"First bytes from client was not 'GET' for handshake, instead was {Log.BufferToString(getHeader.array, 0, GetSize)}");
                     return false;
                 }
             }
 
 
-            var msg = ReadToEndForHandshake(stream);
+            string msg = ReadToEndForHandshake(stream);
 
             if (string.IsNullOrEmpty(msg))
                 return false;
@@ -72,41 +69,40 @@ namespace Mirror.SimpleWeb
             }
         }
 
-        private string ReadToEndForHandshake(Stream stream)
+        string ReadToEndForHandshake(Stream stream)
         {
-            using (var readBuffer = bufferPool.Take(maxHttpHeaderSize))
+            using (ArrayBuffer readBuffer = bufferPool.Take(maxHttpHeaderSize))
             {
-                var readCountOrFail = ReadHelper.SafeReadTillMatch(stream, readBuffer.array, 0, maxHttpHeaderSize,
-                    Constants.endOfHandshake);
+                int? readCountOrFail = ReadHelper.SafeReadTillMatch(stream, readBuffer.array, 0, maxHttpHeaderSize, Constants.endOfHandshake);
                 if (!readCountOrFail.HasValue)
                     return null;
 
-                var readCount = readCountOrFail.Value;
+                int readCount = readCountOrFail.Value;
 
-                var msg = Encoding.ASCII.GetString(readBuffer.array, 0, readCount);
+                string msg = Encoding.ASCII.GetString(readBuffer.array, 0, readCount);
                 Log.Verbose(msg);
 
                 return msg;
             }
         }
 
-        private static bool IsGet(byte[] getHeader)
+        static bool IsGet(byte[] getHeader)
         {
             // just check bytes here instead of using Encoding.ASCII
             return getHeader[0] == 71 && // G
                    getHeader[1] == 69 && // E
-                   getHeader[2] == 84; // T
+                   getHeader[2] == 84;   // T
         }
 
-        private void AcceptHandshake(Stream stream, string msg)
+        void AcceptHandshake(Stream stream, string msg)
         {
             using (
                 ArrayBuffer keyBuffer = bufferPool.Take(KeyLength),
-                responseBuffer = bufferPool.Take(ResponseLength))
+                            responseBuffer = bufferPool.Take(ResponseLength))
             {
                 GetKey(msg, keyBuffer.array);
                 AppendGuid(keyBuffer.array);
-                var keyHash = CreateHash(keyBuffer.array);
+                byte[] keyHash = CreateHash(keyBuffer.array);
                 CreateResponse(keyHash, responseBuffer.array);
 
                 stream.Write(responseBuffer.array, 0, ResponseLength);
@@ -114,32 +110,32 @@ namespace Mirror.SimpleWeb
         }
 
 
-        private static void GetKey(string msg, byte[] keyBuffer)
+        static void GetKey(string msg, byte[] keyBuffer)
         {
-            var start = msg.IndexOf(KeyHeaderString) + KeyHeaderString.Length;
+            int start = msg.IndexOf(KeyHeaderString) + KeyHeaderString.Length;
 
             Log.Verbose($"Handshake Key: {msg.Substring(start, KeyLength)}");
             Encoding.ASCII.GetBytes(msg, start, KeyLength, keyBuffer, 0);
         }
 
-        private static void AppendGuid(byte[] keyBuffer)
+        static void AppendGuid(byte[] keyBuffer)
         {
             Buffer.BlockCopy(Constants.HandshakeGUIDBytes, 0, keyBuffer, KeyLength, Constants.HandshakeGUID.Length);
         }
 
-        private byte[] CreateHash(byte[] keyBuffer)
+        byte[] CreateHash(byte[] keyBuffer)
         {
             Log.Verbose($"Handshake Hashing {Encoding.ASCII.GetString(keyBuffer, 0, MergedKeyLength)}");
 
             return sha1.ComputeHash(keyBuffer, 0, MergedKeyLength);
         }
 
-        private static void CreateResponse(byte[] keyHash, byte[] responseBuffer)
+        static void CreateResponse(byte[] keyHash, byte[] responseBuffer)
         {
-            var keyHashString = Convert.ToBase64String(keyHash);
+            string keyHashString = Convert.ToBase64String(keyHash);
 
             // compiler should merge these strings into 1 string before format
-            var message = string.Format(
+            string message = string.Format(
                 "HTTP/1.1 101 Switching Protocols\r\n" +
                 "Connection: Upgrade\r\n" +
                 "Upgrade: websocket\r\n" +

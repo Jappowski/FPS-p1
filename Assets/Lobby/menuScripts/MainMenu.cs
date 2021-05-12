@@ -1,9 +1,10 @@
+using Mirror;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("UI")] [SerializeField] private readonly GameObject landingPagePanel = null;
-    [SerializeField] private readonly NetworkManagerGame networkManager = null;
+    [Header("UI")] [SerializeField] private GameObject landingPagePanel = null;
+    [SerializeField] private NetworkManagerGame networkManager = null;
 
     public void HostLobby()
     {

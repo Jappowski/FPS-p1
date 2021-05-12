@@ -5,12 +5,12 @@ namespace Mirror.Examples.MultipleMatch
 {
     public class CellGUI : MonoBehaviour
     {
-        public Button button;
+        public MatchController matchController;
         public CellValue cellValue;
 
-        [Header("GUI References")] public Image image;
-
-        public MatchController matchController;
+        [Header("GUI References")]
+        public Image image;
+        public Button button;
 
         [Header("Diagnostics - Do Not Modify")]
         public NetworkIdentity playerIdentity;

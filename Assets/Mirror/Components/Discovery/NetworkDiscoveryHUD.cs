@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Events;
 using UnityEngine;
 
 namespace Mirror.Discovery
@@ -11,24 +9,24 @@ namespace Mirror.Discovery
     [RequireComponent(typeof(NetworkDiscovery))]
     public class NetworkDiscoveryHUD : MonoBehaviour
     {
-        private readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
+        readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
+        Vector2 scrollViewPos = Vector2.zero;
 
         public NetworkDiscovery networkDiscovery;
-        private Vector2 scrollViewPos = Vector2.zero;
 
 #if UNITY_EDITOR
-        private void OnValidate()
+        void OnValidate()
         {
             if (networkDiscovery == null)
             {
                 networkDiscovery = GetComponent<NetworkDiscovery>();
-                UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
-                Undo.RecordObjects(new Object[] {this, networkDiscovery}, "Set NetworkDiscovery");
+                UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
+                UnityEditor.Undo.RecordObjects(new Object[] { this, networkDiscovery }, "Set NetworkDiscovery");
             }
         }
 #endif
 
-        private void OnGUI()
+        void OnGUI()
         {
             if (NetworkManager.singleton == null)
                 return;
@@ -40,7 +38,7 @@ namespace Mirror.Discovery
                 DrawGUI();
         }
 
-        private void DrawGUI()
+        void DrawGUI()
         {
             GUILayout.BeginHorizontal();
 
@@ -76,14 +74,14 @@ namespace Mirror.Discovery
             // servers
             scrollViewPos = GUILayout.BeginScrollView(scrollViewPos);
 
-            foreach (var info in discoveredServers.Values)
+            foreach (ServerResponse info in discoveredServers.Values)
                 if (GUILayout.Button(info.EndPoint.Address.ToString()))
                     Connect(info);
 
             GUILayout.EndScrollView();
         }
 
-        private void Connect(ServerResponse info)
+        void Connect(ServerResponse info)
         {
             NetworkManager.singleton.StartClient(info.uri);
         }

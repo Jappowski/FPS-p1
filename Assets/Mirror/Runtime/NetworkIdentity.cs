@@ -1,13 +1,13 @@
-#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using Mirror.RemoteCalls;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+
+#if UNITY_EDITOR
+using UnityEditor;
 #if UNITY_2018_3_OR_NEWER
 using UnityEditor.Experimental.SceneManagement;
-
 #endif
 #endif
 
@@ -17,12 +17,7 @@ namespace Mirror
     // ForceHidden = useful to hide monsters while they respawn etc.
     // ForceShown = useful to have score NetworkIdentities that always broadcast
     //              to everyone etc.
-    public enum Visibility
-    {
-        Default,
-        ForceHidden,
-        ForceShown
-    }
+    public enum Visibility { Default, ForceHidden, ForceShown }
 
     /// <summary>NetworkIdentity identifies objects across the network.</summary>
     [DisallowMultipleComponent]
@@ -30,79 +25,6 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkIdentity.html")]
     public sealed class NetworkIdentity : MonoBehaviour
     {
-        /// <summary>The delegate type for the clientAuthorityCallback.</summary>
-        public delegate void ClientAuthorityCallback(NetworkConnection conn, NetworkIdentity identity,
-            bool authorityState);
-
-        /// <summary>All spawned NetworkIdentities by netId. Available on server and client.</summary>
-        // server sees ALL spawned ones.
-        // client sees OBSERVED spawned ones.
-        public static readonly Dictionary<uint, NetworkIdentity> spawned =
-            new Dictionary<uint, NetworkIdentity>();
-
-        // Keep track of all sceneIds to detect scene duplicates
-        private static readonly Dictionary<ulong, NetworkIdentity> sceneIds =
-            new Dictionary<ulong, NetworkIdentity>();
-
-        private static uint nextNetworkId = 1;
-
-        // TODO any way to make this not static?
-        // introduced in https://github.com/vis2k/Mirror/commit/c7530894788bb843b0f424e8f25029efce72d8ca#diff-dc8b7a5a67840f75ccc884c91b9eb76ab7311c9ca4360885a7e41d980865bdc2
-        // for PR https://github.com/vis2k/Mirror/pull/1263
-        //
-        // explanation:
-        // we send the spawn message multiple times. Whenever an object changes
-        // authority, we send the spawn message again for the object. This is
-        // necessary because we need to reinitialize all variables when
-        // ownership change due to sync to owner feature.
-        // Without this static, the second time we get the spawn message we
-        // would call OnStartLocalPlayer again on the same object
-        private static NetworkIdentity previousLocalPlayer;
-        private NetworkConnectionToClient _connectionToClient;
-
-        // get all NetworkBehaviour components
-        // => currently lazily initialized so tests can add components after
-        //    creating a NetworkIdentity.
-        private NetworkBehaviour[] _NetworkBehaviours;
-
-        private bool clientStarted;
-
-        // Set before Destroy is called so that OnDestroy doesn't try to destroy
-        // the object again
-        internal bool destroyCalled;
-
-        private bool hadAuthority;
-
-        // hasSpawned should always be false before runtime
-        [SerializeField] [HideInInspector] private bool hasSpawned;
-        [SerializeField] [HideInInspector] private string m_AssetId;
-
-        /// <summary>The set of network connections (players) that can see this object.</summary>
-        // note: null until OnStartServer was called. this is necessary for
-        //       SendTo* to work properly in server-only mode.
-        public Dictionary<int, NetworkConnection> observers;
-
-        /// <summary>Unique identifier for NetworkIdentity objects within a scene, used for spawning scene objects.</summary>
-        // persistent scene id <sceneHash/32,sceneId/32> (see AssignSceneID comments)
-        [FormerlySerializedAs("m_SceneId")] [HideInInspector]
-        public ulong sceneId;
-
-        /// <summary>Make this object only exist when the game is running as a server (or host).</summary>
-        [FormerlySerializedAs("m_ServerOnly")] [Tooltip("Prevents this object from being spawned / enabled on clients")]
-        public bool serverOnly;
-
-        // current visibility
-        //
-        // Default = use interest management
-        // ForceHidden = useful to hide monsters while they respawn etc.
-        // ForceShown = useful to have score NetworkIdentities that always broadcast
-        //              to everyone etc.
-        //
-        // TODO rename to 'visibility' after removing .visibility some day!
-        [Tooltip(
-            "Visibility can overwrite interest management. ForceHidden can be useful to hide monsters while they respawn. ForceShown can be useful for score NetworkIdentities that should always broadcast to everyone in the world.")]
-        public Visibility visible = Visibility.Default;
-
         /// <summary>Returns true if running as a client and this object was spawned by a server.</summary>
         //
         // IMPORTANT:
@@ -159,8 +81,27 @@ namespace Mirror
         // on other clients.
         public bool hasAuthority { get; internal set; }
 
+        /// <summary>The set of network connections (players) that can see this object.</summary>
+        // note: null until OnStartServer was called. this is necessary for
+        //       SendTo* to work properly in server-only mode.
+        public Dictionary<int, NetworkConnection> observers;
+
         /// <summary>The unique network Id of this object (unique at runtime).</summary>
         public uint netId { get; internal set; }
+
+        /// <summary>Unique identifier for NetworkIdentity objects within a scene, used for spawning scene objects.</summary>
+        // persistent scene id <sceneHash/32,sceneId/32> (see AssignSceneID comments)
+        [FormerlySerializedAs("m_SceneId"), HideInInspector]
+        public ulong sceneId;
+
+        /// <summary>Make this object only exist when the game is running as a server (or host).</summary>
+        [FormerlySerializedAs("m_ServerOnly")]
+        [Tooltip("Prevents this object from being spawned / enabled on clients")]
+        public bool serverOnly;
+
+        // Set before Destroy is called so that OnDestroy doesn't try to destroy
+        // the object again
+        internal bool destroyCalled;
 
         /// <summary>Client's network connection to the server. This is only valid for player objects on the client.</summary>
         public NetworkConnection connectionToServer { get; internal set; }
@@ -176,7 +117,18 @@ namespace Mirror
                 _connectionToClient?.AddOwnedObject(this);
             }
         }
+        NetworkConnectionToClient _connectionToClient;
 
+        /// <summary>All spawned NetworkIdentities by netId. Available on server and client.</summary>
+        // server sees ALL spawned ones.
+        // client sees OBSERVED spawned ones.
+        public static readonly Dictionary<uint, NetworkIdentity> spawned =
+            new Dictionary<uint, NetworkIdentity>();
+
+        // get all NetworkBehaviour components
+        // => currently lazily initialized so tests can add components after
+        //    creating a NetworkIdentity.
+        NetworkBehaviour[] _NetworkBehaviours;
         public NetworkBehaviour[] NetworkBehaviours
         {
             get
@@ -186,17 +138,41 @@ namespace Mirror
                     _NetworkBehaviours = GetComponents<NetworkBehaviour>();
                     if (_NetworkBehaviours.Length > byte.MaxValue)
                     {
-                        Debug.LogError(
-                            $"Only {byte.MaxValue} NetworkBehaviour components are allowed for NetworkIdentity: {name} because we send the index as byte.",
-                            this);
+                        Debug.LogError($"Only {byte.MaxValue} NetworkBehaviour components are allowed for NetworkIdentity: {name} because we send the index as byte.", this);
                         // Log error once then resize array so that NetworkIdentity does not throw exceptions later
                         Array.Resize(ref _NetworkBehaviours, byte.MaxValue);
                     }
                 }
-
                 return _NetworkBehaviours;
             }
         }
+
+#pragma warning disable 618
+        NetworkVisibility visibilityCache;
+        [Obsolete(NetworkVisibilityObsoleteMessage.Message)]
+        public NetworkVisibility visibility
+        {
+            get
+            {
+                if (visibilityCache == null)
+                {
+                    visibilityCache = GetComponent<NetworkVisibility>();
+                }
+                return visibilityCache;
+            }
+        }
+#pragma warning restore 618
+
+        // current visibility
+        //
+        // Default = use interest management
+        // ForceHidden = useful to hide monsters while they respawn etc.
+        // ForceShown = useful to have score NetworkIdentities that always broadcast
+        //              to everyone etc.
+        //
+        // TODO rename to 'visibility' after removing .visibility some day!
+        [Tooltip("Visibility can overwrite interest management. ForceHidden can be useful to hide monsters while they respawn. ForceShown can be useful for score NetworkIdentities that should always broadcast to everyone in the world.")]
+        public Visibility visible = Visibility.Default;
 
         /// <summary>Prefab GUID used to spawn prefabs across the network.</summary>
         //
@@ -227,25 +203,26 @@ namespace Mirror
             }
             internal set
             {
-                var newAssetIdString = value == Guid.Empty ? string.Empty : value.ToString("N");
-                var oldAssetIdSrting = m_AssetId;
+                string newAssetIdString = value == Guid.Empty ? string.Empty : value.ToString("N");
+                string oldAssetIdSrting = m_AssetId;
 
                 // they are the same, do nothing
-                if (oldAssetIdSrting == newAssetIdString) return;
+                if (oldAssetIdSrting == newAssetIdString)
+                {
+                    return;
+                }
 
                 // new is empty
                 if (string.IsNullOrEmpty(newAssetIdString))
                 {
-                    Debug.LogError(
-                        $"Can not set AssetId to empty guid on NetworkIdentity '{name}', old assetId '{oldAssetIdSrting}'");
+                    Debug.LogError($"Can not set AssetId to empty guid on NetworkIdentity '{name}', old assetId '{oldAssetIdSrting}'");
                     return;
                 }
 
                 // old not empty
                 if (!string.IsNullOrEmpty(oldAssetIdSrting))
                 {
-                    Debug.LogError(
-                        $"Can not Set AssetId on NetworkIdentity '{name}' because it already had an assetId, current assetId '{oldAssetIdSrting}', attempted new assetId '{newAssetIdString}'");
+                    Debug.LogError($"Can not Set AssetId on NetworkIdentity '{name}' because it already had an assetId, current assetId '{oldAssetIdSrting}', attempted new assetId '{newAssetIdString}'");
                     return;
                 }
 
@@ -254,14 +231,14 @@ namespace Mirror
                 // Debug.Log($"Settings AssetId on NetworkIdentity '{name}', new assetId '{newAssetIdString}'");
             }
         }
+        [SerializeField, HideInInspector] string m_AssetId;
 
-        public bool SpawnedFromInstantiate { get; private set; }
+        // Keep track of all sceneIds to detect scene duplicates
+        static readonly Dictionary<ulong, NetworkIdentity> sceneIds =
+            new Dictionary<ulong, NetworkIdentity>();
 
         /// <summary>Gets the NetworkIdentity from the sceneIds dictionary with the corresponding id</summary>
-        public static NetworkIdentity GetSceneIdentity(ulong id)
-        {
-            return sceneIds[id];
-        }
+        public static NetworkIdentity GetSceneIdentity(ulong id) => sceneIds[id];
 
         // used when adding players
         internal void SetClientOwner(NetworkConnection conn)
@@ -269,25 +246,22 @@ namespace Mirror
             // do nothing if it already has an owner
             if (connectionToClient != null && conn != connectionToClient)
             {
-                Debug.LogError($"Object {this} netId={netId} already has an owner. Use RemoveClientAuthority() first",
-                    this);
+                Debug.LogError($"Object {this} netId={netId} already has an owner. Use RemoveClientAuthority() first", this);
                 return;
             }
 
             // otherwise set the owner connection
-            connectionToClient = (NetworkConnectionToClient) conn;
+            connectionToClient = (NetworkConnectionToClient)conn;
         }
 
-        internal static uint GetNextNetworkId()
-        {
-            return nextNetworkId++;
-        }
+        static uint nextNetworkId = 1;
+        internal static uint GetNextNetworkId() => nextNetworkId++;
 
         /// <summary>Resets nextNetworkId = 1</summary>
-        public static void ResetNextNetworkId()
-        {
-            nextNetworkId = 1;
-        }
+        public static void ResetNextNetworkId() => nextNetworkId = 1;
+
+        /// <summary>The delegate type for the clientAuthorityCallback.</summary>
+        public delegate void ClientAuthorityCallback(NetworkConnection conn, NetworkIdentity identity, bool authorityState);
 
         /// <summary> A callback that can be populated to be notified when the client-authority state of objects changes.</summary>
         public static event ClientAuthorityCallback clientAuthorityCallback;
@@ -298,20 +272,22 @@ namespace Mirror
             observers?.Remove(conn.connectionId);
         }
 
-        private void Awake()
+        // hasSpawned should always be false before runtime
+        [SerializeField, HideInInspector] bool hasSpawned;
+        public bool SpawnedFromInstantiate { get; private set; }
+
+        void Awake()
         {
             if (hasSpawned)
             {
-                Debug.LogError(
-                    $"{name} has already spawned. Don't call Instantiate for NetworkIdentities that were in the scene since the beginning (aka scene objects).  Otherwise the client won't know which object to use for a SpawnSceneObject message.");
+                Debug.LogError($"{name} has already spawned. Don't call Instantiate for NetworkIdentities that were in the scene since the beginning (aka scene objects).  Otherwise the client won't know which object to use for a SpawnSceneObject message.");
                 SpawnedFromInstantiate = true;
                 Destroy(gameObject);
             }
-
             hasSpawned = true;
         }
 
-        private void OnValidate()
+        void OnValidate()
         {
             // OnValidate is not called when using Instantiate, so we can use
             // it to make sure that hasSpawned is false
@@ -322,13 +298,219 @@ namespace Mirror
 #endif
         }
 
+#if UNITY_EDITOR
+        void AssignAssetID(string path) => m_AssetId = AssetDatabase.AssetPathToGUID(path);
+        void AssignAssetID(GameObject prefab) => AssignAssetID(AssetDatabase.GetAssetPath(prefab));
+
+        // persistent sceneId assignment
+        // (because scene objects have no persistent unique ID in Unity)
+        //
+        // original UNET used OnPostProcessScene to assign an index based on
+        // FindObjectOfType<NetworkIdentity> order.
+        // -> this didn't work because FindObjectOfType order isn't deterministic.
+        // -> one workaround is to sort them by sibling paths, but it can still
+        //    get out of sync when we open scene2 in editor and we have
+        //    DontDestroyOnLoad objects that messed with the sibling index.
+        //
+        // we absolutely need a persistent id. challenges:
+        // * it needs to be 0 for prefabs
+        //   => we set it to 0 in SetupIDs() if prefab!
+        // * it needs to be only assigned in edit time, not at runtime because
+        //   only the objects that were in the scene since beginning should have
+        //   a scene id.
+        //   => Application.isPlaying check solves that
+        // * it needs to detect duplicated sceneIds after duplicating scene
+        //   objects
+        //   => sceneIds dict takes care of that
+        // * duplicating the whole scene file shouldn't result in duplicate
+        //   scene objects
+        //   => buildIndex is shifted into sceneId for that.
+        //   => if we have no scenes in build index then it doesn't matter
+        //      because by definition a build can't switch to other scenes
+        //   => if we do have scenes in build index then it will be != -1
+        //   note: the duplicated scene still needs to be opened once for it to
+        //          be set properly
+        // * scene objects need the correct scene index byte even if the scene's
+        //   build index was changed or a duplicated scene wasn't opened yet.
+        //   => OnPostProcessScene is the only function that gets called for
+        //      each scene before runtime, so this is where we set the scene
+        //      byte.
+        // * disabled scenes in build settings should result in same scene index
+        //   in editor and in build
+        //   => .gameObject.scene.buildIndex filters out disabled scenes by
+        //      default
+        // * generated sceneIds absolutely need to set scene dirty and force the
+        //   user to resave.
+        //   => Undo.RecordObject does that perfectly.
+        // * sceneIds should never be generated temporarily for unopened scenes
+        //   when building, otherwise editor and build get out of sync
+        //   => BuildPipeline.isBuildingPlayer check solves that
+        void AssignSceneID()
+        {
+            // we only ever assign sceneIds at edit time, never at runtime.
+            // by definition, only the original scene objects should get one.
+            // -> if we assign at runtime then server and client would generate
+            //    different random numbers!
+            if (Application.isPlaying)
+                return;
+
+            // no valid sceneId yet, or duplicate?
+            bool duplicate = sceneIds.TryGetValue(sceneId, out NetworkIdentity existing) && existing != null && existing != this;
+            if (sceneId == 0 || duplicate)
+            {
+                // clear in any case, because it might have been a duplicate
+                sceneId = 0;
+
+                // if a scene was never opened and we are building it, then a
+                // sceneId would be assigned to build but not saved in editor,
+                // resulting in them getting out of sync.
+                // => don't ever assign temporary ids. they always need to be
+                //    permanent
+                // => throw an exception to cancel the build and let the user
+                //    know how to fix it!
+                if (BuildPipeline.isBuildingPlayer)
+                    throw new InvalidOperationException("Scene " + gameObject.scene.path + " needs to be opened and resaved before building, because the scene object " + name + " has no valid sceneId yet.");
+
+                // if we generate the sceneId then we MUST be sure to set dirty
+                // in order to save the scene object properly. otherwise it
+                // would be regenerated every time we reopen the scene, and
+                // upgrading would be very difficult.
+                // -> Undo.RecordObject is the new EditorUtility.SetDirty!
+                // -> we need to call it before changing.
+                Undo.RecordObject(this, "Generated SceneId");
+
+                // generate random sceneId part (0x00000000FFFFFFFF)
+                uint randomId = Utils.GetTrueRandomUInt();
+
+                // only assign if not a duplicate of an existing scene id
+                // (small chance, but possible)
+                duplicate = sceneIds.TryGetValue(randomId, out existing) && existing != null && existing != this;
+                if (!duplicate)
+                {
+                    sceneId = randomId;
+                    //Debug.Log(name + " in scene=" + gameObject.scene.name + " sceneId assigned to: " + m_SceneId.ToString("X"));
+                }
+            }
+
+            // add to sceneIds dict no matter what
+            // -> even if we didn't generate anything new, because we still need
+            //    existing sceneIds in there to check duplicates
+            sceneIds[sceneId] = this;
+        }
+
+        // copy scene path hash into sceneId for scene objects.
+        // this is the only way for scene file duplication to not contain
+        // duplicate sceneIds as it seems.
+        // -> sceneId before: 0x00000000AABBCCDD
+        // -> then we clear the left 4 bytes, so that our 'OR' uses 0x00000000
+        // -> then we OR the hash into the 0x00000000 part
+        // -> buildIndex is not enough, because Editor and Build have different
+        //    build indices if there are disabled scenes in build settings, and
+        //    if no scene is in build settings then Editor and Build have
+        //    different indices too (Editor=0, Build=-1)
+        // => ONLY USE THIS FROM POSTPROCESSSCENE!
+        public void SetSceneIdSceneHashPartInternal()
+        {
+            // Use `ToLower` to that because BuildPipeline.BuildPlayer is case insensitive but hash is case sensitive
+            // If the scene in the project is `forest.unity` but `Forest.unity` is given to BuildPipeline then the
+            // BuildPipeline will use `Forest.unity` for the build and create a different hash than the editor will.
+            // Using ToLower will mean the hash will be the same for these 2 paths
+            // Assets/Scenes/Forest.unity
+            // Assets/Scenes/forest.unity
+            string scenePath = gameObject.scene.path.ToLower();
+
+            // get deterministic scene hash
+            uint pathHash = (uint)scenePath.GetStableHashCode();
+
+            // shift hash from 0x000000FFFFFFFF to 0xFFFFFFFF00000000
+            ulong shiftedHash = (ulong)pathHash << 32;
+
+            // OR into scene id
+            sceneId = (sceneId & 0xFFFFFFFF) | shiftedHash;
+
+            // log it. this is incredibly useful to debug sceneId issues.
+            // Debug.Log(name + " in scene=" + gameObject.scene.name + " scene index hash(" + pathHash.ToString("X") + ") copied into sceneId: " + sceneId.ToString("X"));
+        }
+
+        void SetupIDs()
+        {
+            // is this a prefab?
+            if (Utils.IsPrefab(gameObject))
+            {
+                // force 0 for prefabs
+                sceneId = 0;
+                AssignAssetID(gameObject);
+            }
+            // are we currently in prefab editing mode? aka prefab stage
+            // => check prefabstage BEFORE SceneObjectWithPrefabParent
+            //    (fixes https://github.com/vis2k/Mirror/issues/976)
+            // => if we don't check GetCurrentPrefabStage and only check
+            //    GetPrefabStage(gameObject), then the 'else' case where we
+            //    assign a sceneId and clear the assetId would still be
+            //    triggered for prefabs. in other words: if we are in prefab
+            //    stage, do not bother with anything else ever!
+            else if (PrefabStageUtility.GetCurrentPrefabStage() != null)
+            {
+                // when modifying a prefab in prefab stage, Unity calls
+                // OnValidate for that prefab and for all scene objects based on
+                // that prefab.
+                //
+                // is this GameObject the prefab that we modify, and not just a
+                // scene object based on the prefab?
+                //   * GetCurrentPrefabStage = 'are we editing ANY prefab?'
+                //   * GetPrefabStage(go) = 'are we editing THIS prefab?'
+                if (PrefabStageUtility.GetPrefabStage(gameObject) != null)
+                {
+                    // force 0 for prefabs
+                    sceneId = 0;
+                    //Debug.Log(name + " @ scene: " + gameObject.scene.name + " sceneid reset to 0 because CurrentPrefabStage=" + PrefabStageUtility.GetCurrentPrefabStage() + " PrefabStage=" + PrefabStageUtility.GetPrefabStage(gameObject));
+                    // NOTE: might make sense to use GetPrefabStage for asset
+                    //       path, but let's not touch it while it works.
+#if UNITY_2020_1_OR_NEWER
+                    string path = PrefabStageUtility.GetCurrentPrefabStage().assetPath;
+#else
+                    string path = PrefabStageUtility.GetCurrentPrefabStage().prefabAssetPath;
+#endif
+
+                    AssignAssetID(path);
+                }
+            }
+            // is this a scene object with prefab parent?
+            else if (Utils.IsSceneObjectWithPrefabParent(gameObject, out GameObject prefab))
+            {
+                AssignSceneID();
+                AssignAssetID(prefab);
+            }
+            else
+            {
+                AssignSceneID();
+
+                // IMPORTANT: DO NOT clear assetId at runtime!
+                // => fixes a bug where clicking any of the NetworkIdentity
+                //    properties (like ServerOnly/ForceHidden) at runtime would
+                //    call OnValidate
+                // => OnValidate gets into this else case here because prefab
+                //    connection isn't known at runtime
+                // => then we would clear the previously assigned assetId
+                // => and NetworkIdentity couldn't be spawned on other clients
+                //    anymore because assetId was cleared
+                if (!EditorApplication.isPlaying)
+                {
+                    m_AssetId = "";
+                }
+                // don't log. would show a lot when pressing play in uMMORPG/uSurvival/etc.
+                //else Debug.Log($"Avoided clearing assetId at runtime for {name} after (probably) clicking any of the NetworkIdentity properties.");
+            }
+        }
+#endif
+
         // OnDestroy is called for all SPAWNED NetworkIdentities
         // => scene objects aren't destroyed. it's not called for them.
         //
         // Note: Unity will Destroy all networked objects on Scene Change, so we
         // have to handle that here silently. That means we cannot have any
         // warning or logging in this method.
-        private void OnDestroy()
+        void OnDestroy()
         {
             // Objects spawned from Instantiate are not allowed so are destroyed right away
             // we don't want to call NetworkServer.Destroy if this is the case
@@ -339,10 +521,13 @@ namespace Mirror
             // if it is still true, then we need to unspawn it
             // if destroy is already called don't call it again
             if (isServer && !destroyCalled)
+            {
                 // Do not add logging to this (see above)
                 NetworkServer.Destroy(gameObject);
+            }
 
             if (isLocalPlayer)
+            {
                 // previously there was a bug where isLocalPlayer was
                 // false in OnDestroy because it was dynamically defined as:
                 //   isLocalPlayer => NetworkClient.localPlayer == this
@@ -365,6 +550,7 @@ namespace Mirror
                 // => see also: https://github.com/vis2k/Mirror/issues/2635
                 if (NetworkClient.localPlayer == this)
                     NetworkClient.localPlayer = null;
+            }
         }
 
         internal void OnStartServer()
@@ -380,7 +566,10 @@ namespace Mirror
             // AFTER OnStartClient, in which case it would still be falsse here.
             // many projects will check isLocalPlayer in OnStartClient though.
             // TODO ideally set isLocalPlayer when NetworkClient.localPlayer is set?
-            if (NetworkClient.localPlayer == this) isLocalPlayer = true;
+            if (NetworkClient.localPlayer == this)
+            {
+                isLocalPlayer = true;
+            }
 
             // If the instance/net ID is invalid here then this is an object instantiated from a prefab and the server should assign a valid ID
             // NOTE: this might not be necessary because the above m_IsServer
@@ -388,10 +577,12 @@ namespace Mirror
             //       netId, so it would still check cases where isServer=false
             //       but netId!=0.
             if (netId != 0)
+            {
                 // This object has already been spawned, this method might be called again
                 // if we try to respawn all objects.  This can happen when we add a scene
                 // in that case there is nothing else to do.
                 return;
+            }
 
             netId = GetNextNetworkId();
             observers = new Dictionary<int, NetworkConnection>();
@@ -404,9 +595,13 @@ namespace Mirror
 
             // in host mode we set isClient true before calling OnStartServer,
             // otherwise isClient is false in OnStartServer.
-            if (NetworkClient.active) isClient = true;
+            if (NetworkClient.active)
+            {
+                isClient = true;
+            }
 
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStartServer should be caught, so that one
                 // component's exception doesn't stop all other components from
                 // being initialized
@@ -420,11 +615,13 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStartServer:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
         internal void OnStopServer()
         {
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStartServer should be caught, so that one
                 // component's exception doesn't stop all other components from
                 // being initialized
@@ -438,8 +635,10 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStopServer:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
+        bool clientStarted;
         internal void OnStartClient()
         {
             if (clientStarted)
@@ -452,10 +651,14 @@ namespace Mirror
             // AFTER OnStartClient, in which case it would still be falsse here.
             // many projects will check isLocalPlayer in OnStartClient though.
             // TODO ideally set isLocalPlayer when NetworkClient.localPlayer is set?
-            if (NetworkClient.localPlayer == this) isLocalPlayer = true;
+            if (NetworkClient.localPlayer == this)
+            {
+                isLocalPlayer = true;
+            }
 
             // Debug.Log("OnStartClient " + gameObject + " netId:" + netId);
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStartClient should be caught, so that one
                 // component's exception doesn't stop all other components from
                 // being initialized
@@ -470,11 +673,13 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStartClient:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
         internal void OnStopClient()
         {
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStopClient should be caught, so that
                 // one component's exception doesn't stop all other components
                 // from being initialized
@@ -488,8 +693,21 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStopClient:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
+        // TODO any way to make this not static?
+        // introduced in https://github.com/vis2k/Mirror/commit/c7530894788bb843b0f424e8f25029efce72d8ca#diff-dc8b7a5a67840f75ccc884c91b9eb76ab7311c9ca4360885a7e41d980865bdc2
+        // for PR https://github.com/vis2k/Mirror/pull/1263
+        //
+        // explanation:
+        // we send the spawn message multiple times. Whenever an object changes
+        // authority, we send the spawn message again for the object. This is
+        // necessary because we need to reinitialize all variables when
+        // ownership change due to sync to owner feature.
+        // Without this static, the second time we get the spawn message we
+        // would call OnStartLocalPlayer again on the same object
+        static NetworkIdentity previousLocalPlayer = null;
         internal void OnStartLocalPlayer()
         {
             if (previousLocalPlayer == this)
@@ -498,7 +716,8 @@ namespace Mirror
 
             isLocalPlayer = true;
 
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStartLocalPlayer should be caught, so that
                 // one component's exception doesn't stop all other components
                 // from being initialized
@@ -512,8 +731,10 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStartLocalPlayer:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
+        bool hadAuthority;
         internal void NotifyAuthority()
         {
             if (!hadAuthority && hasAuthority)
@@ -525,7 +746,8 @@ namespace Mirror
 
         internal void OnStartAuthority()
         {
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStartAuthority should be caught, so that one
                 // component's exception doesn't stop all other components from
                 // being initialized
@@ -539,11 +761,13 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStartAuthority:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
         internal void OnStopAuthority()
         {
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 // an exception in OnStopAuthority should be caught, so that one
                 // component's exception doesn't stop all other components from
                 // being initialized
@@ -557,16 +781,14 @@ namespace Mirror
                 {
                     Debug.LogError("Exception in OnStopAuthority:" + e.Message + " " + e.StackTrace);
                 }
+            }
         }
 
         // interest management /////////////////////////////////////////////////
         // obsoletes to still support ProximityChecker while transitioning to
         // global Interest Management
         [Obsolete("Use NetworkServer.RebuildObservers(identity, initialize) instead.")]
-        public void RebuildObservers(bool initialize)
-        {
-            NetworkServer.RebuildObservers(this, initialize);
-        }
+        public void RebuildObservers(bool initialize) => NetworkServer.RebuildObservers(this, initialize);
 
         // Callback used by the visibility system for objects on a host.
         // Objects on a host (with a local client) cannot be disabled or
@@ -579,7 +801,7 @@ namespace Mirror
         //    directly in NetworkIdentity.
         internal void OnSetHostVisibility(bool visible)
         {
-            foreach (var rend in GetComponentsInChildren<Renderer>())
+            foreach (Renderer rend in GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;
         }
 
@@ -588,17 +810,17 @@ namespace Mirror
         // -> OnDeserialize carefully extracts each data, then deserializes each component with separate readers
         //    -> it will be impossible to read too many or too few bytes in OnDeserialize
         //    -> we can properly track down errors
-        private bool OnSerializeSafely(NetworkBehaviour comp, NetworkWriter writer, bool initialState)
+        bool OnSerializeSafely(NetworkBehaviour comp, NetworkWriter writer, bool initialState)
         {
             // write placeholder length bytes
             // (jumping back later is WAY faster than allocating a temporary
             //  writer for the payload, then writing payload.size, payload)
-            var headerPosition = writer.Position;
+            int headerPosition = writer.Position;
             writer.WriteInt32(0);
-            var contentPosition = writer.Position;
+            int contentPosition = writer.Position;
 
             // write payload
-            var result = false;
+            bool result = false;
             try
             {
                 result = comp.OnSerialize(writer, initialState);
@@ -606,11 +828,9 @@ namespace Mirror
             catch (Exception e)
             {
                 // show a detailed error and let the user know what went wrong
-                Debug.LogError("OnSerialize failed for: object=" + name + " component=" + comp.GetType() + " sceneId=" +
-                               sceneId.ToString("X") + "\n\n" + e);
+                Debug.LogError("OnSerialize failed for: object=" + name + " component=" + comp.GetType() + " sceneId=" + sceneId.ToString("X") + "\n\n" + e);
             }
-
-            var endPosition = writer.Position;
+            int endPosition = writer.Position;
 
             // fill in length now
             writer.Position = headerPosition;
@@ -626,36 +846,34 @@ namespace Mirror
         // check ownerWritten/observersWritten to know if anything was written
         // We pass dirtyComponentsMask into this function so that we can check
         // if any Components are dirty before creating writers
-        internal void OnSerializeAllSafely(bool initialState, NetworkWriter ownerWriter, out int ownerWritten,
-            NetworkWriter observersWriter, out int observersWritten)
+        internal void OnSerializeAllSafely(bool initialState, NetworkWriter ownerWriter, out int ownerWritten, NetworkWriter observersWriter, out int observersWritten)
         {
             // clear 'written' variables
             ownerWritten = observersWritten = 0;
 
             // check if components are in byte.MaxRange just to be 100% sure
             // that we avoid overflows
-            var components = NetworkBehaviours;
+            NetworkBehaviour[] components = NetworkBehaviours;
             if (components.Length > byte.MaxValue)
-                throw new IndexOutOfRangeException(
-                    $"{name} has more than {byte.MaxValue} components. This is not supported.");
+                throw new IndexOutOfRangeException($"{name} has more than {byte.MaxValue} components. This is not supported.");
 
             // serialize all components
-            for (var i = 0; i < components.Length; ++i)
+            for (int i = 0; i < components.Length; ++i)
             {
                 // is this component dirty?
                 // -> always serialize if initialState so all components are included in spawn packet
                 // -> note: IsDirty() is false if the component isn't dirty or sendInterval isn't elapsed yet
-                var comp = components[i];
+                NetworkBehaviour comp = components[i];
                 if (initialState || comp.IsDirty())
                 {
                     // Debug.Log("OnSerializeAllSafely: " + name + " -> " + comp.GetType() + " initial=" + initialState);
 
                     // remember start position in case we need to copy it into
                     // observers writer too
-                    var startPosition = ownerWriter.Position;
+                    int startPosition = ownerWriter.Position;
 
                     // write index as byte [0..255]
-                    ownerWriter.WriteByte((byte) i);
+                    ownerWriter.WriteByte((byte)i);
 
                     // serialize into ownerWriter first
                     // (owner always gets everything!)
@@ -673,8 +891,8 @@ namespace Mirror
                     //    OnSerialize again
                     if (comp.syncMode == SyncMode.Observers)
                     {
-                        var segment = ownerWriter.ToArraySegment();
-                        var length = ownerWriter.Position - startPosition;
+                        ArraySegment<byte> segment = ownerWriter.ToArraySegment();
+                        int length = ownerWriter.Position - startPosition;
                         observersWriter.WriteBytes(segment.Array, startPosition, length);
                         ++observersWritten;
                     }
@@ -682,12 +900,12 @@ namespace Mirror
             }
         }
 
-        private void OnDeserializeSafely(NetworkBehaviour comp, NetworkReader reader, bool initialState)
+        void OnDeserializeSafely(NetworkBehaviour comp, NetworkReader reader, bool initialState)
         {
             // read header as 4 bytes and calculate this chunk's start+end
-            var contentSize = reader.ReadInt32();
-            var chunkStart = reader.Position;
-            var chunkEnd = reader.Position + contentSize;
+            int contentSize = reader.ReadInt32();
+            int chunkStart = reader.Position;
+            int chunkEnd = reader.Position + contentSize;
 
             // call OnDeserialize and wrap it in a try-catch block so there's no
             // way to mess up another component's deserialization
@@ -699,13 +917,12 @@ namespace Mirror
             catch (Exception e)
             {
                 // show a detailed error and let the user know what went wrong
-                Debug.LogError(
-                    $"OnDeserialize failed Exception={e.GetType()} (see below) object={name} component={comp.GetType()} sceneId={sceneId:X} length={contentSize}. Possible Reasons:\n" +
-                    $"  * Do {comp.GetType()}'s OnSerialize and OnDeserialize calls write the same amount of data({contentSize} bytes)? \n" +
-                    $"  * Was there an exception in {comp.GetType()}'s OnSerialize/OnDeserialize code?\n" +
-                    "  * Are the server and client the exact same project?\n" +
-                    "  * Maybe this OnDeserialize call was meant for another GameObject? The sceneIds can easily get out of sync if the Hierarchy was modified only in the client OR the server. Try rebuilding both.\n\n" +
-                    $"Exception {e}");
+                Debug.LogError($"OnDeserialize failed Exception={e.GetType()} (see below) object={name} component={comp.GetType()} sceneId={sceneId:X} length={contentSize}. Possible Reasons:\n" +
+                               $"  * Do {comp.GetType()}'s OnSerialize and OnDeserialize calls write the same amount of data({contentSize} bytes)? \n" +
+                               $"  * Was there an exception in {comp.GetType()}'s OnSerialize/OnDeserialize code?\n" +
+                               $"  * Are the server and client the exact same project?\n" +
+                               $"  * Maybe this OnDeserialize call was meant for another GameObject? The sceneIds can easily get out of sync if the Hierarchy was modified only in the client OR the server. Try rebuilding both.\n\n" +
+                               $"Exception {e}");
             }
 
             // now the reader should be EXACTLY at 'before + size'.
@@ -713,11 +930,8 @@ namespace Mirror
             if (reader.Position != chunkEnd)
             {
                 // warn the user
-                var bytesRead = reader.Position - chunkStart;
-                Debug.LogWarning("OnDeserialize was expected to read " + contentSize + " instead of " + bytesRead +
-                                 " bytes for object:" + name + " component=" + comp.GetType() + " sceneId=" +
-                                 sceneId.ToString("X") +
-                                 ". Make sure that OnSerialize and OnDeserialize write/read the same amount of data in all cases.");
+                int bytesRead = reader.Position - chunkStart;
+                Debug.LogWarning("OnDeserialize was expected to read " + contentSize + " instead of " + bytesRead + " bytes for object:" + name + " component=" + comp.GetType() + " sceneId=" + sceneId.ToString("X") + ". Make sure that OnSerialize and OnDeserialize write/read the same amount of data in all cases.");
 
                 // fix the position, so the following components don't all fail
                 reader.Position = chunkEnd;
@@ -727,20 +941,21 @@ namespace Mirror
         internal void OnDeserializeAllSafely(NetworkReader reader, bool initialState)
         {
             // deserialize all components that were received
-            var components = NetworkBehaviours;
+            NetworkBehaviour[] components = NetworkBehaviours;
             while (reader.Position < reader.Length)
             {
                 // read & check index [0..255]
-                var index = reader.ReadByte();
+                byte index = reader.ReadByte();
                 if (index < components.Length)
+                {
                     // deserialize this component
                     OnDeserializeSafely(components[index], reader, initialState);
+                }
             }
         }
 
         // Helper function to handle Command/Rpc
-        internal void HandleRemoteCall(int componentIndex, int functionHash, MirrorInvokeType invokeType,
-            NetworkReader reader, NetworkConnectionToClient senderConnection = null)
+        internal void HandleRemoteCall(int componentIndex, int functionHash, MirrorInvokeType invokeType, NetworkReader reader, NetworkConnectionToClient senderConnection = null)
         {
             // check if unity object has been destroyed
             if (this == null)
@@ -756,11 +971,11 @@ namespace Mirror
                 return;
             }
 
-            var invokeComponent = NetworkBehaviours[componentIndex];
-            if (!RemoteCallHelper.InvokeHandlerDelegate(functionHash, invokeType, reader, invokeComponent,
-                senderConnection))
-                Debug.LogError(
-                    $"Found no receiver for incoming {invokeType} [{functionHash}] on {gameObject.name}, the server and client should have the same NetworkBehaviour instances [netId={netId}].");
+            NetworkBehaviour invokeComponent = NetworkBehaviours[componentIndex];
+            if (!RemoteCallHelper.InvokeHandlerDelegate(functionHash, invokeType, reader, invokeComponent, senderConnection))
+            {
+                Debug.LogError($"Found no receiver for incoming {invokeType} [{functionHash}] on {gameObject.name}, the server and client should have the same NetworkBehaviour instances [netId={netId}].");
+            }
         }
 
         // Runs on server
@@ -768,18 +983,22 @@ namespace Mirror
         {
             // check if unity object has been destroyed
             if (this == null)
+            {
                 // error can be logged later
                 return default;
+            }
 
             // find the right component to invoke the function on
             if (0 <= componentIndex && componentIndex < NetworkBehaviours.Length)
             {
-                var invokeComponent = NetworkBehaviours[componentIndex];
+                NetworkBehaviour invokeComponent = NetworkBehaviours[componentIndex];
                 return RemoteCallHelper.GetCommandInfo(cmdHash, invokeComponent);
             }
-
-            // error can be logged later
-            return default;
+            else
+            {
+                // error can be logged later
+                return default;
+            }
         }
 
         // Called when NetworkIdentity is destroyed
@@ -787,7 +1006,10 @@ namespace Mirror
         {
             if (observers != null)
             {
-                foreach (var conn in observers.Values) conn.RemoveFromObserving(this, true);
+                foreach (NetworkConnection conn in observers.Values)
+                {
+                    conn.RemoveFromObserving(this, true);
+                }
                 observers.Clear();
             }
         }
@@ -801,9 +1023,11 @@ namespace Mirror
             }
 
             if (observers.ContainsKey(conn.connectionId))
+            {
                 // if we try to add a connectionId that was already added, then
                 // we may have generated one that was already in use.
                 return;
+            }
 
             // Debug.Log("Added observer " + conn.address + " added for " + gameObject);
 
@@ -830,15 +1054,13 @@ namespace Mirror
 
             if (conn == null)
             {
-                Debug.LogError("AssignClientAuthority for " + gameObject +
-                               " owner cannot be null. Use RemoveClientAuthority() instead.");
+                Debug.LogError("AssignClientAuthority for " + gameObject + " owner cannot be null. Use RemoveClientAuthority() instead.");
                 return false;
             }
 
             if (connectionToClient != null && conn != connectionToClient)
             {
-                Debug.LogError("AssignClientAuthority for " + gameObject +
-                               " already has an owner. Use RemoveClientAuthority() first.");
+                Debug.LogError("AssignClientAuthority for " + gameObject + " already has an owner. Use RemoveClientAuthority() first.");
                 return false;
             }
 
@@ -875,7 +1097,7 @@ namespace Mirror
             {
                 clientAuthorityCallback?.Invoke(connectionToClient, this, false);
 
-                var previousOwner = connectionToClient;
+                NetworkConnectionToClient previousOwner = connectionToClient;
 
                 // TODO why do we clear this twice?
                 connectionToClient = null;
@@ -921,255 +1143,44 @@ namespace Mirror
             // clear local player if it was the local player,
             // THEN reset isLocalPlayer AFTERWARDS
             if (isLocalPlayer)
+            {
                 // only clear NetworkClient.localPlayer IF IT POINTS TO US!
                 // see OnDestroy() comments. it does the same.
                 // (https://github.com/vis2k/Mirror/issues/2635)
                 if (NetworkClient.localPlayer == this)
                     NetworkClient.localPlayer = null;
+            }
             isLocalPlayer = false;
         }
 
         // clear all component's dirty bits no matter what
         internal void ClearAllComponentsDirtyBits()
         {
-            foreach (var comp in NetworkBehaviours) comp.ClearAllDirtyBits();
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
+                comp.ClearAllDirtyBits();
+            }
         }
 
         // Clear only dirty component's dirty bits. ignores components which
         // may be dirty but not ready to be synced yet (because of syncInterval)
         internal void ClearDirtyComponentsDirtyBits()
         {
-            foreach (var comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
                 if (comp.IsDirty())
-                    comp.ClearAllDirtyBits();
-        }
-
-        private void ResetSyncObjects()
-        {
-            foreach (var comp in NetworkBehaviours) comp.ResetSyncObjects();
-        }
-
-#pragma warning disable 618
-        private NetworkVisibility visibilityCache;
-        [Obsolete(NetworkVisibilityObsoleteMessage.Message)]
-        public NetworkVisibility visibility
-        {
-            get
-            {
-                if (visibilityCache == null) visibilityCache = GetComponent<NetworkVisibility>();
-                return visibilityCache;
-            }
-        }
-#pragma warning restore 618
-
-#if UNITY_EDITOR
-        private void AssignAssetID(string path)
-        {
-            m_AssetId = AssetDatabase.AssetPathToGUID(path);
-        }
-
-        private void AssignAssetID(GameObject prefab)
-        {
-            AssignAssetID(AssetDatabase.GetAssetPath(prefab));
-        }
-
-        // persistent sceneId assignment
-        // (because scene objects have no persistent unique ID in Unity)
-        //
-        // original UNET used OnPostProcessScene to assign an index based on
-        // FindObjectOfType<NetworkIdentity> order.
-        // -> this didn't work because FindObjectOfType order isn't deterministic.
-        // -> one workaround is to sort them by sibling paths, but it can still
-        //    get out of sync when we open scene2 in editor and we have
-        //    DontDestroyOnLoad objects that messed with the sibling index.
-        //
-        // we absolutely need a persistent id. challenges:
-        // * it needs to be 0 for prefabs
-        //   => we set it to 0 in SetupIDs() if prefab!
-        // * it needs to be only assigned in edit time, not at runtime because
-        //   only the objects that were in the scene since beginning should have
-        //   a scene id.
-        //   => Application.isPlaying check solves that
-        // * it needs to detect duplicated sceneIds after duplicating scene
-        //   objects
-        //   => sceneIds dict takes care of that
-        // * duplicating the whole scene file shouldn't result in duplicate
-        //   scene objects
-        //   => buildIndex is shifted into sceneId for that.
-        //   => if we have no scenes in build index then it doesn't matter
-        //      because by definition a build can't switch to other scenes
-        //   => if we do have scenes in build index then it will be != -1
-        //   note: the duplicated scene still needs to be opened once for it to
-        //          be set properly
-        // * scene objects need the correct scene index byte even if the scene's
-        //   build index was changed or a duplicated scene wasn't opened yet.
-        //   => OnPostProcessScene is the only function that gets called for
-        //      each scene before runtime, so this is where we set the scene
-        //      byte.
-        // * disabled scenes in build settings should result in same scene index
-        //   in editor and in build
-        //   => .gameObject.scene.buildIndex filters out disabled scenes by
-        //      default
-        // * generated sceneIds absolutely need to set scene dirty and force the
-        //   user to resave.
-        //   => Undo.RecordObject does that perfectly.
-        // * sceneIds should never be generated temporarily for unopened scenes
-        //   when building, otherwise editor and build get out of sync
-        //   => BuildPipeline.isBuildingPlayer check solves that
-        private void AssignSceneID()
-        {
-            // we only ever assign sceneIds at edit time, never at runtime.
-            // by definition, only the original scene objects should get one.
-            // -> if we assign at runtime then server and client would generate
-            //    different random numbers!
-            if (Application.isPlaying)
-                return;
-
-            // no valid sceneId yet, or duplicate?
-            var duplicate = sceneIds.TryGetValue(sceneId, out var existing) && existing != null && existing != this;
-            if (sceneId == 0 || duplicate)
-            {
-                // clear in any case, because it might have been a duplicate
-                sceneId = 0;
-
-                // if a scene was never opened and we are building it, then a
-                // sceneId would be assigned to build but not saved in editor,
-                // resulting in them getting out of sync.
-                // => don't ever assign temporary ids. they always need to be
-                //    permanent
-                // => throw an exception to cancel the build and let the user
-                //    know how to fix it!
-                if (BuildPipeline.isBuildingPlayer)
-                    throw new InvalidOperationException("Scene " + gameObject.scene.path +
-                                                        " needs to be opened and resaved before building, because the scene object " +
-                                                        name + " has no valid sceneId yet.");
-
-                // if we generate the sceneId then we MUST be sure to set dirty
-                // in order to save the scene object properly. otherwise it
-                // would be regenerated every time we reopen the scene, and
-                // upgrading would be very difficult.
-                // -> Undo.RecordObject is the new EditorUtility.SetDirty!
-                // -> we need to call it before changing.
-                Undo.RecordObject(this, "Generated SceneId");
-
-                // generate random sceneId part (0x00000000FFFFFFFF)
-                var randomId = Utils.GetTrueRandomUInt();
-
-                // only assign if not a duplicate of an existing scene id
-                // (small chance, but possible)
-                duplicate = sceneIds.TryGetValue(randomId, out existing) && existing != null && existing != this;
-                if (!duplicate)
-                    sceneId = randomId;
-                //Debug.Log(name + " in scene=" + gameObject.scene.name + " sceneId assigned to: " + m_SceneId.ToString("X"));
-            }
-
-            // add to sceneIds dict no matter what
-            // -> even if we didn't generate anything new, because we still need
-            //    existing sceneIds in there to check duplicates
-            sceneIds[sceneId] = this;
-        }
-
-        // copy scene path hash into sceneId for scene objects.
-        // this is the only way for scene file duplication to not contain
-        // duplicate sceneIds as it seems.
-        // -> sceneId before: 0x00000000AABBCCDD
-        // -> then we clear the left 4 bytes, so that our 'OR' uses 0x00000000
-        // -> then we OR the hash into the 0x00000000 part
-        // -> buildIndex is not enough, because Editor and Build have different
-        //    build indices if there are disabled scenes in build settings, and
-        //    if no scene is in build settings then Editor and Build have
-        //    different indices too (Editor=0, Build=-1)
-        // => ONLY USE THIS FROM POSTPROCESSSCENE!
-        public void SetSceneIdSceneHashPartInternal()
-        {
-            // Use `ToLower` to that because BuildPipeline.BuildPlayer is case insensitive but hash is case sensitive
-            // If the scene in the project is `forest.unity` but `Forest.unity` is given to BuildPipeline then the
-            // BuildPipeline will use `Forest.unity` for the build and create a different hash than the editor will.
-            // Using ToLower will mean the hash will be the same for these 2 paths
-            // Assets/Scenes/Forest.unity
-            // Assets/Scenes/forest.unity
-            var scenePath = gameObject.scene.path.ToLower();
-
-            // get deterministic scene hash
-            var pathHash = (uint) scenePath.GetStableHashCode();
-
-            // shift hash from 0x000000FFFFFFFF to 0xFFFFFFFF00000000
-            var shiftedHash = (ulong) pathHash << 32;
-
-            // OR into scene id
-            sceneId = (sceneId & 0xFFFFFFFF) | shiftedHash;
-
-            // log it. this is incredibly useful to debug sceneId issues.
-            // Debug.Log(name + " in scene=" + gameObject.scene.name + " scene index hash(" + pathHash.ToString("X") + ") copied into sceneId: " + sceneId.ToString("X"));
-        }
-
-        private void SetupIDs()
-        {
-            // is this a prefab?
-            if (Utils.IsPrefab(gameObject))
-            {
-                // force 0 for prefabs
-                sceneId = 0;
-                AssignAssetID(gameObject);
-            }
-            // are we currently in prefab editing mode? aka prefab stage
-            // => check prefabstage BEFORE SceneObjectWithPrefabParent
-            //    (fixes https://github.com/vis2k/Mirror/issues/976)
-            // => if we don't check GetCurrentPrefabStage and only check
-            //    GetPrefabStage(gameObject), then the 'else' case where we
-            //    assign a sceneId and clear the assetId would still be
-            //    triggered for prefabs. in other words: if we are in prefab
-            //    stage, do not bother with anything else ever!
-            else if (PrefabStageUtility.GetCurrentPrefabStage() != null)
-            {
-                // when modifying a prefab in prefab stage, Unity calls
-                // OnValidate for that prefab and for all scene objects based on
-                // that prefab.
-                //
-                // is this GameObject the prefab that we modify, and not just a
-                // scene object based on the prefab?
-                //   * GetCurrentPrefabStage = 'are we editing ANY prefab?'
-                //   * GetPrefabStage(go) = 'are we editing THIS prefab?'
-                if (PrefabStageUtility.GetPrefabStage(gameObject) != null)
                 {
-                    // force 0 for prefabs
-                    sceneId = 0;
-                    //Debug.Log(name + " @ scene: " + gameObject.scene.name + " sceneid reset to 0 because CurrentPrefabStage=" + PrefabStageUtility.GetCurrentPrefabStage() + " PrefabStage=" + PrefabStageUtility.GetPrefabStage(gameObject));
-                    // NOTE: might make sense to use GetPrefabStage for asset
-                    //       path, but let's not touch it while it works.
-#if UNITY_2020_1_OR_NEWER
-                    var path = PrefabStageUtility.GetCurrentPrefabStage().assetPath;
-#else
-                    string path = PrefabStageUtility.GetCurrentPrefabStage().prefabAssetPath;
-#endif
-
-                    AssignAssetID(path);
+                    comp.ClearAllDirtyBits();
                 }
             }
-            // is this a scene object with prefab parent?
-            else if (Utils.IsSceneObjectWithPrefabParent(gameObject, out var prefab))
-            {
-                AssignSceneID();
-                AssignAssetID(prefab);
-            }
-            else
-            {
-                AssignSceneID();
+        }
 
-                // IMPORTANT: DO NOT clear assetId at runtime!
-                // => fixes a bug where clicking any of the NetworkIdentity
-                //    properties (like ServerOnly/ForceHidden) at runtime would
-                //    call OnValidate
-                // => OnValidate gets into this else case here because prefab
-                //    connection isn't known at runtime
-                // => then we would clear the previously assigned assetId
-                // => and NetworkIdentity couldn't be spawned on other clients
-                //    anymore because assetId was cleared
-                if (!EditorApplication.isPlaying) m_AssetId = "";
-                // don't log. would show a lot when pressing play in uMMORPG/uSurvival/etc.
-                //else Debug.Log($"Avoided clearing assetId at runtime for {name} after (probably) clicking any of the NetworkIdentity properties.");
+        void ResetSyncObjects()
+        {
+            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            {
+                comp.ResetSyncObjects();
             }
         }
-#endif
     }
 }

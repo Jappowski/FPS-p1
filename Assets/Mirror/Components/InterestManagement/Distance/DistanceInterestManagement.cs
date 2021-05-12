@@ -1,5 +1,4 @@
 // straight forward Vector3.Distance based interest management.
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,24 +6,22 @@ namespace Mirror
 {
     public class DistanceInterestManagement : InterestManagement
     {
-        private double lastRebuildTime;
+        [Tooltip("The maximum range that objects will be visible at.")]
+        public int visRange = 10;
 
         [Tooltip("Rebuild all every 'rebuildInterval' seconds.")]
         public float rebuildInterval = 1;
-
-        [Tooltip("The maximum range that objects will be visible at.")]
-        public int visRange = 10;
+        double lastRebuildTime;
 
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnection newObserver)
         {
             return Vector3.Distance(identity.transform.position, newObserver.identity.transform.position) <= visRange;
         }
 
-        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnection> newObservers,
-            bool initialize)
+        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnection> newObservers, bool initialize)
         {
             // 'transform.' calls GetComponent, only do it once
-            var position = identity.transform.position;
+            Vector3 position = identity.transform.position;
 
             // brute force distance check
             // -> only player connections can be observers, so it's enough if we
@@ -33,15 +30,21 @@ namespace Mirror
             //    magnitude faster. if we have 10k monsters and run a sphere
             //    cast 10k times, we will see a noticeable lag even with physics
             //    layers. but checking to every connection is fast.
-            foreach (var conn in NetworkServer.connections.Values)
+            foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values)
+            {
                 // authenticated and joined world with a player?
                 if (conn != null && conn.isAuthenticated && conn.identity != null)
+                {
                     // check distance
                     if (Vector3.Distance(conn.identity.transform.position, position) < visRange)
+                    {
                         newObservers.Add(conn);
+                    }
+                }
+            }
         }
 
-        private void Update()
+        void Update()
         {
             // only on server
             if (!NetworkServer.active) return;

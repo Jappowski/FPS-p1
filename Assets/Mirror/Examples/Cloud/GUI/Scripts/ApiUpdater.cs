@@ -1,21 +1,28 @@
+using System;
 using Mirror.Cloud.ListServerService;
 using UnityEngine;
 
 namespace Mirror.Cloud.Example
 {
     /// <summary>
-    ///     This component should be put on the NetworkManager object
+    /// This component should be put on the NetworkManager object
     /// </summary>
     public class ApiUpdater : MonoBehaviour
     {
-        [SerializeField] private ApiConnector connector;
+        [SerializeField] NetworkManagerListServer manager;
+        [SerializeField] ApiConnector connector;
         public string gameName = "Game";
-        [SerializeField] private NetworkManagerListServer manager;
 
-        private void Awake()
+        void Awake()
         {
-            if (manager == null) manager = FindObjectOfType<NetworkManagerListServer>();
-            if (connector == null) connector = manager.GetComponent<ApiConnector>();
+            if (manager == null)
+            {
+                manager = FindObjectOfType<NetworkManagerListServer>();
+            }
+            if (connector == null)
+            {
+                connector = manager.GetComponent<ApiConnector>();
+            }
 
             Debug.Assert(manager != null, "ApiUpdater could not find NetworkManagerListServer");
             Debug.Assert(connector != null, "ApiUpdater could not find ApiConnector");
@@ -25,7 +32,7 @@ namespace Mirror.Cloud.Example
             manager.onServerStopped += ServerStoppedHandler;
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             if (manager != null)
             {
@@ -35,7 +42,7 @@ namespace Mirror.Cloud.Example
             }
         }
 
-        private void onPlayerListChanged(int playerCount)
+        void onPlayerListChanged(int playerCount)
         {
             if (connector.ListServer.ServerApi.ServerInList)
             {
@@ -63,22 +70,22 @@ namespace Mirror.Cloud.Example
             }
         }
 
-        private void ServerStartedHandler()
+        void ServerStartedHandler()
         {
             AddServer(0);
         }
 
-        private void AddServer(int playerCount)
+        void AddServer(int playerCount)
         {
-            var transport = Transport.activeTransport;
+            Transport transport = Transport.activeTransport;
 
-            var uri = transport.ServerUri();
-            var port = uri.Port;
-            var protocol = uri.Scheme;
+            Uri uri = transport.ServerUri();
+            int port = uri.Port;
+            string protocol = uri.Scheme;
 
             connector.ListServer.ServerApi.AddServer(new ServerJson
             {
-                displayName = $"{gameName} {(Random.value * 1000).ToString("0")}",
+                displayName = $"{gameName} {(UnityEngine.Random.value * 1000).ToString("0")}",
                 protocol = protocol,
                 port = port,
                 maxPlayerCount = NetworkManager.singleton.maxConnections,
@@ -86,7 +93,7 @@ namespace Mirror.Cloud.Example
             });
         }
 
-        private void ServerStoppedHandler()
+        void ServerStoppedHandler()
         {
             connector.ListServer.ServerApi.RemoveServer();
         }

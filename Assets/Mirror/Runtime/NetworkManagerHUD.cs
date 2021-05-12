@@ -1,6 +1,5 @@
 // vis2k: GUILayout instead of spacey += ...; removed Update hotkeys to avoid
 // confusion if someone accidentally presses one.
-
 using System;
 using UnityEngine;
 
@@ -13,21 +12,20 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkManagerHUD.html")]
     public class NetworkManagerHUD : MonoBehaviour
     {
-        private NetworkManager manager;
+        NetworkManager manager;
+
+        [Obsolete("showGUI will be removed unless someone has a valid use case. Simply use or don't use the HUD component.")]
+        public bool showGUI = true;
 
         public int offsetX;
         public int offsetY;
 
-        [Obsolete(
-            "showGUI will be removed unless someone has a valid use case. Simply use or don't use the HUD component.")]
-        public bool showGUI = true;
-
-        private void Awake()
+        void Awake()
         {
             manager = GetComponent<NetworkManager>();
         }
 
-        private void OnGUI()
+        void OnGUI()
         {
 #pragma warning disable 618
             if (!showGUI) return;
@@ -35,35 +33,51 @@ namespace Mirror
 
             GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
+            {
                 StartButtons();
+            }
             else
+            {
                 StatusLabels();
+            }
 
             // client ready
             if (NetworkClient.isConnected && !NetworkClient.ready)
+            {
                 if (GUILayout.Button("Client Ready"))
                 {
                     NetworkClient.Ready();
-                    if (NetworkClient.localPlayer == null) NetworkClient.AddPlayer();
+                    if (NetworkClient.localPlayer == null)
+                    {
+                        NetworkClient.AddPlayer();
+                    }
                 }
+            }
 
             StopButtons();
 
             GUILayout.EndArea();
         }
 
-        private void StartButtons()
+        void StartButtons()
         {
             if (!NetworkClient.active)
             {
                 // Server + Client
                 if (Application.platform != RuntimePlatform.WebGLPlayer)
+                {
                     if (GUILayout.Button("Host (Server + Client)"))
+                    {
                         manager.StartHost();
+                    }
+                }
 
                 // Client + IP
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Client")) manager.StartClient();
+                if (GUILayout.Button("Client"))
+                {
+                    manager.StartClient();
+                }
                 manager.networkAddress = GUILayout.TextField(manager.networkAddress);
                 GUILayout.EndHorizontal();
 
@@ -82,33 +96,51 @@ namespace Mirror
             {
                 // Connecting
                 GUILayout.Label("Connecting to " + manager.networkAddress + "..");
-                if (GUILayout.Button("Cancel Connection Attempt")) manager.StopClient();
+                if (GUILayout.Button("Cancel Connection Attempt"))
+                {
+                    manager.StopClient();
+                }
             }
         }
 
-        private void StatusLabels()
+        void StatusLabels()
         {
             // server / client status message
-            if (NetworkServer.active) GUILayout.Label("Server: active. Transport: " + Transport.activeTransport);
-            if (NetworkClient.isConnected) GUILayout.Label("Client: address=" + manager.networkAddress);
+            if (NetworkServer.active)
+            {
+                GUILayout.Label("Server: active. Transport: " + Transport.activeTransport);
+            }
+            if (NetworkClient.isConnected)
+            {
+                GUILayout.Label("Client: address=" + manager.networkAddress);
+            }
         }
 
-        private void StopButtons()
+        void StopButtons()
         {
             // stop host if host mode
             if (NetworkServer.active && NetworkClient.isConnected)
             {
-                if (GUILayout.Button("Stop Host")) manager.StopHost();
+                if (GUILayout.Button("Stop Host"))
+                {
+                    manager.StopHost();
+                }
             }
             // stop client if client-only
             else if (NetworkClient.isConnected)
             {
-                if (GUILayout.Button("Stop Client")) manager.StopClient();
+                if (GUILayout.Button("Stop Client"))
+                {
+                    manager.StopClient();
+                }
             }
             // stop server if server-only
             else if (NetworkServer.active)
             {
-                if (GUILayout.Button("Stop Server")) manager.StopServer();
+                if (GUILayout.Button("Stop Server"))
+                {
+                    manager.StopServer();
+                }
             }
         }
     }

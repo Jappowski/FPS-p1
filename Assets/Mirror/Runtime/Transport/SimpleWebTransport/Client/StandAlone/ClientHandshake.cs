@@ -1,12 +1,13 @@
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Mirror.SimpleWeb
 {
     /// <summary>
-    ///     Handles Handshake to the server when it first connects
-    ///     <para>The client handshake does not need buffers to reduce allocations since it only happens once</para>
+    /// Handles Handshake to the server when it first connects
+    /// <para>The client handshake does not need buffers to reduce allocations since it only happens once</para>
     /// </summary>
     internal class ClientHandshake
     {
@@ -14,37 +15,36 @@ namespace Mirror.SimpleWeb
         {
             try
             {
-                var stream = conn.stream;
+                Stream stream = conn.stream;
 
-                var keyBuffer = new byte[16];
-                using (var rng = new RNGCryptoServiceProvider())
+                byte[] keyBuffer = new byte[16];
+                using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
                 {
                     rng.GetBytes(keyBuffer);
                 }
 
-                var key = Convert.ToBase64String(keyBuffer);
-                var keySum = key + Constants.HandshakeGUID;
-                var keySumBytes = Encoding.ASCII.GetBytes(keySum);
+                string key = Convert.ToBase64String(keyBuffer);
+                string keySum = key + Constants.HandshakeGUID;
+                byte[] keySumBytes = Encoding.ASCII.GetBytes(keySum);
                 Log.Verbose($"Handshake Hashing {Encoding.ASCII.GetString(keySumBytes)}");
 
-                var keySumHash = SHA1.Create().ComputeHash(keySumBytes);
+                byte[] keySumHash = SHA1.Create().ComputeHash(keySumBytes);
 
-                var expectedResponse = Convert.ToBase64String(keySumHash);
-                var handshake =
-                    "GET /chat HTTP/1.1\r\n" +
+                string expectedResponse = Convert.ToBase64String(keySumHash);
+                string handshake =
+                    $"GET /chat HTTP/1.1\r\n" +
                     $"Host: {uri.Host}:{uri.Port}\r\n" +
-                    "Upgrade: websocket\r\n" +
-                    "Connection: Upgrade\r\n" +
+                    $"Upgrade: websocket\r\n" +
+                    $"Connection: Upgrade\r\n" +
                     $"Sec-WebSocket-Key: {key}\r\n" +
-                    "Sec-WebSocket-Version: 13\r\n" +
+                    $"Sec-WebSocket-Version: 13\r\n" +
                     "\r\n";
-                var encoded = Encoding.ASCII.GetBytes(handshake);
+                byte[] encoded = Encoding.ASCII.GetBytes(handshake);
                 stream.Write(encoded, 0, encoded.Length);
 
-                var responseBuffer = new byte[1000];
+                byte[] responseBuffer = new byte[1000];
 
-                var lengthOrNull = ReadHelper.SafeReadTillMatch(stream, responseBuffer, 0, responseBuffer.Length,
-                    Constants.endOfHandshake);
+                int? lengthOrNull = ReadHelper.SafeReadTillMatch(stream, responseBuffer, 0, responseBuffer.Length, Constants.endOfHandshake);
 
                 if (!lengthOrNull.HasValue)
                 {
@@ -52,12 +52,12 @@ namespace Mirror.SimpleWeb
                     return false;
                 }
 
-                var responseString = Encoding.ASCII.GetString(responseBuffer, 0, lengthOrNull.Value);
+                string responseString = Encoding.ASCII.GetString(responseBuffer, 0, lengthOrNull.Value);
 
-                var acceptHeader = "Sec-WebSocket-Accept: ";
-                var startIndex = responseString.IndexOf(acceptHeader) + acceptHeader.Length;
-                var endIndex = responseString.IndexOf("\r\n", startIndex);
-                var responseKey = responseString.Substring(startIndex, endIndex - startIndex);
+                string acceptHeader = "Sec-WebSocket-Accept: ";
+                int startIndex = responseString.IndexOf(acceptHeader) + acceptHeader.Length;
+                int endIndex = responseString.IndexOf("\r\n", startIndex);
+                string responseKey = responseString.Substring(startIndex, endIndex - startIndex);
 
                 if (responseKey != expectedResponse)
                 {

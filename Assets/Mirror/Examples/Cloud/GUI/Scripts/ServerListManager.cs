@@ -4,46 +4,54 @@ using UnityEngine.UI;
 namespace Mirror.Cloud.Example
 {
     /// <summary>
-    ///     Uses the ApiConnector on NetworkManager to update the Server list
+    /// Uses the ApiConnector on NetworkManager to update the Server list
     /// </summary>
     public class ServerListManager : MonoBehaviour
     {
-        [Header("Auto Refresh")] [SerializeField]
-        private readonly bool autoRefreshServerlist = false;
+        [Header("UI")]
+        [SerializeField] ServerListUI listUI = null;
 
-        private ApiConnector connector;
+        [Header("Buttons")]
+        [SerializeField] Button refreshButton = null;
+        [SerializeField] Button startServerButton = null;
 
-        [Header("UI")] [SerializeField] private readonly ServerListUI listUI = null;
 
-        [Header("Buttons")] [SerializeField] private readonly Button refreshButton = null;
+        [Header("Auto Refresh")]
+        [SerializeField] bool autoRefreshServerlist = false;
+        [SerializeField] int refreshinterval = 20;
 
-        [SerializeField] private readonly int refreshinterval = 20;
-        [SerializeField] private readonly Button startServerButton = null;
+        ApiConnector connector;
 
-        private void Start()
+        void Start()
         {
-            var manager = NetworkManager.singleton;
+            NetworkManager manager = NetworkManager.singleton;
             connector = manager.GetComponent<ApiConnector>();
 
             connector.ListServer.ClientApi.onServerListUpdated += listUI.UpdateList;
 
-            if (autoRefreshServerlist) connector.ListServer.ClientApi.StartGetServerListRepeat(refreshinterval);
+            if (autoRefreshServerlist)
+            {
+                connector.ListServer.ClientApi.StartGetServerListRepeat(refreshinterval);
+            }
 
             AddButtonHandlers();
         }
 
-        private void AddButtonHandlers()
+        void AddButtonHandlers()
         {
             refreshButton.onClick.AddListener(RefreshButtonHandler);
             startServerButton.onClick.AddListener(StartServerButtonHandler);
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             if (connector == null)
                 return;
 
-            if (autoRefreshServerlist) connector.ListServer.ClientApi.StopGetServerListRepeat();
+            if (autoRefreshServerlist)
+            {
+                connector.ListServer.ClientApi.StopGetServerListRepeat();
+            }
 
             connector.ListServer.ClientApi.onServerListUpdated -= listUI.UpdateList;
         }

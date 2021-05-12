@@ -20,7 +20,7 @@ namespace Telepathy
         // -> ArraySegment indicates the actual message content
         //
         // IMPORTANT: lock{} all usages!
-        private readonly Queue<ArraySegment<byte>> queue = new Queue<ArraySegment<byte>>();
+        readonly Queue<ArraySegment<byte>> queue = new Queue<ArraySegment<byte>>();
 
         // byte[] pool to avoid allocations
         // Take & Return is beautifully encapsulated in the pipe.
@@ -28,7 +28,7 @@ namespace Telepathy
         // and it can be tested easily.
         //
         // IMPORTANT: lock{} all usages!
-        private readonly Pool<byte[]> pool;
+        Pool<byte[]> pool;
 
         // constructor
         public MagnificentSendPipe(int MaxMessageSize)
@@ -41,25 +41,13 @@ namespace Telepathy
         // the call.
         public int Count
         {
-            get
-            {
-                lock (this)
-                {
-                    return queue.Count;
-                }
-            }
+            get { lock (this) { return queue.Count; } }
         }
 
         // pool count for testing
         public int PoolCount
         {
-            get
-            {
-                lock (this)
-                {
-                    return pool.Count();
-                }
-            }
+            get { lock (this) { return pool.Count(); } }
         }
 
         // enqueue a message
@@ -74,13 +62,13 @@ namespace Telepathy
                 // it into a byte[] that we can queue safely.
 
                 // get one from the pool first to avoid allocations
-                var bytes = pool.Take();
+                byte[] bytes = pool.Take();
 
                 // copy into it
                 Buffer.BlockCopy(message.Array, message.Offset, bytes, 0, message.Count);
 
                 // indicate which part is the message
-                var segment = new ArraySegment<byte>(bytes, 0, message.Count);
+                ArraySegment<byte> segment = new ArraySegment<byte>(bytes, 0, message.Count);
 
                 // now enqueue it
                 queue.Enqueue(segment);
@@ -128,7 +116,7 @@ namespace Telepathy
                 //            into one large payload so we only give it to TCP
                 //            ONCE. This is HUGE for performance so we keep it!
                 packetSize = 0;
-                foreach (var message in queue)
+                foreach (ArraySegment<byte> message in queue)
                     packetSize += 4 + message.Count; // header + content
 
                 // create payload buffer if not created yet or previous one is
@@ -138,11 +126,11 @@ namespace Telepathy
                     payload = new byte[packetSize];
 
                 // dequeue all byte[] messages and serialize into the packet
-                var position = 0;
+                int position = 0;
                 while (queue.Count > 0)
                 {
                     // dequeue
-                    var message = queue.Dequeue();
+                    ArraySegment<byte> message = queue.Dequeue();
 
                     // write header (size) into buffer at position
                     Utils.IntToBytesBigEndianNonAlloc(message.Count, payload, position);
@@ -167,7 +155,10 @@ namespace Telepathy
             lock (this)
             {
                 // clear queue, but via dequeue to return each byte[] to pool
-                while (queue.Count > 0) pool.Return(queue.Dequeue().Array);
+                while (queue.Count > 0)
+                {
+                    pool.Return(queue.Dequeue().Array);
+                }
             }
         }
     }

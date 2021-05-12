@@ -3,17 +3,16 @@ using UnityEditor;
 
 namespace Mirror
 {
-    internal static class PreprocessorDefine
+    static class PreprocessorDefine
     {
         /// <summary>
-        ///     Add define symbols as soon as Unity gets done compiling.
+        /// Add define symbols as soon as Unity gets done compiling.
         /// </summary>
         [InitializeOnLoadMethod]
         public static void AddDefineSymbols()
         {
-            var currentDefines =
-                PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-            var defines = new HashSet<string>(currentDefines.Split(';'))
+            string currentDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            HashSet<string> defines = new HashSet<string>(currentDefines.Split(';'))
             {
                 "MIRROR",
                 "MIRROR_17_0_OR_NEWER",
@@ -33,10 +32,11 @@ namespace Mirror
 
             // only touch PlayerSettings if we actually modified it.
             // otherwise it shows up as changed in git each time.
-            var newDefines = string.Join(";", defines);
+            string newDefines = string.Join(";", defines);
             if (newDefines != currentDefines)
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
-                    newDefines);
+            {
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, newDefines);
+            }
         }
     }
 }

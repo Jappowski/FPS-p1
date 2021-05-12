@@ -8,27 +8,23 @@ namespace Mirror.SimpleWeb
 {
     public class WebSocketServer
     {
-        private readonly BufferPool bufferPool;
-
-        private readonly ConcurrentDictionary<int, Connection>
-            connections = new ConcurrentDictionary<int, Connection>();
-
-        private readonly ServerHandshake handShake;
-        private readonly int maxMessageSize;
         public readonly ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
-        private readonly ServerSslHelper sslHelper;
 
-        private readonly TcpConfig tcpConfig;
+        readonly TcpConfig tcpConfig;
+        readonly int maxMessageSize;
+
+        TcpListener listener;
+        Thread acceptThread;
+        bool serverStopped;
+        readonly ServerHandshake handShake;
+        readonly ServerSslHelper sslHelper;
+        readonly BufferPool bufferPool;
+        readonly ConcurrentDictionary<int, Connection> connections = new ConcurrentDictionary<int, Connection>();
 
 
-        private int _idCounter;
-        private Thread acceptThread;
+        int _idCounter = 0;
 
-        private TcpListener listener;
-        private bool serverStopped;
-
-        public WebSocketServer(TcpConfig tcpConfig, int maxMessageSize, int handshakeMaxSize, SslConfig sslConfig,
-            BufferPool bufferPool)
+        public WebSocketServer(TcpConfig tcpConfig, int maxMessageSize, int handshakeMaxSize, SslConfig sslConfig, BufferPool bufferPool)
         {
             this.tcpConfig = tcpConfig;
             this.maxMessageSize = maxMessageSize;
@@ -61,13 +57,16 @@ namespace Mirror.SimpleWeb
 
             Log.Info("Server stopped, Closing all connections...");
             // make copy so that foreach doesn't break if values are removed
-            var connectionsCopy = connections.Values.ToArray();
-            foreach (var conn in connectionsCopy) conn.Dispose();
+            Connection[] connectionsCopy = connections.Values.ToArray();
+            foreach (Connection conn in connectionsCopy)
+            {
+                conn.Dispose();
+            }
 
             connections.Clear();
         }
 
-        private void acceptLoop()
+        void acceptLoop()
         {
             try
             {
@@ -75,18 +74,18 @@ namespace Mirror.SimpleWeb
                 {
                     while (true)
                     {
-                        var client = listener.AcceptTcpClient();
+                        TcpClient client = listener.AcceptTcpClient();
                         tcpConfig.ApplyTo(client);
 
 
                         // TODO keep track of connections before they are in connections dictionary
                         //      this might not be a problem as HandshakeAndReceiveLoop checks for stop
                         //      and returns/disposes before sending message to queue
-                        var conn = new Connection(client, AfterConnectionDisposed);
+                        Connection conn = new Connection(client, AfterConnectionDisposed);
                         Log.Info($"A client connected {conn}");
 
                         // handshake needs its own thread as it needs to wait for message from client
-                        var receiveThread = new Thread(() => HandshakeAndReceiveLoop(conn));
+                        Thread receiveThread = new Thread(() => HandshakeAndReceiveLoop(conn));
 
                         conn.receiveThread = receiveThread;
 
@@ -101,25 +100,16 @@ namespace Mirror.SimpleWeb
                     throw;
                 }
             }
-            catch (ThreadInterruptedException e)
-            {
-                Log.InfoException(e);
-            }
-            catch (ThreadAbortException e)
-            {
-                Log.InfoException(e);
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e);
-            }
+            catch (ThreadInterruptedException e) { Log.InfoException(e); }
+            catch (ThreadAbortException e) { Log.InfoException(e); }
+            catch (Exception e) { Log.Exception(e); }
         }
 
-        private void HandshakeAndReceiveLoop(Connection conn)
+        void HandshakeAndReceiveLoop(Connection conn)
         {
             try
             {
-                var success = sslHelper.TryCreateStream(conn);
+                bool success = sslHelper.TryCreateStream(conn);
                 if (!success)
                 {
                     Log.Error($"Failed to create SSL Stream {conn}");
@@ -152,12 +142,12 @@ namespace Mirror.SimpleWeb
 
                 receiveQueue.Enqueue(new Message(conn.connId, EventType.Connected));
 
-                var sendThread = new Thread(() =>
+                Thread sendThread = new Thread(() =>
                 {
-                    var sendConfig = new SendLoop.Config(
+                    SendLoop.Config sendConfig = new SendLoop.Config(
                         conn,
-                        Constants.HeaderSize + maxMessageSize,
-                        false);
+                        bufferSize: Constants.HeaderSize + maxMessageSize,
+                        setMask: false);
 
                     SendLoop.Loop(sendConfig);
                 });
@@ -167,27 +157,18 @@ namespace Mirror.SimpleWeb
                 sendThread.Name = $"SendLoop {conn.connId}";
                 sendThread.Start();
 
-                var receiveConfig = new ReceiveLoop.Config(
+                ReceiveLoop.Config receiveConfig = new ReceiveLoop.Config(
                     conn,
                     maxMessageSize,
-                    true,
+                    expectMask: true,
                     receiveQueue,
                     bufferPool);
 
                 ReceiveLoop.Loop(receiveConfig);
             }
-            catch (ThreadInterruptedException e)
-            {
-                Log.InfoException(e);
-            }
-            catch (ThreadAbortException e)
-            {
-                Log.InfoException(e);
-            }
-            catch (Exception e)
-            {
-                Log.Exception(e);
-            }
+            catch (ThreadInterruptedException e) { Log.InfoException(e); }
+            catch (ThreadAbortException e) { Log.InfoException(e); }
+            catch (Exception e) { Log.Exception(e); }
             finally
             {
                 // close here in case connect fails
@@ -195,52 +176,55 @@ namespace Mirror.SimpleWeb
             }
         }
 
-        private void AfterConnectionDisposed(Connection conn)
+        void AfterConnectionDisposed(Connection conn)
         {
             if (conn.connId != Connection.IdNotSet)
             {
                 receiveQueue.Enqueue(new Message(conn.connId, EventType.Disconnected));
-                connections.TryRemove(conn.connId, out var _);
+                connections.TryRemove(conn.connId, out Connection _);
             }
         }
 
         public void Send(int id, ArrayBuffer buffer)
         {
-            if (connections.TryGetValue(id, out var conn))
+            if (connections.TryGetValue(id, out Connection conn))
             {
                 conn.sendQueue.Enqueue(buffer);
                 conn.sendPending.Set();
             }
             else
             {
-                Log.Warn(
-                    $"Cant send message to {id} because connection was not found in dictionary. Maybe it disconnected.");
+                Log.Warn($"Cant send message to {id} because connection was not found in dictionary. Maybe it disconnected.");
             }
         }
 
         public bool CloseConnection(int id)
         {
-            if (connections.TryGetValue(id, out var conn))
+            if (connections.TryGetValue(id, out Connection conn))
             {
                 Log.Info($"Kicking connection {id}");
                 conn.Dispose();
                 return true;
             }
+            else
+            {
+                Log.Warn($"Failed to kick {id} because id not found");
 
-            Log.Warn($"Failed to kick {id} because id not found");
-
-            return false;
+                return false;
+            }
         }
 
         public string GetClientAddress(int id)
         {
-            if (connections.TryGetValue(id, out var conn))
+            if (connections.TryGetValue(id, out Connection conn))
             {
                 return conn.client.Client.RemoteEndPoint.ToString();
             }
-
-            Log.Error($"Cant close connection to {id} because connection was not found in dictionary");
-            return null;
+            else
+            {
+                Log.Error($"Cant close connection to {id} because connection was not found in dictionary");
+                return null;
+            }
         }
     }
 }

@@ -5,7 +5,8 @@ namespace Mirror.Examples.Chat
     [AddComponentMenu("")]
     public class ChatNetworkManager : NetworkManager
     {
-        [Header("Chat GUI")] public ChatWindow chatWindow;
+        [Header("Chat GUI")]
+        public ChatWindow chatWindow;
 
         // Set by UI element UsernameInput OnValueChanged
         public string PlayerName { get; set; }
@@ -14,6 +15,11 @@ namespace Mirror.Examples.Chat
         public void SetHostname(string hostname)
         {
             networkAddress = hostname;
+        }
+
+        public struct CreatePlayerMessage : NetworkMessage
+        {
+            public string name;
         }
 
         public override void OnStartServer()
@@ -27,24 +33,19 @@ namespace Mirror.Examples.Chat
             base.OnClientConnect(conn);
 
             // tell the server to create a player with this name
-            conn.Send(new CreatePlayerMessage {name = PlayerName});
+            conn.Send(new CreatePlayerMessage { name = PlayerName });
         }
 
-        private void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
+        void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
         {
             // create a gameobject using the name supplied by client
-            var playergo = Instantiate(playerPrefab);
+            GameObject playergo = Instantiate(playerPrefab);
             playergo.GetComponent<Player>().playerName = createPlayerMessage.name;
 
             // set it as the player
             NetworkServer.AddPlayerForConnection(connection, playergo);
 
             chatWindow.gameObject.SetActive(true);
-        }
-
-        public struct CreatePlayerMessage : NetworkMessage
-        {
-            public string name;
         }
     }
 }

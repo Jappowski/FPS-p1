@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using UnityEditor;
 using UnityEngine;
 
 namespace Mirror
@@ -39,12 +38,11 @@ namespace Mirror
     // add custom channels anymore.
     public static class Channels
     {
-        public const int Reliable = 0; // ordered
-        public const int Unreliable = 1; // unordered
+        public const int Reliable = 0;      // ordered
+        public const int Unreliable = 1;    // unordered
 
         [Obsolete("Use Channels.Reliable instead")]
         public const int DefaultReliable = Reliable;
-
         [Obsolete("Use Channels.Unreliable instead")]
         public const int DefaultUnreliable = Unreliable;
     }
@@ -53,27 +51,34 @@ namespace Mirror
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntFloat
     {
-        [FieldOffset(0)] public float floatValue;
+        [FieldOffset(0)]
+        public float floatValue;
 
-        [FieldOffset(0)] public uint intValue;
+        [FieldOffset(0)]
+        public uint intValue;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntDouble
     {
-        [FieldOffset(0)] public double doubleValue;
+        [FieldOffset(0)]
+        public double doubleValue;
 
-        [FieldOffset(0)] public ulong longValue;
+        [FieldOffset(0)]
+        public ulong longValue;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntDecimal
     {
-        [FieldOffset(0)] public ulong longValue1;
+        [FieldOffset(0)]
+        public ulong longValue1;
 
-        [FieldOffset(8)] public ulong longValue2;
+        [FieldOffset(8)]
+        public ulong longValue2;
 
-        [FieldOffset(0)] public decimal decimalValue;
+        [FieldOffset(0)]
+        public decimal decimalValue;
     }
 
     public static class Utils
@@ -81,9 +86,9 @@ namespace Mirror
         public static uint GetTrueRandomUInt()
         {
             // use Crypto RNG to avoid having time based duplicates
-            using (var rng = new RNGCryptoServiceProvider())
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             {
-                var bytes = new byte[4];
+                byte[] bytes = new byte[4];
                 rng.GetBytes(bytes);
                 return BitConverter.ToUInt32(bytes, 0);
             }
@@ -92,7 +97,7 @@ namespace Mirror
         public static bool IsPrefab(GameObject obj)
         {
 #if UNITY_EDITOR
-            return PrefabUtility.IsPartOfPrefabAsset(obj);
+            return UnityEditor.PrefabUtility.IsPartOfPrefabAsset(obj);
 #else
             return false;
 #endif
@@ -103,8 +108,11 @@ namespace Mirror
             prefab = null;
 
 #if UNITY_EDITOR
-            if (!PrefabUtility.IsPartOfPrefabInstance(gameObject)) return false;
-            prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+            if (!UnityEditor.PrefabUtility.IsPartOfPrefabInstance(gameObject))
+            {
+                return false;
+            }
+            prefab = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
 #endif
 
             if (prefab == null)
@@ -112,7 +120,6 @@ namespace Mirror
                 Debug.LogError("Failed to find prefab parent for scene object [name:" + gameObject.name + "]");
                 return false;
             }
-
             return true;
         }
     }

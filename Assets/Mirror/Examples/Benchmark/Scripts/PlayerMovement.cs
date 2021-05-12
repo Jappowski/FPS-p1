@@ -6,14 +6,14 @@ namespace Mirror.Examples.Benchmark
     {
         public float speed = 5;
 
-        private void Update()
+        void Update()
         {
             if (!isLocalPlayer) return;
 
-            var h = Input.GetAxis("Horizontal");
-            var v = Input.GetAxis("Vertical");
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
 
-            var dir = new Vector3(h, 0, v);
+            Vector3 dir = new Vector3(h, 0, v);
             transform.position += dir.normalized * (Time.deltaTime * speed);
         }
     }

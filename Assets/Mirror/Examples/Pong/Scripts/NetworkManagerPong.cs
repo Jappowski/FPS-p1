@@ -8,15 +8,15 @@ namespace Mirror.Examples.Pong
     [AddComponentMenu("")]
     public class NetworkManagerPong : NetworkManager
     {
-        private GameObject ball;
         public Transform leftRacketSpawn;
         public Transform rightRacketSpawn;
+        GameObject ball;
 
         public override void OnServerAddPlayer(NetworkConnection conn)
         {
             // add player at correct spawn position
-            var start = numPlayers == 0 ? leftRacketSpawn : rightRacketSpawn;
-            var player = Instantiate(playerPrefab, start.position, start.rotation);
+            Transform start = numPlayers == 0 ? leftRacketSpawn : rightRacketSpawn;
+            GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
             NetworkServer.AddPlayerForConnection(conn, player);
 
             // spawn ball if two players

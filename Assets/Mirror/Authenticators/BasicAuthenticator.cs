@@ -7,12 +7,11 @@ namespace Mirror.Authenticators
     [AddComponentMenu("Network/Authenticators/BasicAuthenticator")]
     public class BasicAuthenticator : NetworkAuthenticator
     {
-        public string password;
-
         [Header("Custom Properties")]
 
         // set these in the inspector
         public string username;
+        public string password;
 
         #region Messages
 
@@ -35,8 +34,8 @@ namespace Mirror.Authenticators
         #region Server
 
         /// <summary>
-        ///     Called on server from StartServer to initialize the Authenticator
-        ///     <para>Server message handlers should be registered in this method.</para>
+        /// Called on server from StartServer to initialize the Authenticator
+        /// <para>Server message handlers should be registered in this method.</para>
         /// </summary>
         public override void OnStartServer()
         {
@@ -45,8 +44,8 @@ namespace Mirror.Authenticators
         }
 
         /// <summary>
-        ///     Called on server from StopServer to reset the Authenticator
-        ///     <para>Server message handlers should be registered in this method.</para>
+        /// Called on server from StopServer to reset the Authenticator
+        /// <para>Server message handlers should be registered in this method.</para>
         /// </summary>
         public override void OnStopServer()
         {
@@ -55,7 +54,7 @@ namespace Mirror.Authenticators
         }
 
         /// <summary>
-        ///     Called on server from OnServerAuthenticateInternal when a client needs to authenticate
+        /// Called on server from OnServerAuthenticateInternal when a client needs to authenticate
         /// </summary>
         /// <param name="conn">Connection to client.</param>
         public override void OnServerAuthenticate(NetworkConnection conn)
@@ -64,7 +63,7 @@ namespace Mirror.Authenticators
         }
 
         /// <summary>
-        ///     Called on server when the client's AuthRequestMessage arrives
+        /// Called on server when the client's AuthRequestMessage arrives
         /// </summary>
         /// <param name="conn">Connection to client.</param>
         /// <param name="msg">The message payload</param>
@@ -76,7 +75,7 @@ namespace Mirror.Authenticators
             if (msg.authUsername == username && msg.authPassword == password)
             {
                 // create and send msg to client so it knows to proceed
-                var authResponseMessage = new AuthResponseMessage
+                AuthResponseMessage authResponseMessage = new AuthResponseMessage
                 {
                     code = 100,
                     message = "Success"
@@ -90,7 +89,7 @@ namespace Mirror.Authenticators
             else
             {
                 // create and send msg to client so it knows to disconnect
-                var authResponseMessage = new AuthResponseMessage
+                AuthResponseMessage authResponseMessage = new AuthResponseMessage
                 {
                     code = 200,
                     message = "Invalid Credentials"
@@ -106,7 +105,7 @@ namespace Mirror.Authenticators
             }
         }
 
-        private IEnumerator DelayedDisconnect(NetworkConnection conn, float waitTime)
+        IEnumerator DelayedDisconnect(NetworkConnection conn, float waitTime)
         {
             yield return new WaitForSeconds(waitTime);
 
@@ -119,18 +118,18 @@ namespace Mirror.Authenticators
         #region Client
 
         /// <summary>
-        ///     Called on client from StartClient to initialize the Authenticator
-        ///     <para>Client message handlers should be registered in this method.</para>
+        /// Called on client from StartClient to initialize the Authenticator
+        /// <para>Client message handlers should be registered in this method.</para>
         /// </summary>
         public override void OnStartClient()
         {
             // register a handler for the authentication response we expect from server
-            NetworkClient.RegisterHandler((Action<AuthResponseMessage>) OnAuthResponseMessage, false);
+            NetworkClient.RegisterHandler<AuthResponseMessage>((Action<AuthResponseMessage>)OnAuthResponseMessage, false);
         }
 
         /// <summary>
-        ///     Called on client from StopClient to reset the Authenticator
-        ///     <para>Client message handlers should be unregistered in this method.</para>
+        /// Called on client from StopClient to reset the Authenticator
+        /// <para>Client message handlers should be unregistered in this method.</para>
         /// </summary>
         public override void OnStopClient()
         {
@@ -139,12 +138,12 @@ namespace Mirror.Authenticators
         }
 
         /// <summary>
-        ///     Called on client from OnClientAuthenticateInternal when a client needs to authenticate
+        /// Called on client from OnClientAuthenticateInternal when a client needs to authenticate
         /// </summary>
         /// <param name="conn">Connection of the client.</param>
         public override void OnClientAuthenticate(NetworkConnection conn)
         {
-            var authRequestMessage = new AuthRequestMessage
+            AuthRequestMessage authRequestMessage = new AuthRequestMessage
             {
                 authUsername = username,
                 authPassword = password
@@ -154,7 +153,7 @@ namespace Mirror.Authenticators
         }
 
         /// <summary>
-        ///     Called on client when the server's AuthResponseMessage arrives
+        /// Called on client when the server's AuthResponseMessage arrives
         /// </summary>
         /// <param name="conn">Connection to client.</param>
         /// <param name="msg">The message payload</param>
@@ -176,12 +175,8 @@ namespace Mirror.Authenticators
             }
         }
 
-        [Obsolete(
-            "Call OnAuthResponseMessage without the NetworkConnection parameter. It always points to NetworkClient.connection anyway.")]
-        public void OnAuthResponseMessage(NetworkConnection conn, AuthResponseMessage msg)
-        {
-            OnAuthResponseMessage(msg);
-        }
+        [Obsolete("Call OnAuthResponseMessage without the NetworkConnection parameter. It always points to NetworkClient.connection anyway.")]
+        public void OnAuthResponseMessage(NetworkConnection conn, AuthResponseMessage msg) => OnAuthResponseMessage(msg);
 
         #endregion
     }

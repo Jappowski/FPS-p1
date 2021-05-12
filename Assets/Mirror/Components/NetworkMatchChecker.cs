@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Mirror
 {
     /// <summary>
-    ///     Component that controls visibility of networked objects based on match id.
-    ///     <para>Any object with this component on it will only be visible to other objects in the same match.</para>
-    ///     <para>This would be used to isolate players to their respective matches within a single game server instance. </para>
+    /// Component that controls visibility of networked objects based on match id.
+    /// <para>Any object with this component on it will only be visible to other objects in the same match.</para>
+    /// <para>This would be used to isolate players to their respective matches within a single game server instance. </para>
     /// </summary>
     [Obsolete(NetworkVisibilityObsoleteMessage.Message)]
     [DisallowMultipleComponent]
@@ -16,25 +16,26 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkMatchChecker.html")]
     public class NetworkMatchChecker : NetworkVisibility
     {
-        private static readonly Dictionary<Guid, HashSet<NetworkIdentity>> matchPlayers =
-            new Dictionary<Guid, HashSet<NetworkIdentity>>();
+        static readonly Dictionary<Guid, HashSet<NetworkIdentity>> matchPlayers = new Dictionary<Guid, HashSet<NetworkIdentity>>();
 
-        private Guid currentMatch = Guid.Empty;
+        Guid currentMatch = Guid.Empty;
 
-        [Header("Diagnostics")] [SyncVar] public string currentMatchDebug;
+        [Header("Diagnostics")]
+        [SyncVar]
+        public string currentMatchDebug;
 
         /// <summary>
-        ///     Set this to the same value on all networked objects that belong to a given match
+        /// Set this to the same value on all networked objects that belong to a given match
         /// </summary>
         public Guid matchId
         {
-            get => currentMatch;
+            get { return currentMatch; }
             set
             {
                 if (currentMatch == value) return;
 
                 // cache previous match so observers in that match can be rebuilt
-                var previousMatch = currentMatch;
+                Guid previousMatch = currentMatch;
 
                 // Set this to the new match this object just entered ...
                 currentMatch = value;
@@ -91,9 +92,9 @@ namespace Mirror
                 RebuildMatchObservers(currentMatch);
         }
 
-        private void RebuildMatchObservers(Guid specificMatch)
+        void RebuildMatchObservers(Guid specificMatch)
         {
-            foreach (var networkIdentity in matchPlayers[specificMatch])
+            foreach (NetworkIdentity networkIdentity in matchPlayers[specificMatch])
                 if (networkIdentity != null)
                     networkIdentity.RebuildObservers(false);
         }
@@ -101,8 +102,8 @@ namespace Mirror
         #region Observers
 
         /// <summary>
-        ///     Callback used by the visibility system to determine if an observer (player) can see this object.
-        ///     <para>If this function returns true, the network connection will be added as an observer.</para>
+        /// Callback used by the visibility system to determine if an observer (player) can see this object.
+        /// <para>If this function returns true, the network connection will be added as an observer.</para>
         /// </summary>
         /// <param name="conn">Network connection of a player.</param>
         /// <returns>True if the player can see this object.</returns>
@@ -112,7 +113,7 @@ namespace Mirror
             if (matchId == Guid.Empty)
                 return false;
 
-            var networkMatchChecker = conn.identity.GetComponent<NetworkMatchChecker>();
+            NetworkMatchChecker networkMatchChecker = conn.identity.GetComponent<NetworkMatchChecker>();
 
             if (networkMatchChecker == null)
                 return false;
@@ -121,11 +122,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Callback used by the visibility system to (re)construct the set of observers that can see this object.
-        ///     <para>
-        ///         Implementations of this callback should add network connections of players that can see this object to the
-        ///         observers set.
-        ///     </para>
+        /// Callback used by the visibility system to (re)construct the set of observers that can see this object.
+        /// <para>Implementations of this callback should add network connections of players that can see this object to the observers set.</para>
         /// </summary>
         /// <param name="observers">The new set of observers for this object.</param>
         /// <param name="initialize">True if the set of observers is being built for the first time.</param>
@@ -133,7 +131,7 @@ namespace Mirror
         {
             if (currentMatch == Guid.Empty) return;
 
-            foreach (var networkIdentity in matchPlayers[currentMatch])
+            foreach (NetworkIdentity networkIdentity in matchPlayers[currentMatch])
                 if (networkIdentity != null && networkIdentity.connectionToClient != null)
                     observers.Add(networkIdentity.connectionToClient);
         }

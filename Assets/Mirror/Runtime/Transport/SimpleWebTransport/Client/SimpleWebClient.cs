@@ -9,20 +9,27 @@ namespace Mirror.SimpleWeb
         NotConnected = 0,
         Connecting = 1,
         Connected = 2,
-        Disconnecting = 3
+        Disconnecting = 3,
     }
-
     /// <summary>
-    ///     Client used to control websockets
-    ///     <para>Base class used by WebSocketClientWebGl and WebSocketClientStandAlone</para>
+    /// Client used to control websockets
+    /// <para>Base class used by WebSocketClientWebGl and WebSocketClientStandAlone</para>
     /// </summary>
     public abstract class SimpleWebClient
     {
-        protected readonly BufferPool bufferPool;
-        protected readonly int maxMessageSize;
+        public static SimpleWebClient Create(int maxMessageSize, int maxMessagesPerTick, TcpConfig tcpConfig)
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return new WebSocketClientWebGl(maxMessageSize, maxMessagesPerTick);
+#else
+            return new WebSocketClientStandAlone(maxMessageSize, maxMessagesPerTick, tcpConfig);
+#endif
+        }
 
-        private readonly int maxMessagesPerTick;
+        readonly int maxMessagesPerTick;
+        protected readonly int maxMessageSize;
         protected readonly ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
+        protected readonly BufferPool bufferPool;
 
         protected ClientState state;
 
@@ -35,15 +42,6 @@ namespace Mirror.SimpleWeb
 
         public ClientState ConnectionState => state;
 
-        public static SimpleWebClient Create(int maxMessageSize, int maxMessagesPerTick, TcpConfig tcpConfig)
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            return new WebSocketClientWebGl(maxMessageSize, maxMessagesPerTick);
-#else
-            return new WebSocketClientStandAlone(maxMessageSize, maxMessagesPerTick, tcpConfig);
-#endif
-        }
-
         public event Action onConnect;
         public event Action onDisconnect;
         public event Action<ArraySegment<byte>> onData;
@@ -51,14 +49,14 @@ namespace Mirror.SimpleWeb
 
         public void ProcessMessageQueue(MonoBehaviour behaviour)
         {
-            var processedCount = 0;
+            int processedCount = 0;
             // check enabled every time in case behaviour was disabled after data
             while (
                 behaviour.enabled &&
                 processedCount < maxMessagesPerTick &&
                 // Dequeue last
-                receiveQueue.TryDequeue(out var next)
-            )
+                receiveQueue.TryDequeue(out Message next)
+                )
             {
                 processedCount++;
 

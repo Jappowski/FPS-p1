@@ -5,17 +5,21 @@ using UnityEngine;
 namespace Mirror.Cloud.Example
 {
     /// <summary>
-    ///     Displays the list of servers
+    /// Displays the list of servers
     /// </summary>
     public class ServerListUI : MonoBehaviour
     {
-        private readonly List<ServerListUIItem> items = new List<ServerListUIItem>();
-        [SerializeField] private readonly ServerListUIItem itemPrefab = null;
-        [SerializeField] private Transform parent;
+        [SerializeField] ServerListUIItem itemPrefab = null;
+        [SerializeField] Transform parent = null;
 
-        private void OnValidate()
+        readonly List<ServerListUIItem> items = new List<ServerListUIItem>();
+
+        void OnValidate()
         {
-            if (parent == null) parent = transform;
+            if (parent == null)
+            {
+                parent = transform;
+            }
         }
 
         public void UpdateList(ServerCollectionJson serverCollection)
@@ -24,19 +28,22 @@ namespace Mirror.Cloud.Example
             CreateNewItems(serverCollection.servers);
         }
 
-        private void CreateNewItems(ServerJson[] servers)
+        void CreateNewItems(ServerJson[] servers)
         {
-            foreach (var server in servers)
+            foreach (ServerJson server in servers)
             {
-                var clone = Instantiate(itemPrefab, parent);
+                ServerListUIItem clone = Instantiate(itemPrefab, parent);
                 clone.Setup(server);
                 items.Add(clone);
             }
         }
 
-        private void DeleteOldItems()
+        void DeleteOldItems()
         {
-            foreach (var item in items) Destroy(item.gameObject);
+            foreach (ServerListUIItem item in items)
+            {
+                Destroy(item.gameObject);
+            }
 
             items.Clear();
         }

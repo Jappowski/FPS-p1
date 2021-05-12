@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,30 +9,15 @@ namespace Telepathy
 {
     public class Server : Common
     {
-        // clients with <connectionId, ConnectionState>
-        private readonly ConcurrentDictionary<int, ConnectionState> clients =
-            new ConcurrentDictionary<int, ConnectionState>();
-
-        // connectionId counter
-        private int counter;
-
-        // listener
-        public TcpListener listener;
-
-        private Thread listenerThread;
-
         // events to hook into
         // => OnData uses ArraySegment for allocation free receives later
         public Action<int> OnConnected;
         public Action<int, ArraySegment<byte>> OnData;
         public Action<int> OnDisconnected;
 
-        // thread safe pipe for received messages
-        // IMPORTANT: unfortunately using one pipe per connection is way slower
-        //            when testing 150 CCU. we need to use one pipe for all
-        //            connections. this scales beautifully.
-        protected MagnificentReceivePipe receivePipe;
-        public int ReceiveQueueLimit = 10000;
+        // listener
+        public TcpListener listener;
+        Thread listenerThread;
 
         // disconnect if send queue gets too big.
         // -> avoids ever growing queue memory if network is slower than input
@@ -43,24 +29,29 @@ namespace Telepathy
         //   limit =  1,000 means  16 MB of memory/connection
         //   limit = 10,000 means 160 MB of memory/connection
         public int SendQueueLimit = 10000;
+        public int ReceiveQueueLimit = 10000;
 
-        // constructor
-        public Server(int MaxMessageSize) : base(MaxMessageSize)
-        {
-        }
+        // thread safe pipe for received messages
+        // IMPORTANT: unfortunately using one pipe per connection is way slower
+        //            when testing 150 CCU. we need to use one pipe for all
+        //            connections. this scales beautifully.
+        protected MagnificentReceivePipe receivePipe;
 
         // pipe count, useful for debugging / benchmarks
         public int ReceivePipeTotalCount => receivePipe.TotalCount;
 
-        // check if the server is running
-        public bool Active => listenerThread != null && listenerThread.IsAlive;
+        // clients with <connectionId, ConnectionState>
+        readonly ConcurrentDictionary<int, ConnectionState> clients = new ConcurrentDictionary<int, ConnectionState>();
+
+        // connectionId counter
+        int counter;
 
         // public next id function in case someone needs to reserve an id
         // (e.g. if hostMode should always have 0 connection and external
         //  connections should start at 1, etc.)
         public int NextConnectionId()
         {
-            var id = Interlocked.Increment(ref counter);
+            int id = Interlocked.Increment(ref counter);
 
             // it's very unlikely that we reach the uint limit of 2 billion.
             // even with 1 new connection per second, this would take 68 years.
@@ -68,15 +59,24 @@ namespace Telepathy
             //    the caller probably should stop accepting clients.
             // -> it's hardly worth using 'bool Next(out id)' for that case
             //    because it's just so unlikely.
-            if (id == int.MaxValue) throw new Exception("connection id limit reached: " + id);
+            if (id == int.MaxValue)
+            {
+                throw new Exception("connection id limit reached: " + id);
+            }
 
             return id;
         }
 
+        // check if the server is running
+        public bool Active => listenerThread != null && listenerThread.IsAlive;
+
+        // constructor
+        public Server(int MaxMessageSize) : base(MaxMessageSize) {}
+
         // the listener thread's listen function
         // note: no maxConnections parameter. high level API should handle that.
         //       (Transport can't send a 'too full' message anyway)
-        private void Listen(int port)
+        void Listen(int port)
         {
             // absolutely must wrap with try/catch, otherwise thread
             // exceptions are silent
@@ -97,7 +97,7 @@ namespace Telepathy
                     // note: 'using' sucks here because it will try to
                     // dispose after thread was started but we still need it
                     // in the thread
-                    var client = listener.AcceptTcpClient();
+                    TcpClient client = listener.AcceptTcpClient();
 
                     // set socket options
                     client.NoDelay = NoDelay;
@@ -105,14 +105,14 @@ namespace Telepathy
                     client.ReceiveTimeout = ReceiveTimeout;
 
                     // generate the next connection id (thread safely)
-                    var connectionId = NextConnectionId();
+                    int connectionId = NextConnectionId();
 
                     // add to dict immediately
-                    var connection = new ConnectionState(client, MaxMessageSize);
+                    ConnectionState connection = new ConnectionState(client, MaxMessageSize);
                     clients[connectionId] = connection;
 
                     // spawn a send thread for each client
-                    var sendThread = new Thread(() =>
+                    Thread sendThread = new Thread(() =>
                     {
                         // wrap in try-catch, otherwise Thread exceptions
                         // are silent
@@ -138,7 +138,7 @@ namespace Telepathy
                     sendThread.Start();
 
                     // spawn a receive thread for each client
-                    var receiveThread = new Thread(() =>
+                    Thread receiveThread = new Thread(() =>
                     {
                         // wrap in try-catch, otherwise Thread exceptions
                         // are silent
@@ -146,8 +146,7 @@ namespace Telepathy
                         {
                             // run the receive loop
                             // (receive pipe is shared across all loops)
-                            ThreadFunctions.ReceiveLoop(connectionId, client, MaxMessageSize, receivePipe,
-                                ReceiveQueueLimit);
+                            ThreadFunctions.ReceiveLoop(connectionId, client, MaxMessageSize, receivePipe, ReceiveQueueLimit);
 
                             // IMPORTANT: do NOT remove from clients after the
                             // thread ends. need to do it in Tick() so that the
@@ -237,19 +236,12 @@ namespace Telepathy
             listenerThread = null;
 
             // close all client connections
-            foreach (var kvp in clients)
+            foreach (KeyValuePair<int, ConnectionState> kvp in clients)
             {
-                var client = kvp.Value.client;
+                TcpClient client = kvp.Value.client;
                 // close the stream if not closed yet. it may have been closed
                 // by a disconnect already, so use try/catch
-                try
-                {
-                    client.GetStream().Close();
-                }
-                catch
-                {
-                }
-
+                try { client.GetStream().Close(); } catch {}
                 client.Close();
             }
 
@@ -270,7 +262,7 @@ namespace Telepathy
             if (message.Count <= MaxMessageSize)
             {
                 // find the connection
-                if (clients.TryGetValue(connectionId, out var connection))
+                if (clients.TryGetValue(connectionId, out ConnectionState connection))
                 {
                     // check send pipe limit
                     if (connection.sendPipe.Count < SendQueueLimit)
@@ -293,14 +285,15 @@ namespace Telepathy
                     //       immediately, it's still possible that the sending
                     //       blocks for so long that the send queue just gets
                     //       way too big. have a limit - better safe than sorry.
+                    else
+                    {
+                        // log the reason
+                        Log.Warning($"Server.Send: sendPipe for connection {connectionId} reached limit of {SendQueueLimit}. This can happen if we call send faster than the network can process messages. Disconnecting this connection for load balancing.");
 
-                    // log the reason
-                    Log.Warning(
-                        $"Server.Send: sendPipe for connection {connectionId} reached limit of {SendQueueLimit}. This can happen if we call send faster than the network can process messages. Disconnecting this connection for load balancing.");
-
-                    // just close it. send thread will take care of the rest.
-                    connection.client.Close();
-                    return false;
+                        // just close it. send thread will take care of the rest.
+                        connection.client.Close();
+                        return false;
+                    }
                 }
 
                 // sending to an invalid connectionId is expected sometimes.
@@ -311,7 +304,6 @@ namespace Telepathy
                 //Logger.Log("Server.Send: invalid connectionId: " + connectionId);
                 return false;
             }
-
             Log.Error("Server.Send: message too big: " + message.Count + ". Limit: " + MaxMessageSize);
             return false;
         }
@@ -320,8 +312,10 @@ namespace Telepathy
         public string GetClientAddress(int connectionId)
         {
             // find the connection
-            if (clients.TryGetValue(connectionId, out var connection))
-                return ((IPEndPoint) connection.client.Client.RemoteEndPoint).Address.ToString();
+            if (clients.TryGetValue(connectionId, out ConnectionState connection))
+            {
+                return ((IPEndPoint)connection.client.Client.RemoteEndPoint).Address.ToString();
+            }
             return "";
         }
 
@@ -329,14 +323,13 @@ namespace Telepathy
         public bool Disconnect(int connectionId)
         {
             // find the connection
-            if (clients.TryGetValue(connectionId, out var connection))
+            if (clients.TryGetValue(connectionId, out ConnectionState connection))
             {
                 // just close it. send thread will take care of the rest.
                 connection.client.Close();
                 Log.Info("Server.Disconnect connectionId:" + connectionId);
                 return true;
             }
-
             return false;
         }
 
@@ -360,7 +353,7 @@ namespace Telepathy
                 return 0;
 
             // process up to 'processLimit' messages for this connection
-            for (var i = 0; i < processLimit; ++i)
+            for (int i = 0; i < processLimit; ++i)
             {
                 // check enabled in case a Mirror scene message arrived
                 if (checkEnabled != null && !checkEnabled())
@@ -368,7 +361,7 @@ namespace Telepathy
 
                 // peek first. allows us to process the first queued entry while
                 // still keeping the pooled byte[] alive by not removing anything.
-                if (receivePipe.TryPeek(out var connectionId, out var eventType, out var message))
+                if (receivePipe.TryPeek(out int connectionId, out EventType eventType, out ArraySegment<byte> message))
                 {
                     switch (eventType)
                     {
@@ -382,7 +375,7 @@ namespace Telepathy
                             OnDisconnected?.Invoke(connectionId);
                             // remove disconnected connection now that the final
                             // disconnected message was processed.
-                            clients.TryRemove(connectionId, out var _);
+                            clients.TryRemove(connectionId, out ConnectionState _);
                             break;
                     }
 
@@ -391,10 +384,7 @@ namespace Telepathy
                     receivePipe.TryDequeue();
                 }
                 // no more messages. stop the loop.
-                else
-                {
-                    break;
-                }
+                else break;
             }
 
             // return what's left to process for next time

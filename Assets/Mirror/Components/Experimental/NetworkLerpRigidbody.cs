@@ -6,54 +6,62 @@ namespace Mirror.Experimental
     [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkLerpRigidbody.html")]
     public class NetworkLerpRigidbody : NetworkBehaviour
     {
+        [Header("Settings")]
+        [SerializeField] internal Rigidbody target = null;
+        [Tooltip("How quickly current velocity approaches target velocity")]
+        [SerializeField] float lerpVelocityAmount = 0.5f;
+        [Tooltip("How quickly current position approaches target position")]
+        [SerializeField] float lerpPositionAmount = 0.5f;
+
         [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
-        [SerializeField]
-        private readonly bool clientAuthority = false;
+        [SerializeField] bool clientAuthority = false;
 
-        [Tooltip("How quickly current position approaches target position")] [SerializeField]
-        private readonly float lerpPositionAmount = 0.5f;
-
-        [Tooltip("How quickly current velocity approaches target velocity")] [SerializeField]
-        private readonly float lerpVelocityAmount = 0.5f;
-
-        private float nextSyncTime;
-
-        [Header("Settings")] [SerializeField] internal Rigidbody target;
-
-        [SyncVar] private Vector3 targetPosition;
+        float nextSyncTime;
 
 
-        [SyncVar] private Vector3 targetVelocity;
+        [SyncVar()]
+        Vector3 targetVelocity;
+
+        [SyncVar()]
+        Vector3 targetPosition;
 
         /// <summary>
-        ///     Ignore value if is host or client with Authority
+        /// Ignore value if is host or client with Authority
         /// </summary>
         /// <returns></returns>
-        private bool IgnoreSync => isServer || ClientWithAuthority;
+        bool IgnoreSync => isServer || ClientWithAuthority;
 
-        private bool ClientWithAuthority => clientAuthority && hasAuthority;
+        bool ClientWithAuthority => clientAuthority && hasAuthority;
 
-        private void OnValidate()
+        void OnValidate()
         {
-            if (target == null) target = GetComponent<Rigidbody>();
+            if (target == null)
+            {
+                target = GetComponent<Rigidbody>();
+            }
         }
 
-        private void Update()
+        void Update()
         {
             if (isServer)
+            {
                 SyncToClients();
-            else if (ClientWithAuthority) SendToServer();
+            }
+            else if (ClientWithAuthority)
+            {
+                SendToServer();
+            }
         }
 
-        private void SyncToClients()
+        void SyncToClients()
         {
             targetVelocity = target.velocity;
             targetPosition = target.position;
         }
 
-        private void SendToServer()
+        void SendToServer()
         {
-            var now = Time.time;
+            float now = Time.time;
             if (now > nextSyncTime)
             {
                 nextSyncTime = now + syncInterval;
@@ -62,7 +70,7 @@ namespace Mirror.Experimental
         }
 
         [Command]
-        private void CmdSendState(Vector3 velocity, Vector3 position)
+        void CmdSendState(Vector3 velocity, Vector3 position)
         {
             target.velocity = velocity;
             target.position = position;
@@ -70,9 +78,9 @@ namespace Mirror.Experimental
             targetPosition = position;
         }
 
-        private void FixedUpdate()
+        void FixedUpdate()
         {
-            if (IgnoreSync) return;
+            if (IgnoreSync) { return; }
 
             target.velocity = Vector3.Lerp(target.velocity, targetVelocity, lerpVelocityAmount);
             target.position = Vector3.Lerp(target.position, targetPosition, lerpPositionAmount);

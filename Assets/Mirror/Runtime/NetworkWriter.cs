@@ -14,10 +14,7 @@ namespace Mirror
         public static Action<NetworkWriter, T> write;
     }
 
-    /// <summary>
-    ///     Network Writer for most simple types like floats, ints, buffers, structs, etc. Use
-    ///     NetworkWriterPool.GetReader() to avoid allocations.
-    /// </summary>
+    /// <summary>Network Writer for most simple types like floats, ints, buffers, structs, etc. Use NetworkWriterPool.GetReader() to avoid allocations.</summary>
     public class NetworkWriter
     {
         public const int MaxStringLength = 1024 * 32;
@@ -25,14 +22,15 @@ namespace Mirror
         // create writer immediately with it's own buffer so no one can mess with it and so that we can resize it.
         // note: BinaryWriter allocates too much, so we only use a MemoryStream
         // => 1500 bytes by default because on average, most packets will be <= MTU
-        private byte[] buffer = new byte[1500];
+        byte[] buffer = new byte[1500];
 
         // 'int' is the best type for .Position. 'short' is too small if we send >32kb which would result in negative .Position
         // -> converting long to int is fine until 2GB of data (MAX_INT), so we don't have to worry about overflows here
-        private int position;
+        int position;
+        int length;
 
         /// <summary>Number of bytes writen to the buffer</summary>
-        public int Length { get; private set; }
+        public int Length => length;
 
         /// <summary>Next position to write to the buffer</summary>
         public int Position
@@ -51,41 +49,44 @@ namespace Mirror
         public void Reset()
         {
             position = 0;
-            Length = 0;
+            length = 0;
         }
 
         /// <summary>Sets length, moves position if it is greater than new length</summary>
         /// Zeros out any extra length created by setlength
         public void SetLength(int newLength)
         {
-            var oldLength = Length;
+            int oldLength = length;
 
             // ensure length & capacity
             EnsureLength(newLength);
 
             // zero out new length
-            if (oldLength < newLength) Array.Clear(buffer, oldLength, newLength - oldLength);
+            if (oldLength < newLength)
+            {
+                Array.Clear(buffer, oldLength, newLength - oldLength);
+            }
 
-            Length = newLength;
-            position = Mathf.Min(position, Length);
+            length = newLength;
+            position = Mathf.Min(position, length);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EnsureLength(int value)
+        void EnsureLength(int value)
         {
-            if (Length < value)
+            if (length < value)
             {
-                Length = value;
+                length = value;
                 EnsureCapacity(value);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EnsureCapacity(int value)
+        void EnsureCapacity(int value)
         {
             if (buffer.Length < value)
             {
-                var capacity = Math.Max(value, buffer.Length * 2);
+                int capacity = Math.Max(value, buffer.Length * 2);
                 Array.Resize(ref buffer, capacity);
             }
         }
@@ -93,15 +94,15 @@ namespace Mirror
         /// <summary>Copies buffer to new array of size 'Length'. Ignores 'Position'.</summary>
         public byte[] ToArray()
         {
-            var data = new byte[Length];
-            Array.ConstrainedCopy(buffer, 0, data, 0, Length);
+            byte[] data = new byte[length];
+            Array.ConstrainedCopy(buffer, 0, data, 0, length);
             return data;
         }
 
         /// <summary>Returns allocatin-free ArraySegment which points to buffer up to 'Length' (ignores 'Position').</summary>
         public ArraySegment<byte> ToArraySegment()
         {
-            return new ArraySegment<byte>(buffer, 0, Length);
+            return new ArraySegment<byte>(buffer, 0, length);
         }
 
         public void WriteByte(byte value)
@@ -122,12 +123,15 @@ namespace Mirror
         /// <summary>Writes any type that mirror supports. Uses weaver populated Writer(T).write.</summary>
         public void Write<T>(T value)
         {
-            var writeDelegate = Writer<T>.write;
+            Action<NetworkWriter, T> writeDelegate = Writer<T>.write;
             if (writeDelegate == null)
-                Debug.LogError(
-                    $"No writer found for {typeof(T)}. Use a type supported by Mirror or define a custom writer");
+            {
+                Debug.LogError($"No writer found for {typeof(T)}. Use a type supported by Mirror or define a custom writer");
+            }
             else
+            {
                 writeDelegate(this, value);
+            }
         }
     }
 
@@ -138,73 +142,52 @@ namespace Mirror
         // cache encoding instead of creating it with BinaryWriter each time
         // 1000 readers before:  1MB GC, 30ms
         // 1000 readers after: 0.8MB GC, 18ms
-        private static readonly UTF8Encoding encoding = new UTF8Encoding(false, true);
-        private static readonly byte[] stringBuffer = new byte[NetworkWriter.MaxStringLength];
+        static readonly UTF8Encoding encoding = new UTF8Encoding(false, true);
+        static readonly byte[] stringBuffer = new byte[NetworkWriter.MaxStringLength];
 
-        public static void WriteByte(this NetworkWriter writer, byte value)
-        {
-            writer.WriteByte(value);
-        }
+        public static void WriteByte(this NetworkWriter writer, byte value) => writer.WriteByte(value);
 
-        public static void WriteSByte(this NetworkWriter writer, sbyte value)
-        {
-            writer.WriteByte((byte) value);
-        }
+        public static void WriteSByte(this NetworkWriter writer, sbyte value) => writer.WriteByte((byte)value);
 
-        public static void WriteChar(this NetworkWriter writer, char value)
-        {
-            writer.WriteUInt16(value);
-        }
+        public static void WriteChar(this NetworkWriter writer, char value) => writer.WriteUInt16(value);
 
-        public static void WriteBoolean(this NetworkWriter writer, bool value)
-        {
-            writer.WriteByte((byte) (value ? 1 : 0));
-        }
+        public static void WriteBoolean(this NetworkWriter writer, bool value) => writer.WriteByte((byte)(value ? 1 : 0));
 
         public static void WriteUInt16(this NetworkWriter writer, ushort value)
         {
-            writer.WriteByte((byte) value);
-            writer.WriteByte((byte) (value >> 8));
+            writer.WriteByte((byte)value);
+            writer.WriteByte((byte)(value >> 8));
         }
 
-        public static void WriteInt16(this NetworkWriter writer, short value)
-        {
-            writer.WriteUInt16((ushort) value);
-        }
+        public static void WriteInt16(this NetworkWriter writer, short value) => writer.WriteUInt16((ushort)value);
 
         public static void WriteUInt32(this NetworkWriter writer, uint value)
         {
-            writer.WriteByte((byte) value);
-            writer.WriteByte((byte) (value >> 8));
-            writer.WriteByte((byte) (value >> 16));
-            writer.WriteByte((byte) (value >> 24));
+            writer.WriteByte((byte)value);
+            writer.WriteByte((byte)(value >> 8));
+            writer.WriteByte((byte)(value >> 16));
+            writer.WriteByte((byte)(value >> 24));
         }
 
-        public static void WriteInt32(this NetworkWriter writer, int value)
-        {
-            writer.WriteUInt32((uint) value);
-        }
+        public static void WriteInt32(this NetworkWriter writer, int value) => writer.WriteUInt32((uint)value);
 
         public static void WriteUInt64(this NetworkWriter writer, ulong value)
         {
-            writer.WriteByte((byte) value);
-            writer.WriteByte((byte) (value >> 8));
-            writer.WriteByte((byte) (value >> 16));
-            writer.WriteByte((byte) (value >> 24));
-            writer.WriteByte((byte) (value >> 32));
-            writer.WriteByte((byte) (value >> 40));
-            writer.WriteByte((byte) (value >> 48));
-            writer.WriteByte((byte) (value >> 56));
+            writer.WriteByte((byte)value);
+            writer.WriteByte((byte)(value >> 8));
+            writer.WriteByte((byte)(value >> 16));
+            writer.WriteByte((byte)(value >> 24));
+            writer.WriteByte((byte)(value >> 32));
+            writer.WriteByte((byte)(value >> 40));
+            writer.WriteByte((byte)(value >> 48));
+            writer.WriteByte((byte)(value >> 56));
         }
 
-        public static void WriteInt64(this NetworkWriter writer, long value)
-        {
-            writer.WriteUInt64((ulong) value);
-        }
+        public static void WriteInt64(this NetworkWriter writer, long value) => writer.WriteUInt64((ulong)value);
 
         public static void WriteSingle(this NetworkWriter writer, float value)
         {
-            var converter = new UIntFloat
+            UIntFloat converter = new UIntFloat
             {
                 floatValue = value
             };
@@ -213,7 +196,7 @@ namespace Mirror
 
         public static void WriteDouble(this NetworkWriter writer, double value)
         {
-            var converter = new UIntDouble
+            UIntDouble converter = new UIntDouble
             {
                 doubleValue = value
             };
@@ -225,7 +208,7 @@ namespace Mirror
             // the only way to read it without allocations is to both read and
             // write it with the FloatConverter (which is not binary compatible
             // to writer.Write(decimal), hence why we use it here too)
-            var converter = new UIntDecimal
+            UIntDecimal converter = new UIntDecimal
             {
                 decimalValue = value
             };
@@ -247,15 +230,16 @@ namespace Mirror
 
             // write string with same method as NetworkReader
             // convert to byte[]
-            var size = encoding.GetBytes(value, 0, value.Length, stringBuffer, 0);
+            int size = encoding.GetBytes(value, 0, value.Length, stringBuffer, 0);
 
             // check if within max size
             if (size >= NetworkWriter.MaxStringLength)
-                throw new IndexOutOfRangeException("NetworkWriter.Write(string) too long: " + size + ". Limit: " +
-                                                   NetworkWriter.MaxStringLength);
+            {
+                throw new IndexOutOfRangeException("NetworkWriter.Write(string) too long: " + size + ". Limit: " + NetworkWriter.MaxStringLength);
+            }
 
             // write size and bytes
-            writer.WriteUInt16(checked((ushort) (size + 1)));
+            writer.WriteUInt16(checked((ushort)(size + 1)));
             writer.WriteBytes(stringBuffer, 0, size);
         }
 
@@ -271,8 +255,7 @@ namespace Mirror
                 writer.WriteUInt32(0u);
                 return;
             }
-
-            writer.WriteUInt32(checked((uint) count) + 1u);
+            writer.WriteUInt32(checked((uint)count) + 1u);
             writer.WriteBytes(buffer, offset, count);
         }
 
@@ -389,7 +372,7 @@ namespace Mirror
 
         public static void WriteGuid(this NetworkWriter writer, Guid value)
         {
-            var data = value.ToByteArray();
+            byte[] data = value.ToByteArray();
             writer.WriteBytes(data, 0, data.Length);
         }
 
@@ -400,7 +383,6 @@ namespace Mirror
                 writer.WriteUInt32(0);
                 return;
             }
-
             writer.WriteUInt32(value.netId);
         }
 
@@ -411,9 +393,8 @@ namespace Mirror
                 writer.WriteUInt32(0);
                 return;
             }
-
             writer.WriteUInt32(value.netId);
-            writer.WriteByte((byte) value.ComponentIndex);
+            writer.WriteByte((byte)value.ComponentIndex);
         }
 
         public static void WriteTransform(this NetworkWriter writer, Transform value)
@@ -423,8 +404,7 @@ namespace Mirror
                 writer.WriteUInt32(0);
                 return;
             }
-
-            var identity = value.GetComponent<NetworkIdentity>();
+            NetworkIdentity identity = value.GetComponent<NetworkIdentity>();
             if (identity != null)
             {
                 writer.WriteUInt32(identity.netId);
@@ -443,8 +423,7 @@ namespace Mirror
                 writer.WriteUInt32(0);
                 return;
             }
-
-            var identity = value.GetComponent<NetworkIdentity>();
+            NetworkIdentity identity = value.GetComponent<NetworkIdentity>();
             if (identity != null)
             {
                 writer.WriteUInt32(identity.netId);
@@ -468,9 +447,8 @@ namespace Mirror
                 writer.WriteInt32(-1);
                 return;
             }
-
             writer.WriteInt32(list.Count);
-            for (var i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
                 writer.Write(list[i]);
         }
 
@@ -481,17 +459,19 @@ namespace Mirror
                 writer.WriteInt32(-1);
                 return;
             }
-
             writer.WriteInt32(array.Length);
-            for (var i = 0; i < array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
                 writer.Write(array[i]);
         }
 
         public static void WriteArraySegment<T>(this NetworkWriter writer, ArraySegment<T> segment)
         {
-            var length = segment.Count;
+            int length = segment.Count;
             writer.WriteInt32(length);
-            for (var i = 0; i < length; i++) writer.Write(segment.Array[segment.Offset + i]);
+            for (int i = 0; i < length; i++)
+            {
+                writer.Write(segment.Array[segment.Offset + i]);
+            }
         }
     }
 }

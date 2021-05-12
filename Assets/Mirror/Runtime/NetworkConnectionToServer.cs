@@ -11,7 +11,10 @@ namespace Mirror
             // Debug.Log("ConnectionSend " + this + " bytes:" + BitConverter.ToString(segment.Array, segment.Offset, segment.Count));
 
             // validate packet size first.
-            if (ValidatePacketSize(segment, channelId)) Transport.activeTransport.ClientSend(channelId, segment);
+            if (ValidatePacketSize(segment, channelId))
+            {
+                Transport.activeTransport.ClientSend(channelId, segment);
+            }
         }
 
         /// <summary>Disconnects this connection.</summary>

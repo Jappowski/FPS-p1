@@ -4,20 +4,19 @@ using Mono.CecilX.Cil;
 namespace Mirror.Weaver
 {
     /// <summary>
-    ///     Processes [Rpc] methods in NetworkBehaviour
+    /// Processes [Rpc] methods in NetworkBehaviour
     /// </summary>
     public static class RpcProcessor
     {
-        public static MethodDefinition ProcessRpcInvoke(TypeDefinition td, MethodDefinition md,
-            MethodDefinition rpcCallFunc)
+        public static MethodDefinition ProcessRpcInvoke(TypeDefinition td, MethodDefinition md, MethodDefinition rpcCallFunc)
         {
-            var rpc = new MethodDefinition(
+            MethodDefinition rpc = new MethodDefinition(
                 Weaver.InvokeRpcPrefix + md.Name,
                 MethodAttributes.Family | MethodAttributes.Static | MethodAttributes.HideBySig,
                 WeaverTypes.Import(typeof(void)));
 
-            var worker = rpc.Body.GetILProcessor();
-            var label = worker.Create(OpCodes.Nop);
+            ILProcessor worker = rpc.Body.GetILProcessor();
+            Instruction label = worker.Create(OpCodes.Nop);
 
             NetworkBehaviourProcessor.WriteClientActiveCheck(worker, md.Name, label, "RPC");
 
@@ -59,12 +58,11 @@ namespace Mirror.Weaver
             This way we do not need to modify the code anywhere else,  and this works
             correctly in dependent assemblies
         */
-        public static MethodDefinition ProcessRpcCall(TypeDefinition td, MethodDefinition md,
-            CustomAttribute clientRpcAttr)
+        public static MethodDefinition ProcessRpcCall(TypeDefinition td, MethodDefinition md, CustomAttribute clientRpcAttr)
         {
-            var rpc = MethodProcessor.SubstituteMethod(td, md);
+            MethodDefinition rpc = MethodProcessor.SubstituteMethod(td, md);
 
-            var worker = md.Body.GetILProcessor();
+            ILProcessor worker = md.Body.GetILProcessor();
 
             NetworkBehaviourProcessor.WriteSetupLocals(worker);
 
@@ -80,9 +78,9 @@ namespace Mirror.Weaver
             if (!NetworkBehaviourProcessor.WriteArguments(worker, md, RemoteCallType.ClientRpc))
                 return null;
 
-            var rpcName = md.Name;
-            var channel = clientRpcAttr.GetField("channel", 0);
-            var includeOwner = clientRpcAttr.GetField("includeOwner", true);
+            string rpcName = md.Name;
+            int channel = clientRpcAttr.GetField("channel", 0);
+            bool includeOwner = clientRpcAttr.GetField("includeOwner", true);
 
             // invoke SendInternal and return
             // this

@@ -8,9 +8,9 @@ namespace Mirror.Cloud.Example
         {
             Debug.Assert(startPositions.Count == 2, "Pong Scene should have 2 start Positions");
             // add player at correct spawn position
-            var startPos = numPlayers == 0 ? startPositions[0] : startPositions[1];
+            Transform startPos = numPlayers == 0 ? startPositions[0] : startPositions[1];
 
-            var player = startPos != null
+            GameObject player = startPos != null
                 ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
                 : Instantiate(playerPrefab);
 

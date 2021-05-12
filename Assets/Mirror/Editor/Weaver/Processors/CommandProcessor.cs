@@ -4,7 +4,7 @@ using Mono.CecilX.Cil;
 namespace Mirror.Weaver
 {
     /// <summary>
-    ///     Processes [Command] methods in NetworkBehaviour
+    /// Processes [Command] methods in NetworkBehaviour
     /// </summary>
     public static class CommandProcessor
     {
@@ -31,12 +31,11 @@ namespace Mirror.Weaver
             This way we do not need to modify the code anywhere else,  and this works
             correctly in dependent assemblies
         */
-        public static MethodDefinition ProcessCommandCall(TypeDefinition td, MethodDefinition md,
-            CustomAttribute commandAttr)
+        public static MethodDefinition ProcessCommandCall(TypeDefinition td, MethodDefinition md, CustomAttribute commandAttr)
         {
-            var cmd = MethodProcessor.SubstituteMethod(td, md);
+            MethodDefinition cmd = MethodProcessor.SubstituteMethod(td, md);
 
-            var worker = md.Body.GetILProcessor();
+            ILProcessor worker = md.Body.GetILProcessor();
 
             NetworkBehaviourProcessor.WriteSetupLocals(worker);
 
@@ -47,9 +46,9 @@ namespace Mirror.Weaver
             if (!NetworkBehaviourProcessor.WriteArguments(worker, md, RemoteCallType.Command))
                 return null;
 
-            var cmdName = md.Name;
-            var channel = commandAttr.GetField("channel", 0);
-            var requiresAuthority = commandAttr.GetField("requiresAuthority", true);
+            string cmdName = md.Name;
+            int channel = commandAttr.GetField("channel", 0);
+            bool requiresAuthority = commandAttr.GetField("requiresAuthority", true);
 
             // invoke internal send and return
             // load 'base.' to call the SendCommand function with
@@ -82,15 +81,14 @@ namespace Mirror.Weaver
                 ((ShipControl)obj).CmdThrust(reader.ReadSingle(), (int)reader.ReadPackedUInt32());
             }
         */
-        public static MethodDefinition ProcessCommandInvoke(TypeDefinition td, MethodDefinition method,
-            MethodDefinition cmdCallFunc)
+        public static MethodDefinition ProcessCommandInvoke(TypeDefinition td, MethodDefinition method, MethodDefinition cmdCallFunc)
         {
-            var cmd = new MethodDefinition(Weaver.InvokeRpcPrefix + method.Name,
+            MethodDefinition cmd = new MethodDefinition(Weaver.InvokeRpcPrefix + method.Name,
                 MethodAttributes.Family | MethodAttributes.Static | MethodAttributes.HideBySig,
                 WeaverTypes.Import(typeof(void)));
 
-            var worker = cmd.Body.GetILProcessor();
-            var label = worker.Create(OpCodes.Nop);
+            ILProcessor worker = cmd.Body.GetILProcessor();
+            Instruction label = worker.Create(OpCodes.Nop);
 
             NetworkBehaviourProcessor.WriteServerActiveCheck(worker, method.Name, label, "Command");
 
@@ -113,13 +111,17 @@ namespace Mirror.Weaver
             return cmd;
         }
 
-        private static void AddSenderConnection(MethodDefinition method, ILProcessor worker)
+        static void AddSenderConnection(MethodDefinition method, ILProcessor worker)
         {
-            foreach (var param in method.Parameters)
+            foreach (ParameterDefinition param in method.Parameters)
+            {
                 if (NetworkBehaviourProcessor.IsSenderConnection(param, RemoteCallType.Command))
+                {
                     // NetworkConnection is 3nd arg (arg0 is "obj" not "this" because method is static)
                     // example: static void InvokeCmdCmdSendCommand(NetworkBehaviour obj, NetworkReader reader, NetworkConnection connection)
                     worker.Emit(OpCodes.Ldarg_2);
+                }
+            }
         }
     }
 }

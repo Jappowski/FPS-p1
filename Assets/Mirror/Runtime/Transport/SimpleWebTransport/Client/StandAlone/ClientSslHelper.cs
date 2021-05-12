@@ -10,7 +10,7 @@ namespace Mirror.SimpleWeb
     {
         internal bool TryCreateStream(Connection conn, Uri uri)
         {
-            var stream = conn.client.GetStream();
+            NetworkStream stream = conn.client.GetStream();
             if (uri.Scheme != "wss")
             {
                 conn.stream = stream;
@@ -29,15 +29,14 @@ namespace Mirror.SimpleWeb
             }
         }
 
-        private Stream CreateStream(NetworkStream stream, Uri uri)
+        Stream CreateStream(NetworkStream stream, Uri uri)
         {
-            var sslStream = new SslStream(stream, true, ValidateServerCertificate);
+            SslStream sslStream = new SslStream(stream, true, ValidateServerCertificate);
             sslStream.AuthenticateAsClient(uri.Host);
             return sslStream;
         }
 
-        private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain,
-            SslPolicyErrors sslPolicyErrors)
+        static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             // Do not allow this client to communicate with unauthenticated servers.
 

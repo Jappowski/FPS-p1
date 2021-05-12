@@ -6,17 +6,16 @@ namespace Mirror.SimpleWeb
 {
     public class SimpleWebServer
     {
-        private readonly BufferPool bufferPool;
-        private readonly int maxMessagesPerTick;
+        readonly int maxMessagesPerTick;
 
-        private readonly WebSocketServer server;
+        readonly WebSocketServer server;
+        readonly BufferPool bufferPool;
 
-        public SimpleWebServer(int maxMessagesPerTick, TcpConfig tcpConfig, int maxMessageSize, int handshakeMaxSize,
-            SslConfig sslConfig)
+        public SimpleWebServer(int maxMessagesPerTick, TcpConfig tcpConfig, int maxMessageSize, int handshakeMaxSize, SslConfig sslConfig)
         {
             this.maxMessagesPerTick = maxMessagesPerTick;
             // use max because bufferpool is used for both messages and handshake
-            var max = Math.Max(maxMessageSize, handshakeMaxSize);
+            int max = Math.Max(maxMessageSize, handshakeMaxSize);
             bufferPool = new BufferPool(5, 20, max);
 
             server = new WebSocketServer(tcpConfig, maxMessageSize, handshakeMaxSize, sslConfig, bufferPool);
@@ -43,17 +42,19 @@ namespace Mirror.SimpleWeb
 
         public void SendAll(List<int> connectionIds, ArraySegment<byte> source)
         {
-            var buffer = bufferPool.Take(source.Count);
+            ArrayBuffer buffer = bufferPool.Take(source.Count);
             buffer.CopyFrom(source);
             buffer.SetReleasesRequired(connectionIds.Count);
 
             // make copy of array before for each, data sent to each client is the same
-            foreach (var id in connectionIds) server.Send(id, buffer);
+            foreach (int id in connectionIds)
+            {
+                server.Send(id, buffer);
+            }
         }
-
         public void SendOne(int connectionId, ArraySegment<byte> source)
         {
-            var buffer = bufferPool.Take(source.Count);
+            ArrayBuffer buffer = bufferPool.Take(source.Count);
             buffer.CopyFrom(source);
 
             server.Send(connectionId, buffer);
@@ -71,14 +72,14 @@ namespace Mirror.SimpleWeb
 
         public void ProcessMessageQueue(MonoBehaviour behaviour)
         {
-            var processedCount = 0;
+            int processedCount = 0;
             // check enabled every time in case behaviour was disabled after data
             while (
                 behaviour.enabled &&
                 processedCount < maxMessagesPerTick &&
                 // Dequeue last
-                server.receiveQueue.TryDequeue(out var next)
-            )
+                server.receiveQueue.TryDequeue(out Message next)
+                )
             {
                 processedCount++;
 

@@ -1,14 +1,15 @@
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class JoinLobbyMenu : MonoBehaviour
 {
-    [SerializeField] private readonly TMP_InputField ipAddressInputField = null;
-    [SerializeField] private readonly Button joinButton = null;
+    [SerializeField] private TMP_InputField ipAddressInputField = null;
+    [SerializeField] private Button joinButton = null;
 
-    [Header("UI")] [SerializeField] private readonly GameObject landingPagePanel = null;
-    [SerializeField] private readonly NetworkManagerGame networkManager = null;
+    [Header("UI")] [SerializeField] private GameObject landingPagePanel = null;
+    [SerializeField] private NetworkManagerGame networkManager = null;
 
     private void OnEnable()
     {

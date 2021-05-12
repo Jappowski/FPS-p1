@@ -4,11 +4,11 @@ namespace Mirror.Cloud.Examples.Pong
 {
     public class Player : NetworkBehaviour
     {
-        public Rigidbody2D rigidbody2d;
         public float speed = 1500;
+        public Rigidbody2D rigidbody2d;
 
         // need to use FixedUpdate for rigidbody
-        private void FixedUpdate()
+        void FixedUpdate()
         {
             // only let the local player control the racket.
             // don't control other player's rackets

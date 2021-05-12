@@ -5,8 +5,8 @@ namespace Mirror.Examples.Tanks
     public class Projectile : NetworkBehaviour
     {
         public float destroyAfter = 5;
-        public float force = 1000;
         public Rigidbody rigidBody;
+        public float force = 1000;
 
         public override void OnStartServer()
         {
@@ -15,14 +15,14 @@ namespace Mirror.Examples.Tanks
 
         // set velocity for server and client. this way we don't have to sync the
         // position, because both the server and the client simulate it.
-        private void Start()
+        void Start()
         {
             rigidBody.AddForce(transform.forward * force);
         }
 
         // destroy for everyone on the server
         [Server]
-        private void DestroySelf()
+        void DestroySelf()
         {
             NetworkServer.Destroy(gameObject);
         }
@@ -30,7 +30,7 @@ namespace Mirror.Examples.Tanks
         // ServerCallback because we don't want a warning if OnTriggerEnter is
         // called on the client
         [ServerCallback]
-        private void OnTriggerEnter(Collider co)
+        void OnTriggerEnter(Collider co)
         {
             NetworkServer.Destroy(gameObject);
         }

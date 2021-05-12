@@ -5,15 +5,17 @@ namespace Mirror.Examples.Basic
 {
     public class PlayerUI : MonoBehaviour
     {
-        [Header("Player Components")] public Image image;
+        [Header("Player Components")]
+        public Image image;
 
-        private Player player;
+        [Header("Child Text Objects")]
+        public Text playerNameText;
         public Text playerDataText;
 
-        [Header("Child Text Objects")] public Text playerNameText;
+        Player player;
 
         /// <summary>
-        ///     Caches the controlling Player object, subscribes to its events
+        /// Caches the controlling Player object, subscribes to its events
         /// </summary>
         /// <param name="player">Player object that controls this UI</param>
         /// <param name="isLocalPlayer">true if the Player object is the Local Player</param>
@@ -32,7 +34,7 @@ namespace Mirror.Examples.Basic
                 image.color = new Color(1f, 1f, 1f, 0.1f);
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             player.OnPlayerNumberChanged -= OnPlayerNumberChanged;
             player.OnPlayerColorChanged -= OnPlayerColorChanged;
@@ -40,22 +42,23 @@ namespace Mirror.Examples.Basic
         }
 
         // This value can change as clients leave and join
-        private void OnPlayerNumberChanged(int newPlayerNumber)
+        void OnPlayerNumberChanged(int newPlayerNumber)
         {
             playerNameText.text = string.Format("Player {0:00}", newPlayerNumber);
         }
 
         // Random color set by Player::OnStartServer
-        private void OnPlayerColorChanged(Color32 newPlayerColor)
+        void OnPlayerColorChanged(Color32 newPlayerColor)
         {
             playerNameText.color = newPlayerColor;
         }
 
         // This updates from Player::UpdateData via InvokeRepeating on server
-        private void OnPlayerDataChanged(int newPlayerData)
+        void OnPlayerDataChanged(int newPlayerData)
         {
             // Show the data in the UI
             playerDataText.text = string.Format("Data: {0:000}", newPlayerData);
         }
+
     }
 }

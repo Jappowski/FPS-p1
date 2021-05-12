@@ -1,3 +1,4 @@
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ public class PlayerNameInput : MonoBehaviour
     private const string PlayerPrefsNameKey = "PlayerName";
     [SerializeField] private Button ContinueButtton;
 
-    [Header("UI")] [SerializeField] private readonly TMP_InputField nameInputField = null;
+    [Header("UI")] [SerializeField] private TMP_InputField nameInputField = null;
 
     public static string DisplayName { get; private set; }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Mirror.Cloud
 {
     /// <summary>
-    ///     Used to requests and responses from the mirror api
+    /// Used to requests and responses from the mirror api
     /// </summary>
     public interface IApiConnector
     {
@@ -12,25 +12,40 @@ namespace Mirror.Cloud
     }
 
     /// <summary>
-    ///     Used to requests and responses from the mirror api
+    /// Used to requests and responses from the mirror api
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Network/CloudServices/ApiConnector")]
     [HelpURL("https://mirror-networking.com/docs/api/Mirror.Cloud.ApiConnector.html")]
     public class ApiConnector : MonoBehaviour, IApiConnector, ICoroutineRunner
     {
-        private IRequestCreator requestCreator;
+        #region Inspector
+        [Header("Settings")]
+
+        [Tooltip("Base URL of api, including https")]
+        [SerializeField] string ApiAddress = "";
+
+        [Tooltip("Api key required to access api")]
+        [SerializeField] string ApiKey = "";
+
+        [Header("Events")]
+
+        [Tooltip("Triggered when server list updates")]
+        [SerializeField] ServerListEvent _onServerListUpdated = new ServerListEvent();
+        #endregion
+
+        IRequestCreator requestCreator;
 
         public ListServer ListServer { get; private set; }
 
-        private void Awake()
+        void Awake()
         {
             requestCreator = new RequestCreator(ApiAddress, ApiKey, this);
 
             InitListServer();
         }
 
-        private void InitListServer()
+        void InitListServer()
         {
             IListServerServerApi serverApi = new ListServerServerApi(this, requestCreator);
             IListServerClientApi clientApi = new ListServerClientApi(this, requestCreator, _onServerListUpdated);
@@ -42,18 +57,5 @@ namespace Mirror.Cloud
             ListServer?.ServerApi.Shutdown();
             ListServer?.ClientApi.Shutdown();
         }
-
-        #region Inspector
-
-        [Header("Settings")] [Tooltip("Base URL of api, including https")] [SerializeField]
-        private readonly string ApiAddress = "";
-
-        [Tooltip("Api key required to access api")] [SerializeField]
-        private readonly string ApiKey = "";
-
-        [Header("Events")] [Tooltip("Triggered when server list updates")] [SerializeField]
-        private readonly ServerListEvent _onServerListUpdated = new ServerListEvent();
-
-        #endregion
     }
 }

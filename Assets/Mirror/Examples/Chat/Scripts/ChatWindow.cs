@@ -6,8 +6,8 @@ namespace Mirror.Examples.Chat
 {
     public class ChatWindow : MonoBehaviour
     {
-        public Text chatHistory;
         public InputField chatMessage;
+        public Text chatHistory;
         public Scrollbar scrollbar;
 
         public void Awake()
@@ -15,11 +15,11 @@ namespace Mirror.Examples.Chat
             Player.OnMessage += OnPlayerMessage;
         }
 
-        private void OnPlayerMessage(Player player, string message)
+        void OnPlayerMessage(Player player, string message)
         {
-            var prettyMessage = player.isLocalPlayer
-                ? $"<color=red>{player.playerName}: </color> {message}"
-                : $"<color=blue>{player.playerName}: </color> {message}";
+            string prettyMessage = player.isLocalPlayer ?
+                $"<color=red>{player.playerName}: </color> {message}" :
+                $"<color=blue>{player.playerName}: </color> {message}";
             AppendMessage(prettyMessage);
 
             Debug.Log(message);
@@ -32,7 +32,7 @@ namespace Mirror.Examples.Chat
                 return;
 
             // get our player
-            var player = NetworkClient.connection.identity.GetComponent<Player>();
+            Player player = NetworkClient.connection.identity.GetComponent<Player>();
 
             // send a message
             player.CmdSend(chatMessage.text.Trim());
@@ -45,7 +45,7 @@ namespace Mirror.Examples.Chat
             StartCoroutine(AppendAndScroll(message));
         }
 
-        private IEnumerator AppendAndScroll(string message)
+        IEnumerator AppendAndScroll(string message)
         {
             chatHistory.text += message + "\n";
 

@@ -1,13 +1,14 @@
 
+using Mirror;
+using UnityEngine;
 
-/*
-public class PlayerSetup 
+public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] Behaviour[] componentsToDisable;
     [SerializeField] private GameObject playerBody;
     void Start()
     {
-        if (!IsLocalPlayer)
+        if (!isLocalPlayer)
         {
             foreach (var component in componentsToDisable)
             {
@@ -16,10 +17,8 @@ public class PlayerSetup
         }
         else
         {
-            Camera.main.gameObject.SetActive(false);
             playerBody.SetActive(false);
         }
         
     }
 }
-*/

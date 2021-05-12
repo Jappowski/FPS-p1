@@ -1,25 +1,25 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace Mirror.Cloud.ListServerService
 {
     public sealed class ListServerClientApi : ListServerBaseApi, IListServerClientApi
     {
-        private readonly ServerListEvent _onServerListUpdated;
+        readonly ServerListEvent _onServerListUpdated;
 
-        private Coroutine getServerListRepeatCoroutine;
-
-        public ListServerClientApi(ICoroutineRunner runner, IRequestCreator requestCreator,
-            ServerListEvent onServerListUpdated) : base(runner, requestCreator)
-        {
-            _onServerListUpdated = onServerListUpdated;
-        }
+        Coroutine getServerListRepeatCoroutine;
 
         public event UnityAction<ServerCollectionJson> onServerListUpdated
         {
             add => _onServerListUpdated.AddListener(value);
             remove => _onServerListUpdated.RemoveListener(value);
+        }
+
+        public ListServerClientApi(ICoroutineRunner runner, IRequestCreator requestCreator, ServerListEvent onServerListUpdated) : base(runner, requestCreator)
+        {
+            _onServerListUpdated = onServerListUpdated;
         }
 
         public void Shutdown()
@@ -41,10 +41,12 @@ namespace Mirror.Cloud.ListServerService
         {
             // if runner is null it has been destroyed and will already be null
             if (runner.IsNotNull() && getServerListRepeatCoroutine != null)
+            {
                 runner.StopCoroutine(getServerListRepeatCoroutine);
+            }
         }
 
-        private IEnumerator GetServerListRepeat(int interval)
+        IEnumerator GetServerListRepeat(int interval)
         {
             while (true)
             {
@@ -53,15 +55,14 @@ namespace Mirror.Cloud.ListServerService
                 yield return new WaitForSeconds(interval);
             }
         }
-
-        private IEnumerator getServerList()
+        IEnumerator getServerList()
         {
-            var request = requestCreator.Get("servers");
+            UnityWebRequest request = requestCreator.Get("servers");
             yield return requestCreator.SendRequestEnumerator(request, onSuccess);
 
             void onSuccess(string responseBody)
             {
-                var serverlist = JsonUtility.FromJson<ServerCollectionJson>(responseBody);
+                ServerCollectionJson serverlist = JsonUtility.FromJson<ServerCollectionJson>(responseBody);
                 _onServerListUpdated?.Invoke(serverlist);
             }
         }

@@ -7,19 +7,21 @@ namespace Mirror.Examples.Additive
     // Note that all ProximityCheckers should be restricted to the Player layer.
     public class ShootingTankBehaviour : NetworkBehaviour
     {
-        private NetworkAnimator networkAnimator;
+        [SyncVar]
+        public Quaternion rotation;
 
-        [SyncVar] public Quaternion rotation;
-
-        [Range(0, 1)] public float turnSpeed = 0.1f;
+        NetworkAnimator networkAnimator;
 
         [ServerCallback]
-        private void Start()
+        void Start()
         {
             networkAnimator = GetComponent<NetworkAnimator>();
         }
 
-        private void Update()
+        [Range(0, 1)]
+        public float turnSpeed = 0.1f;
+
+        void Update()
         {
             if (isServer && netIdentity.observers.Count > 0)
                 ShootNearestPlayer();
@@ -29,15 +31,15 @@ namespace Mirror.Examples.Additive
         }
 
         [Server]
-        private void ShootNearestPlayer()
+        void ShootNearestPlayer()
         {
             GameObject target = null;
-            var distance = 100f;
+            float distance = 100f;
 
-            foreach (var networkConnection in netIdentity.observers.Values)
+            foreach (NetworkConnection networkConnection in netIdentity.observers.Values)
             {
-                var tempTarget = networkConnection.identity.gameObject;
-                var tempDistance = Vector3.Distance(tempTarget.transform.position, transform.position);
+                GameObject tempTarget = networkConnection.identity.gameObject;
+                float tempDistance = Vector3.Distance(tempTarget.transform.position, transform.position);
 
                 if (target == null || distance > tempDistance)
                 {

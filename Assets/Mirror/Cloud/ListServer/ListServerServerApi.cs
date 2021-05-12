@@ -1,72 +1,63 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Mirror.Cloud.ListServerService
 {
     public sealed class ListServerServerApi : ListServerBaseApi, IListServerServerApi
     {
-        private const int PingInterval = 20;
-        private const int MaxPingFails = 15;
+        const int PingInterval = 20;
+        const int MaxPingFails = 15;
 
-        private Coroutine _pingCoroutine;
+        ServerJson currentServer;
+        string serverId;
 
-        private ServerJson currentServer;
-
+        Coroutine _pingCoroutine;
         /// <summary>
-        ///     How many failed pings in a row
+        /// If the server has already been added
         /// </summary>
-        private int pingFails;
-
+        bool added;
         /// <summary>
-        ///     if a request is currently sending
+        /// if a request is currently sending
         /// </summary>
-        private bool sending;
-
-        private string serverId;
-
+        bool sending;
         /// <summary>
-        ///     If an update request was recently sent
+        /// If an update request was recently sent
         /// </summary>
-        private bool skipNextPing;
+        bool skipNextPing;
+        /// <summary>
+        /// How many failed pings in a row
+        /// </summary>
+        int pingFails = 0;
 
-        public ListServerServerApi(ICoroutineRunner runner, IRequestCreator requestCreator) : base(runner,
-            requestCreator)
+        public bool ServerInList => added;
+
+        public ListServerServerApi(ICoroutineRunner runner, IRequestCreator requestCreator) : base(runner, requestCreator)
         {
         }
-
-        /// <summary>
-        ///     If the server has already been added
-        /// </summary>
-        public bool ServerInList { get; private set; }
 
         public void Shutdown()
         {
             stopPingCoroutine();
-            if (ServerInList) removeServerWithoutCoroutine();
-            ServerInList = false;
+            if (added)
+            {
+                removeServerWithoutCoroutine();
+            }
+            added = false;
         }
 
         public void AddServer(ServerJson server)
         {
-            if (ServerInList)
-            {
-                Logger.LogWarning("AddServer called when server was already adding or added");
-                return;
-            }
-
-            var valid = server.Validate();
-            if (!valid) return;
+            if (added) { Logger.LogWarning("AddServer called when server was already adding or added"); return; }
+            bool valid = server.Validate();
+            if (!valid) { return; }
 
             runner.StartCoroutine(addServer(server));
         }
 
         public void UpdateServer(int newPlayerCount)
         {
-            if (!ServerInList)
-            {
-                Logger.LogWarning("UpdateServer called when before server was added");
-                return;
-            }
+            if (!added) { Logger.LogWarning("UpdateServer called when before server was added"); return; }
 
             currentServer.playerCount = newPlayerCount;
             UpdateServer(currentServer);
@@ -75,18 +66,14 @@ namespace Mirror.Cloud.ListServerService
         public void UpdateServer(ServerJson server)
         {
             // TODO, use PartialServerJson as Arg Instead
-            if (!ServerInList)
-            {
-                Logger.LogWarning("UpdateServer called when before server was added");
-                return;
-            }
+            if (!added) { Logger.LogWarning("UpdateServer called when before server was added"); return; }
 
-            var partialServer = new PartialServerJson
+            PartialServerJson partialServer = new PartialServerJson
             {
                 displayName = server.displayName,
                 playerCount = server.playerCount,
                 maxPlayerCount = server.maxPlayerCount,
-                customData = server.customData
+                customData = server.customData,
             };
             partialServer.Validate();
 
@@ -95,7 +82,7 @@ namespace Mirror.Cloud.ListServerService
 
         public void RemoveServer()
         {
-            if (!ServerInList) return;
+            if (!added) { return; }
 
             if (string.IsNullOrEmpty(serverId))
             {
@@ -107,7 +94,7 @@ namespace Mirror.Cloud.ListServerService
             runner.StartCoroutine(removeServer());
         }
 
-        private void stopPingCoroutine()
+        void stopPingCoroutine()
         {
             if (_pingCoroutine != null)
             {
@@ -116,45 +103,43 @@ namespace Mirror.Cloud.ListServerService
             }
         }
 
-        private IEnumerator addServer(ServerJson server)
+        IEnumerator addServer(ServerJson server)
         {
-            ServerInList = true;
+            added = true;
             sending = true;
             currentServer = server;
 
-            var request = requestCreator.Post("servers", currentServer);
+            UnityWebRequest request = requestCreator.Post("servers", currentServer);
             yield return requestCreator.SendRequestEnumerator(request, onSuccess, onFail);
             sending = false;
 
             void onSuccess(string responseBody)
             {
-                var created = JsonUtility.FromJson<CreatedIdJson>(responseBody);
+                CreatedIdJson created = JsonUtility.FromJson<CreatedIdJson>(responseBody);
                 serverId = created.id;
 
                 // Start ping to keep server alive
                 _pingCoroutine = runner.StartCoroutine(ping());
             }
-
             void onFail(string responseBody)
             {
-                ServerInList = false;
+                added = false;
             }
         }
 
-        private IEnumerator updateServer(PartialServerJson server)
+        IEnumerator updateServer(PartialServerJson server)
         {
             // wait to not be sending
-            while (sending) yield return new WaitForSeconds(1);
-
-            // We need to check added in case Update is called soon after Add, and add failed
-            if (!ServerInList)
+            while (sending)
             {
-                Logger.LogWarning("UpdateServer called when before server was added");
-                yield break;
+                yield return new WaitForSeconds(1);
             }
 
+            // We need to check added in case Update is called soon after Add, and add failed
+            if (!added) { Logger.LogWarning("UpdateServer called when before server was added"); yield break; }
+
             sending = true;
-            var request = requestCreator.Patch("servers/" + serverId, server);
+            UnityWebRequest request = requestCreator.Patch("servers/" + serverId, server);
             yield return requestCreator.SendRequestEnumerator(request, onSuccess);
             sending = false;
 
@@ -162,15 +147,18 @@ namespace Mirror.Cloud.ListServerService
             {
                 skipNextPing = true;
 
-                if (_pingCoroutine == null) _pingCoroutine = runner.StartCoroutine(ping());
+                if (_pingCoroutine == null)
+                {
+                    _pingCoroutine = runner.StartCoroutine(ping());
+                }
             }
         }
 
         /// <summary>
-        ///     Keeps server alive in database
+        /// Keeps server alive in database
         /// </summary>
         /// <returns></returns>
-        private IEnumerator ping()
+        IEnumerator ping()
         {
             while (pingFails <= MaxPingFails)
             {
@@ -182,7 +170,7 @@ namespace Mirror.Cloud.ListServerService
                 }
 
                 sending = true;
-                var request = requestCreator.Patch("servers/" + serverId, new EmptyJson());
+                UnityWebRequest request = requestCreator.Patch("servers/" + serverId, new EmptyJson());
                 yield return requestCreator.SendRequestEnumerator(request, onSuccess, onFail);
                 sending = false;
             }
@@ -195,24 +183,23 @@ namespace Mirror.Cloud.ListServerService
             {
                 pingFails = 0;
             }
-
             void onFail(string responseBody)
             {
                 pingFails++;
             }
         }
 
-        private IEnumerator removeServer()
+        IEnumerator removeServer()
         {
             sending = true;
-            var request = requestCreator.Delete("servers/" + serverId);
+            UnityWebRequest request = requestCreator.Delete("servers/" + serverId);
             yield return requestCreator.SendRequestEnumerator(request);
             sending = false;
 
-            ServerInList = false;
+            added = false;
         }
 
-        private void removeServerWithoutCoroutine()
+        void removeServerWithoutCoroutine()
         {
             if (string.IsNullOrEmpty(serverId))
             {
@@ -220,10 +207,13 @@ namespace Mirror.Cloud.ListServerService
                 return;
             }
 
-            var request = requestCreator.Delete("servers/" + serverId);
-            var operation = request.SendWebRequest();
+            UnityWebRequest request = requestCreator.Delete("servers/" + serverId);
+            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
-            operation.completed += op => { Logger.LogResponse(request); };
+            operation.completed += (op) =>
+            {
+                Logger.LogResponse(request);
+            };
         }
     }
 }
