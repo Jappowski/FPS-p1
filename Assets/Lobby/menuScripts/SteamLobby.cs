@@ -14,7 +14,7 @@ public class SteamLobby : MonoBehaviour
    private const string HostAddresKey = "HostAddress" ;
    private void Start()
    {
-      networkManager = GetComponent<NetworkManagerGame>();
+      networkManager = GetComponent<NetworkManager>();
 
       if (!SteamManager.Initialized)
       {
@@ -27,11 +27,18 @@ public class SteamLobby : MonoBehaviour
    }
    public void HostLobby()
    {
+      buttons.SetActive(false);
       SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
    }
 
    private void OnLobbyCreated(LobbyCreated_t callBack)
    {
+      if (callBack.m_eResult != EResult.k_EResultOK)
+      {
+         buttons.SetActive(true);
+         return;
+      }
+      
       networkManager.StartHost();
 
       SteamMatchmaking.SetLobbyData(new CSteamID(callBack.m_ulSteamIDLobby), HostAddresKey,

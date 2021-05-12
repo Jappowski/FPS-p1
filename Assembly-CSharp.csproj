@@ -66,9 +66,11 @@
      <Compile Include="Assets\_scripts\PlayerSetup.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+     <Compile Include="Assets\Lobby\menuScripts\SteamLobby.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
+     <Compile Include="Assets\Lobby\menuScripts\PlayerSpawnSystem.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
@@ -87,6 +89,7 @@
      <Compile Include="Assets\Lobby\menuScripts\PlayerNameInput.cs" />
      <Compile Include="Assets\_scripts\PasswordNetworkManager.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
+     <Compile Include="Assets\Lobby\menuScripts\PlayerSpawnPoint.cs" />
      <Compile Include="Assets\Lobby\menuScripts\NetworkGamePlayerLobby.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
@@ -99,9 +102,6 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
      <Compile Include="Assets\_scripts\Target.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-     <Compile Include="Assets\Lobby\menuScripts\PlayerSpawnSystem.cs" />
-     <Compile Include="Assets\Lobby\menuScripts\PlayerSpawnPoint.cs" />
-     <Compile Include="Assets\Lobby\menuScripts\SteamLobby.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\ScriptTemplates\51-Mirror__Network Authenticator-NewNetworkAuthenticator.cs.txt" />
@@ -793,9 +793,21 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Mirror.csproj">
+      <Project>{4d437d07-aaef-d621-2504-699cf6e59dfc}</Project>
+      <Name>Mirror</Name>
+    </ProjectReference>
     <ProjectReference Include="kcp2k.csproj">
       <Project>{2224fa6d-7eb0-bf6f-626f-fbe20f2fac20}</Project>
       <Name>kcp2k</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Examples.csproj">
+      <Project>{776ea6b8-7135-fbd7-e2bd-f1b65ff001e6}</Project>
+      <Name>Mirror.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Cloud.csproj">
+      <Project>{88a7449e-b210-857f-0bd7-d3713f24f519}</Project>
+      <Name>Mirror.Cloud</Name>
     </ProjectReference>
     <ProjectReference Include="Mirror.Weaver.csproj">
       <Project>{0627374d-c2fd-be0e-14ef-39f82f37e153}</Project>
@@ -805,30 +817,6 @@
       <Project>{b2658847-6f8b-d7c4-0eb9-626f4f0b0c5b}</Project>
       <Name>Mirror.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Telepathy.csproj">
-      <Project>{e76d7667-f833-13e0-7663-9b29250c9d14}</Project>
-      <Name>Telepathy</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Cloud.csproj">
-      <Project>{88a7449e-b210-857f-0bd7-d3713f24f519}</Project>
-      <Name>Mirror.Cloud</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Examples.Cloud.GUI.csproj">
-      <Project>{55af8767-720a-fb7b-31cf-cd4c85294b76}</Project>
-      <Name>Mirror.Examples.Cloud.GUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Components.csproj">
-      <Project>{bd6a37b0-3ca0-15db-fa70-1f8f1df94f4c}</Project>
-      <Name>Mirror.Components</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Examples.csproj">
-      <Project>{776ea6b8-7135-fbd7-e2bd-f1b65ff001e6}</Project>
-      <Name>Mirror.Examples</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Examples.Cloud.Pong.csproj">
-      <Project>{55928d40-6d7d-1f00-cc3a-5a44e93eb2f6}</Project>
-      <Name>Mirror.Examples.Cloud.Pong</Name>
-    </ProjectReference>
     <ProjectReference Include="Mirror.CompilerSymbols.csproj">
       <Project>{8d271945-9f73-9cd5-33f9-c0c715e57785}</Project>
       <Name>Mirror.CompilerSymbols</Name>
@@ -837,13 +825,25 @@
       <Project>{44ac4144-7f50-3a9a-d001-ef46611ec215}</Project>
       <Name>Mirror.Authenticators</Name>
     </ProjectReference>
-    <ProjectReference Include="Mirror.csproj">
-      <Project>{4d437d07-aaef-d621-2504-699cf6e59dfc}</Project>
-      <Name>Mirror</Name>
+    <ProjectReference Include="Telepathy.csproj">
+      <Project>{e76d7667-f833-13e0-7663-9b29250c9d14}</Project>
+      <Name>Telepathy</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Examples.Cloud.GUI.csproj">
+      <Project>{55af8767-720a-fb7b-31cf-cd4c85294b76}</Project>
+      <Name>Mirror.Examples.Cloud.GUI</Name>
     </ProjectReference>
     <ProjectReference Include="SimpleWebTransport.csproj">
       <Project>{fce53831-f925-c31d-5a30-9da079d6cd01}</Project>
       <Name>SimpleWebTransport</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Components.csproj">
+      <Project>{bd6a37b0-3ca0-15db-fa70-1f8f1df94f4c}</Project>
+      <Name>Mirror.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Examples.Cloud.Pong.csproj">
+      <Project>{55928d40-6d7d-1f00-cc3a-5a44e93eb2f6}</Project>
+      <Name>Mirror.Examples.Cloud.Pong</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

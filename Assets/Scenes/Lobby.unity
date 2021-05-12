@@ -375,12 +375,12 @@ PrefabInstance:
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -391,7 +391,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2040757439}
+      objectReference: {fileID: 1315914495}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -410,7 +410,7 @@ PrefabInstance:
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: JoinLobby
+      value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -420,7 +420,7 @@ PrefabInstance:
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SteamLobby, Assembly-CSharp
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -430,7 +430,7 @@ PrefabInstance:
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6614705099755587933, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -491,7 +491,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2040757439}
+      objectReference: {fileID: 2040757435}
     - target: {fileID: 7259113022343716891, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -505,7 +505,7 @@ PrefabInstance:
     - target: {fileID: 7259113022343716891, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HostLobby
+      value: StartHost
       objectReference: {fileID: 0}
     - target: {fileID: 7259113022343716891, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -515,7 +515,7 @@ PrefabInstance:
     - target: {fileID: 7259113022343716891, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SteamLobby, Assembly-CSharp
+      value: Mirror.NetworkManager, Mirror
       objectReference: {fileID: 0}
     - target: {fileID: 7259113022343716891, guid: 05cfa1382d0a7e74bba7ac8421ff0fda,
         type: 3}
@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 2040757436}
   - component: {fileID: 2040757438}
   - component: {fileID: 2040757439}
+  - component: {fileID: 2040757440}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -843,7 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
-  PersistNetworkManagerToOfflineScene: 0
+  PersistNetworkManagerToOfflineScene: 1
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 60
@@ -851,9 +852,9 @@ MonoBehaviour:
   serverBatchInterval: 0
   offlineScene: 
   onlineScene: Assets/Scenes/Lobby.unity
-  transport: {fileID: 2040757438}
+  transport: {fileID: 2040757440}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 4
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
@@ -877,7 +878,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040757434}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
@@ -899,8 +900,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040757434}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -44.001713, y: -21.000605, z: -30.169476}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -913,7 +914,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040757434}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea368fb6f27ec2f40a40e20977992b9c, type: 3}
   m_Name: 
@@ -931,9 +932,33 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040757434}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d98b2c0e3b84c4340bfb35a72c2d46a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   buttons: {fileID: 1815805306}
+--- !u!114 &2040757440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040757434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  NoDelay: 1
+  SendTimeout: 5000
+  ReceiveTimeout: 30000
+  serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
+  serverSendQueueLimitPerConnection: 10000
+  serverReceiveQueueLimitPerConnection: 10000
+  clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
+  clientSendQueueLimit: 10000
+  clientReceiveQueueLimit: 10000
