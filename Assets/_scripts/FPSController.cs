@@ -14,12 +14,15 @@ public class FPSController : NetworkBehaviour
     private Vector3 moveDirection = Vector3.zero;
     public Camera playerCamera;
     private float rotationX;
-    public float runningSpeed = 11.5f;
-    public float walkingSpeed = 7.5f;
+    public float slowWalkSpeed = 7f;
+    public float walkingSpeed = 11.5f;
 
+    [SerializeField] private Animator animator;
+    
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
 
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -33,17 +36,29 @@ public class FPSController : NetworkBehaviour
 
         var right = transform.TransformDirection(Vector3.right);
         // Press Left Shift to run
-        var isRunning = Input.GetKey(KeyCode.LeftShift);
-        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
-        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
+        var isWalkingSlow = Input.GetKey(KeyCode.LeftShift);
+        var curSpeedX = canMove ? (isWalkingSlow ? slowWalkSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
+        var curSpeedY = canMove ? (isWalkingSlow ? slowWalkSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         var movementDirectionY = moveDirection.y;
         moveDirection = forward * curSpeedX + right * curSpeedY;
+        
+        animator.SetFloat("Vertical", Input.GetAxis("Vertical"));
+        animator.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        {
             moveDirection.y = jumpSpeed;
+        }
         else
+        {
             moveDirection.y = movementDirectionY;
+        }
 
+        if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        {
+            animator.SetTrigger("Jump");
+        }
+        
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
         // as an acceleration (ms^-2)
