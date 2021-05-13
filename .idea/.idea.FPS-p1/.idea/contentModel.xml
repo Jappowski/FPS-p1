@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\jappo\AppData\local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\jappo\AppData\local\JetBrains\Rider2020.2\resharper-host\local\Transient\Rider\v202\SolutionCaches\_FPS-p1.1018799960.00" t="ExcludeRecursive" />
-    <e p="C:\Users\jappo\Documents\GitHub\FPS-p1" t="IncludeRecursive">
+    <e p="C:\Users\PC\AppData\local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\PC\AppData\local\JetBrains\Rider2020.3\resharper-host\local\Transient\Rider\v203\SolutionCaches\_FPS-p1.1544564629.00" t="ExcludeRecursive" />
+    <e p="C:\Users\PC\OneDrive\Dokumenty\GitHub\FPS-p1" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="_scripts" t="Include">

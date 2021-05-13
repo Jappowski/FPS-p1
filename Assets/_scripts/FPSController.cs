@@ -30,6 +30,7 @@ public class FPSController : NetworkBehaviour
     {
         // We are grounded, so recalculate move direction based on axes
         var forward = transform.TransformDirection(Vector3.forward);
+
         var right = transform.TransformDirection(Vector3.right);
         // Press Left Shift to run
         var isRunning = Input.GetKey(KeyCode.LeftShift);

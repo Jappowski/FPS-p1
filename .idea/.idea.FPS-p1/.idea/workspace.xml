@@ -20,18 +20,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/SpawnSystem.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/SpawnSystem.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FPS-p1.sln" beforeDir="false" afterPath="$PROJECT_DIR$/FPS-p1.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/Packages-Update.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Packages-Update.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,65 +43,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/PlayerSpawnSystem.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/JoinLobbyMenu.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/GunShot.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/PlayerSpawnPoint.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/GunShot.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PlayerSetup.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Steamworks/Scripts/SteamLobby.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../NetworkGamePlayerLobby.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkRoomPlayerLobby.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkManagerLobby.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/19391519-2608-4240-8FF9-93819E8AFDF3/70/91e94ca2/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Assets/_scripts/CsController.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" />
-        <option value="$PROJECT_DIR$/Assets/AmmoCountUI.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/GuiManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Target.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/NetworkMenager.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Lobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/NetworkRoomPlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/NetworkManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/MainMenu.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/PlayerNameInput.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/MapHandler.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/JoinLobbyMenu.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/MainMenu.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/InputManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/Inputs/Controls.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/RoundSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/PlayerSpawnSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/PlayerSpawnPoint.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/MapSet.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/NetworkManagerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/NetworkGamePlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/ActionMapNames.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/NetworkManagerGame.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/menuScripts/NetworkRoomPlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/MainMenu.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerNameInput.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkRoomPlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/PlayerSpawnSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Spawn/PlayerSpawnPoint.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Spawn/PlayerSpawnSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/PlayerSetup.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/JoinLobbyMenu.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" />
-      </list>
-    </option>
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" />
+    </changedPaths>
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">
@@ -124,17 +76,23 @@
     <property name="settings.editor.selected.configurable" value="RiderDpaPageId" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="selectedOptions">
+        <list />
+      </option>
       <method v="2" />
     </configuration>
     <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="selectedOptions">
+        <list />
+      </option>
       <method v="2" />
     </configuration>
   </component>
@@ -166,6 +124,7 @@
       <workItem from="1620764885649" duration="6575000" />
       <workItem from="1620827396260" duration="11666000" />
       <workItem from="1620841872770" duration="11798000" />
+      <workItem from="1620916892895" duration="992000" />
     </task>
     <servers />
   </component>
