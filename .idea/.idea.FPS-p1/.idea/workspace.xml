@@ -23,11 +23,15 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Arena2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Arena2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/characterwithgun_anims.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/characterwithgun_anims.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Idle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Idle.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Jump.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Jump.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Slow_Walk_Forward.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Slow_Walk_Forward.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/CharacterAnimator.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/CharacterAnimator.controller" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,6 +128,7 @@
       <workItem from="1620916892895" duration="992000" />
       <workItem from="1620927955757" duration="8641000" />
       <workItem from="1620943296873" duration="632000" />
+      <workItem from="1620981974986" duration="2221000" />
     </task>
     <servers />
   </component>

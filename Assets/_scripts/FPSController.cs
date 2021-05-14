@@ -41,6 +41,17 @@ public class FPSController : NetworkBehaviour
         var curSpeedY = canMove ? (isWalkingSlow ? slowWalkSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         var movementDirectionY = moveDirection.y;
         moveDirection = forward * curSpeedX + right * curSpeedY;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            animator.SetBool("SlowWalk", true);
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            animator.SetBool("SlowWalk", false);
+        }
+        
+        
         
         animator.SetFloat("Vertical", Input.GetAxis("Vertical"));
         animator.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
