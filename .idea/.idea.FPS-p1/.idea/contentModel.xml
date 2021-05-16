@@ -14,6 +14,11 @@
           <e p="PasswordNetworkManager.cs" t="Include" />
           <e p="PlayerSetup.cs" t="Include" />
           <e p="Target.cs" t="Include" />
+          <e p="WeaponAiming" t="Include">
+            <e p="DebugDrawLine.cs" t="Include" />
+            <e p="DebugDrawSphere.cs" t="Include" />
+            <e p="WeaponIK.cs" t="Include" />
+          </e>
         </e>
         <e p="Lobby" t="Include">
           <e p="menuScripts" t="Include">
