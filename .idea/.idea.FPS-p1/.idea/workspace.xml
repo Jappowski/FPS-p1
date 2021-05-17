@@ -21,26 +21,14 @@
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/characterwithgun_improved.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/characterwithgun_improved.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/CharacterAnimator.controller" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/CharacterAnimator.controller.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Animations/M4A1.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/M4A1.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase2.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/CsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/CsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
@@ -68,6 +56,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF667CDC-82BF-4A4E-911D-1DDEA9FF581D/2b/667f0772/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF667CDC-82BF-4A4E-911D-1DDEA9FF581D/0f/06ec625c/Quaternion.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Unity/Hub/Editor/2020.3.8f1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/EventSystem/EventSystem.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/19391519-2608-4240-8FF9-93819E8AFDF3/70/91e94ca2/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -83,6 +72,9 @@
       <option value="$PROJECT_DIR$/Assets/_scripts/CsController.cs" />
       <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" />
       <option value="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" />
+      <option value="$PROJECT_DIR$/Assets/SetParent.cs" />
+      <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" />
+      <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
@@ -108,7 +100,23 @@
     <property name="settings.editor.selected.configurable" value="RiderDpaPageId" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+  <component name="RunManager" selected=".NET Static Method.Steamworks.InteropHelp.TestIfAvailableClient">
+    <configuration name="Steamworks.InteropHelp.TestIfAvailableClient" type="DotNetStaticMethod" factoryName=".NET Static Method" temporary="true">
+      <option name="EXE_PATH" value="C:\Program Files\JetBrains\JetBrains Rider 2020.3.2\lib\ReSharperHost\JetLauncherILc.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/Mirror.csproj" />
+      <option name="PROJECT_TFM" value=".NETFramework,Version=v4.7.1" />
+      <option name="CLASS_NAME" value="Steamworks.InteropHelp" />
+      <option name="METHOD_NAME" value="TestIfAvailableClient" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
@@ -127,6 +135,11 @@
       </option>
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue=".NET Static Method.Steamworks.InteropHelp.TestIfAvailableClient" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -168,6 +181,13 @@
       <workItem from="1621192900846" duration="845000" />
       <workItem from="1621193824637" duration="22000" />
       <workItem from="1621193938785" duration="246000" />
+      <workItem from="1621256759579" duration="413000" />
+      <workItem from="1621257290220" duration="15000" />
+      <workItem from="1621257423387" duration="66000" />
+      <workItem from="1621257970354" duration="54000" />
+      <workItem from="1621259126440" duration="27000" />
+      <workItem from="1621259194814" duration="35000" />
+      <workItem from="1621259284434" duration="13000" />
     </task>
     <servers />
   </component>

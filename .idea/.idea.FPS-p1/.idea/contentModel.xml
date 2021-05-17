@@ -17,6 +17,7 @@
           <e p="WeaponAiming" t="Include">
             <e p="DebugDrawLine.cs" t="Include" />
             <e p="DebugDrawSphere.cs" t="Include" />
+            <e p="SetParent.cs" t="Include" />
             <e p="WeaponIK.cs" t="Include" />
           </e>
         </e>
