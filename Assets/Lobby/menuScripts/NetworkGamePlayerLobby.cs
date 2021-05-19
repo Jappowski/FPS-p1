@@ -20,7 +20,6 @@ namespace Assets.Lobby.menuScripts
 
         public override void OnStartClient()
         {
-            DontDestroyOnLoad(gameObject);
             Room.GamePlayers.Add(this);
         }
 

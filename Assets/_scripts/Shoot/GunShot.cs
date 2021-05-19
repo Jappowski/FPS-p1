@@ -7,14 +7,14 @@ public class GunShot : MonoBehaviour
     private Text ammoUi;
     public Animator animator;
     private GameObject canvas;
-
+    
     public float currentAmmo;
     public float damage = 25f;
     public float fireRate = 15f;
     public Camera fpsCam;
     public GameObject hitEffect;
     public float impactForce = 100f;
-    private bool isReloading;
+    public static bool isReloading;
     private readonly float maxAmmo = 30f;
     public float maxReloadAmmo = 90f;
     public ParticleSystem muzzleFlash;

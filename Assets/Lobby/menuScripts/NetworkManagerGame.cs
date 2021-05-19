@@ -17,8 +17,7 @@ public class NetworkManagerGame : NetworkManager
 
         [Header("Game")]
         [SerializeField] private NetworkGamePlayerLobby gamePlayerPrefab = null;
-
-        [SerializeField] private GameObject playerSpawnSystem = null;
+        
 
         public static event Action OnClientConnected;
         public static event Action OnClientDisconnected;
@@ -132,23 +131,12 @@ public class NetworkManagerGame : NetworkManager
                 if (!IsReadyToStart()) { return; }
 
                 ServerChangeScene("Scene_Map_01");
+                Destroy(gameObject);
             }
         }
 
         public override void ServerChangeScene(string newSceneName)
         {
-            if (SceneManager.GetActiveScene().path == menuScene && newSceneName.Contains("Scene_Map"))
-            {
-                for (int i = RoomPlayers.Count - 1; i >= 0; i--)
-                {
-                    var conn = RoomPlayers[i].connectionToClient;
-                    var gameplayerInstance = Instantiate(gamePlayerPrefab);
-                    gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
-                    NetworkServer.Destroy(conn.identity.gameObject);
-                    NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
-
-                }
-            }
 
             base.ServerChangeScene(newSceneName);
         }
@@ -159,13 +147,5 @@ public class NetworkManagerGame : NetworkManager
             
             OnServerReadied?.Invoke(conn);
         }
-
-        public override void OnServerSceneChanged(string sceneName)
-        {
-            if (sceneName.Contains("Scene_Map"))
-            {
-                GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
-                NetworkServer.Spawn(playerSpawnSystemInstance);
-            }
-        }
+        
 }

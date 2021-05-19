@@ -21,14 +21,31 @@
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/AnimsTest.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Login.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Login.unity.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Spawn.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FPS-p1.sln" beforeDir="false" afterPath="$PROJECT_DIR$/FPS-p1.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
@@ -49,33 +66,25 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/GunShot.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/AD0A7939-8190-48A0-A161-F66558C98867/a4/d0ad9cab/AvatarIKGoal.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF667CDC-82BF-4A4E-911D-1DDEA9FF581D/2b/667f0772/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF667CDC-82BF-4A4E-911D-1DDEA9FF581D/0f/06ec625c/Quaternion.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Unity/Hub/Editor/2020.3.8f1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/EventSystem/EventSystem.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/19391519-2608-4240-8FF9-93819E8AFDF3/70/91e94ca2/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkManagerLobby.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
-    <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/DebugDrawLine.cs" />
-      <option value="$PROJECT_DIR$/Assets/DebugDrawSphere.cs" />
-      <option value="$PROJECT_DIR$/Assets/WeaponAiming.cs" />
-      <option value="$PROJECT_DIR$/Assets/WeaponIK.cs" />
-      <option value="$PROJECT_DIR$/Assets/_scripts/WeaponAiming/WeaponIK.cs" />
-      <option value="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" />
-      <option value="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" />
-      <option value="$PROJECT_DIR$/Assets/_scripts/CsController.cs" />
-      <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" />
-      <option value="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" />
-      <option value="$PROJECT_DIR$/Assets/SetParent.cs" />
-      <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" />
-      <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" />
-    </changedPaths>
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" />
+        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" />
+        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" />
+      </list>
+    </option>
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">
@@ -97,7 +106,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="RiderDpaPageId" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected=".NET Static Method.Steamworks.InteropHelp.TestIfAvailableClient">
@@ -188,6 +197,7 @@
       <workItem from="1621259126440" duration="27000" />
       <workItem from="1621259194814" duration="35000" />
       <workItem from="1621259284434" duration="13000" />
+      <workItem from="1621447810418" duration="13836000" />
     </task>
     <servers />
   </component>
@@ -210,5 +220,15 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1500" y="367" key="SettingsEditor" timestamp="1621458545496">
+      <screen x="0" y="0" width="2498" height="1440" />
+    </state>
+    <state x="1500" y="367" key="SettingsEditor/0.0.2498.1440@0.0.2498.1440" timestamp="1621458545496" />
+    <state x="1468" y="384" width="672" height="678" key="search.everywhere.popup" timestamp="1621455610215">
+      <screen x="0" y="0" width="2498" height="1440" />
+    </state>
+    <state x="1468" y="384" width="672" height="678" key="search.everywhere.popup/0.0.2498.1440@0.0.2498.1440" timestamp="1621455610215" />
   </component>
 </project>
