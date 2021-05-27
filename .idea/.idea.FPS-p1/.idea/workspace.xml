@@ -21,32 +21,19 @@
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/Resources/SpawnablePrefabs/Player.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Lobby/menuScripts/SteamLobby.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/GUI/Scripts/NetworkManagerListServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Runtime/NetworkIdentity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Lobby.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Login.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Login.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene_Map_01.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptTemplates/50-Mirror__Network Manager-NewNetworkManager.cs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/GunShot.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Spawn.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/FPSController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/PlayerSetup.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/PlayerSetup.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Target.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Target.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FPS-p1.sln" beforeDir="false" afterPath="$PROJECT_DIR$/FPS-p1.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,8 +68,10 @@
         <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" />
         <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" />
         <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
         <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
       </list>
     </option>
   </component>
@@ -198,6 +187,8 @@
       <workItem from="1621259194814" duration="35000" />
       <workItem from="1621259284434" duration="13000" />
       <workItem from="1621447810418" duration="13836000" />
+      <workItem from="1622067389380" duration="2907000" />
+      <workItem from="1622073867116" duration="379000" />
     </task>
     <servers />
   </component>

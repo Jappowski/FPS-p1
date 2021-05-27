@@ -9,15 +9,17 @@
         <e p="_scripts" t="Include">
           <e p="CameraController.cs" t="Include" />
           <e p="CsController.cs" t="Include" />
-          <e p="FPSController.cs" t="Include" />
           <e p="PasswordNetworkManager.cs" t="Include" />
-          <e p="PlayerSetup.cs" t="Include" />
+          <e p="Player" t="Include">
+            <e p="FPSController.cs" t="Include" />
+            <e p="PlayerSetup.cs" t="Include" />
+            <e p="Target.cs" t="Include" />
+          </e>
           <e p="Shoot" t="Include">
             <e p="GunShot.cs" t="Include" />
             <e p="Recoil.cs" t="Include" />
           </e>
           <e p="SteamLobby.cs" t="Include" />
-          <e p="Target.cs" t="Include" />
           <e p="WeaponAiming" t="Include">
             <e p="DebugDrawLine.cs" t="Include" />
             <e p="DebugDrawSphere.cs" t="Include" />

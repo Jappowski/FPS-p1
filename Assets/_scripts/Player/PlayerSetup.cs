@@ -1,7 +1,7 @@
 
 using Mirror;
 using UnityEngine;
-
+[RequireComponent(typeof(Target))]
 public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] Behaviour[] componentsToDisable;
@@ -19,6 +19,8 @@ public class PlayerSetup : NetworkBehaviour
         {
             playerBody.SetActive(false);
         }
-        
+
+        GetComponent<Target>().Setup();
     }
 }
+

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Recoil : MonoBehaviour
 {
+    [SerializeField] private Camera _camera;
     [SerializeField] private Vector3 recoilUp;
     public Vector3 startRotation;
     public Vector3 currentRotation;
     void Start()
     {
         
-        startRotation = transform.localEulerAngles;
+        startRotation = _camera.transform.localEulerAngles;
     }
     void Update()
     {
@@ -29,13 +30,13 @@ public class Recoil : MonoBehaviour
     public void AddRecoil()                        
     {
         currentRotation += recoilUp;               
-        transform.localEulerAngles += currentRotation;
+        _camera.transform.localEulerAngles += currentRotation;
     }                                              
                                                    
     public void StopRecoil()
     {
         currentRotation = startRotation;
-        transform.localEulerAngles = startRotation;
+        _camera.transform.localEulerAngles = startRotation;
     }
     
 }

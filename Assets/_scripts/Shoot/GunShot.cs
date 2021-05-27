@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class GunShot : MonoBehaviour
 {
     private Text ammoUi;
-    public Animator animator;
+   // public Animator animator;
     private GameObject canvas;
     
     public float currentAmmo;
@@ -56,9 +56,9 @@ public class GunShot : MonoBehaviour
     private IEnumerator Reload()
     {
         isReloading = true;
-        animator.SetBool("Reload", true);
+     //   animator.SetBool("Reload", true);
         yield return new WaitForSeconds(reloadTime - .25f);
-        animator.SetBool("Reload", false);
+     //   animator.SetBool("Reload", false);
         yield return new WaitForSeconds(.25f);
 
 
@@ -78,7 +78,7 @@ public class GunShot : MonoBehaviour
         }
 
         isReloading = false;
-        animator.SetBool("Reload", false);
+     //   animator.SetBool("Reload", false);
     }
 
     private void Shoot()
