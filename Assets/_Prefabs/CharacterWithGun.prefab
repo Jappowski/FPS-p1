@@ -5720,7 +5720,7 @@ GameObject:
   - component: {fileID: 880695924841570977}
   - component: {fileID: 6733563573575506529}
   - component: {fileID: 7498407566279362533}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5869,6 +5869,7 @@ GameObject:
   - component: {fileID: 8055611513008903285}
   - component: {fileID: 7830347466798320331}
   - component: {fileID: 8870299976848345615}
+  - component: {fileID: -6024079040124900443}
   - component: {fileID: 8055611513008903282}
   - component: {fileID: 1515187778335380746}
   - component: {fileID: 9009687598911722127}
@@ -5997,6 +5998,22 @@ MonoBehaviour:
   interpolateScale: 1
   syncScale: 1
   target: {fileID: 8055611513310967862}
+--- !u!114 &-6024079040124900443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7136567328140716335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  animator: {fileID: 8055611513008903283}
 --- !u!114 &8055611513008903282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6095,8 +6112,10 @@ MonoBehaviour:
   - {fileID: 4534051876333142519}
   - {fileID: 8055611513310967851}
   - {fileID: 5934423178072439759}
-  playerBody: {fileID: 4033654004322017559, guid: 6f1719641775dbe4598f5c94710a2f05,
-    type: 3}
+  - {fileID: 6733563573575506529}
+  playerBody: {fileID: 1665545141943145582}
+  weapon: {fileID: 6733563573575506558}
+  weaponHierarchy: {fileID: 3743039360693849679}
 --- !u!114 &3738044691481276563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6104,7 +6123,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7136567328140716335}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34c72405c4daa2440aabf2a167d626ab, type: 3}
   m_Name: 
@@ -6262,7 +6281,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7565499368384155068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.34, z: 3.69}
+  m_LocalPosition: {x: -1.05, y: -0.65, z: 3.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3743039360693849679}
@@ -11186,7 +11205,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.75
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
