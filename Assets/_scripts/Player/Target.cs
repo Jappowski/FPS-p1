@@ -9,6 +9,7 @@ public class Target : NetworkBehaviour
     [SerializeField]
     private Behaviour[] disableOnDeath;
     private bool[] wasEnabled;
+   [SerializeField] private ParticleSystem blood;
 
     [SyncVar] 
     private bool _isDead = false;
@@ -34,6 +35,7 @@ public class Target : NetworkBehaviour
             return;
         
         health -= dmg;
+        blood.Play();
         if (health <= 0f)
             Die();
     }
