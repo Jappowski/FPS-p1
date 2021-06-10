@@ -18,6 +18,9 @@ public class FPSController : NetworkBehaviour
     public float walkingSpeed = 11.5f;
     [SerializeField] private Animator animator;
 
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] jumpClips;
+
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -50,6 +53,9 @@ public class FPSController : NetworkBehaviour
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
         {
             moveDirection.y = jumpSpeed;
+            var index = Random.Range(0, jumpClips.Length);
+            audioSource.clip = jumpClips[index];
+            audioSource.Play();
         }
         else
         {

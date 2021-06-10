@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab.meta" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" afterDir="false" />
@@ -37,6 +38,20 @@
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/CharacterController.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/CharacterController.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/New Animator Controller.controller" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/New Animator Controller.controller.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
@@ -57,6 +72,7 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/CharacterAnimationSounds.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/PlayerWeapon.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -68,6 +84,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
+<<<<<<< Updated upstream
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" />
@@ -79,6 +96,13 @@
         <option value="$PROJECT_DIR$/Assets/_scripts/Player/Player.cs" />
       </list>
     </option>
+=======
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+      <option value="$PROJECT_DIR$/Assets/CharacterAnimationSounds.cs" />
+      <option value="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" />
+    </changedPaths>
+>>>>>>> Stashed changes
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">
@@ -119,6 +143,14 @@
       <method v="2">
         <option name="Build" />
       </method>
+    </configuration>
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../../Pulpit/GRA\FPS - p1.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\vikto\OneDrive\Pulpit\GRA" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
     </configuration>
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
@@ -199,7 +231,9 @@
       <workItem from="1622208686073" duration="1056000" />
       <workItem from="1622468590067" duration="2051000" />
       <workItem from="1622488871289" duration="303000" />
-      <workItem from="1623321120044" duration="966000" />
+      <workItem from="1623321120044" duration="2606000" />
+      <workItem from="1623328979644" duration="4574000" />
+      <workItem from="1623334794919" duration="45000" />
     </task>
     <servers />
   </component>
