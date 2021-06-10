@@ -16,16 +16,12 @@ public class FPSController : NetworkBehaviour
     private float rotationX;
     public float slowWalkSpeed = 7f;
     public float walkingSpeed = 11.5f;
-
     [SerializeField] private Animator animator;
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     private void Update()

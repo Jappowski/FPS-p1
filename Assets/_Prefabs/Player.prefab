@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c72405c4daa2440aabf2a167d626ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 3380688030508610633}
   recoilUp: {x: -0.1, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0}
   currentRotation: {x: 0, y: 0, z: 0}
@@ -10196,6 +10197,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 7973049035333277563}
   playerBody: {fileID: 1415721940301841405}
+  weapon: {fileID: 1551001987868405945}
+  weaponHierarchy: {fileID: 7397066736004910735}
 --- !u!114 &6239970858887315485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10208,7 +10211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f891fbeb5f8014487d965ceebaf065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 7397066736431994103}
   currentAmmo: 30
   damage: 10
   fireRate: 10
@@ -10237,6 +10239,7 @@ MonoBehaviour:
   disableOnDeath:
   - {fileID: 7397066735618302099}
   - {fileID: 6239970858887315485}
+  blood: {fileID: 0}
 --- !u!114 &7397066735618302099
 MonoBehaviour:
   m_ObjectHideFlags: 0

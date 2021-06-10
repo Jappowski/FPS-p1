@@ -20,47 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot1.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot1.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot2.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot2.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot3.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot3.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot4.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot4.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot5.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot5.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot6.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot6.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot7.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot7.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload1.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload1.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload2.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload2.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload3.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload3.ogg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/CursorState.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/riderModule.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/riderModule.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/PongWithListServer/Prefabs/Ball.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/PongWithListServer/Prefabs/Ball.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,15 +58,27 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/PlayerWeapon.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Player/Player.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkManagerLobby.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
-    <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
-    </changedPaths>
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/PlayerWeapon.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Player.cs" />
+      </list>
+    </option>
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">

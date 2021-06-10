@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
+using Mirror;
+using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-public class GunShot : MonoBehaviour
+public class GunShot : NetworkBehaviour
 {
     private Text ammoUi;
    // public Animator animator;
@@ -15,20 +19,19 @@ public class GunShot : MonoBehaviour
     public GameObject hitEffect;
     public float impactForce = 100f;
     public static bool isReloading;
-    private readonly float maxAmmo = 30f;
+    public readonly float maxAmmo = 30f;
     public float maxReloadAmmo = 90f;
     public ParticleSystem muzzleFlash;
-
+    public PlayerWeapon weapon;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] shootingClips;
     [SerializeField] private AudioClip reloadSound1;
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
-
+    [SerializeField] private LayerMask mask;
     private float nextShoot;
     public float reloadTime = 3f;
     
-    [SerializeField]
 
     private void start()
     {
@@ -47,8 +50,9 @@ public class GunShot : MonoBehaviour
         ammoUi.text = currentAmmo + " / " + maxReloadAmmo;
         if (isReloading)
             return;
-
-        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
+        if (currentAmmo == 0 && maxReloadAmmo == 0)
+            return;
+        if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reload());
             return;
@@ -59,11 +63,18 @@ public class GunShot : MonoBehaviour
             nextShoot = Time.time + 1f / fireRate;
             Shoot();
         }
+        
     }
 
     private IEnumerator Reload()
     {
         isReloading = true;
+        if (currentAmmo == maxAmmo)
+        {
+            isReloading = false;
+            yield break;
+        }
+
         audioSource.clip = reloadSound1;
         audioSource.Play();
         //   animator.SetBool("Reload", true);
@@ -81,36 +92,42 @@ public class GunShot : MonoBehaviour
             maxReloadAmmo -= maxAmmo - currentAmmo;
             currentAmmo = maxAmmo;
         }
-        else if (maxReloadAmmo == 0)
-        {
-            currentAmmo = 0;
-        }
         else if (maxReloadAmmo < 30 && maxReloadAmmo > 0)
         {
             currentAmmo = maxReloadAmmo;
             maxReloadAmmo = 0;
         }
 
+
         isReloading = false;
      //   animator.SetBool("Reload", false);
     }
-
+    [Client]
     private void Shoot()
     {
         currentAmmo--;
         muzzleFlash.Play();
-        RaycastHit hit;
         int index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
+        RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
         {
-            var target = hit.transform.GetComponent<Target>();
-            if (target != null) target.TakeDamage(damage);
 
-            if (hit.rigidbody != null) hit.rigidbody.AddForce(-hit.normal * impactForce);
+
+            if (hit.collider.tag == "Player")
+            {
+                CmdPlayerShot(hit.collider.name, weapon.damage);
+            }
             var ImpactGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(ImpactGO, 3f);
         }
+    }
+
+    [Command]
+    void CmdPlayerShot(string _playerID, int _damage)
+    {
+        Player _player = GameManager.GetPlayer(_playerID);
+        _player.TakeDamge(_damage);
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Recoil : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
+    [SerializeField] private GameObject _camera;
+    
     [SerializeField] private Vector3 recoilUp;
     public Vector3 startRotation;
     public Vector3 currentRotation;
+    
     void Start()
     {
         
@@ -24,6 +26,7 @@ public class Recoil : MonoBehaviour
         {                                          
             StopRecoil();                          
         }
+       
         
     }                                              
                                                    
