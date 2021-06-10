@@ -13,7 +13,7 @@ public class Player : GunShot
     [SerializeField] private ParticleSystem blood;
     private Text hp;
     
-   void Start()
+   private void Start()
    {
        SetDefaults();
        var canvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -21,7 +21,7 @@ public class Player : GunShot
        hp = textTr.GetComponent<Text>();
    }
 
-   void Update()
+   private void Update()
    {
        _hpUpdate();
    }
@@ -88,7 +88,7 @@ public class Player : GunShot
         isDead = false;
         currentHealth = maxhealth;
         currentAmmo = maxAmmo;
-        maxReloadAmmo = 90f;
+        maxReloadAmmo = 90;
     }
     
 }

@@ -12,15 +12,14 @@ public class GunShot : NetworkBehaviour
    // public Animator animator;
     private GameObject canvas;
     
-    public float currentAmmo;
-    public float damage = 25f;
-    public float fireRate = 15f;
+    public int currentAmmo;
+    public int damage = 25;
+    public int fireRate = 15;
     public Camera fpsCam;
     public GameObject hitEffect;
-    public float impactForce = 100f;
     public static bool isReloading;
-    public readonly float maxAmmo = 30f;
-    public float maxReloadAmmo = 90f;
+    public readonly int maxAmmo = 30;
+    public int maxReloadAmmo = 90;
     public ParticleSystem muzzleFlash;
     public PlayerWeapon weapon;
     [SerializeField] private AudioSource audioSource;
@@ -28,12 +27,13 @@ public class GunShot : NetworkBehaviour
     [SerializeField] private AudioClip reloadSound1;
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
+    [SerializeField] private AudioClip emptyGunSound;
     [SerializeField] private LayerMask mask;
-    private float nextShoot;
+    private float nextShot;
     public float reloadTime = 3f;
     
 
-    private void start()
+    private void Start()
     {
         currentAmmo = maxAmmo;
     }
@@ -51,16 +51,19 @@ public class GunShot : NetworkBehaviour
         if (isReloading)
             return;
         if (currentAmmo == 0 && maxReloadAmmo == 0)
+        {
+            EmptyGunShot();
             return;
+        }
         if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reload());
             return;
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= nextShoot)
+        if (Input.GetButton("Fire1") && Time.time >= nextShot)
         {
-            nextShoot = Time.time + 1f / fireRate;
+            nextShot = Time.time + 1f / fireRate;
             Shoot();
         }
         
@@ -77,15 +80,12 @@ public class GunShot : NetworkBehaviour
 
         audioSource.clip = reloadSound1;
         audioSource.Play();
-        //   animator.SetBool("Reload", true);
         yield return new WaitForSeconds(reloadTime - .25f);
         audioSource.clip = reloadSound2;
         audioSource.Play();
-     //   animator.SetBool("Reload", false);
         yield return new WaitForSeconds(.25f);
         audioSource.clip = reloadSound3;
         audioSource.Play();
-
 
         if (maxReloadAmmo >= 30)
         {
@@ -97,11 +97,19 @@ public class GunShot : NetworkBehaviour
             currentAmmo = maxReloadAmmo;
             maxReloadAmmo = 0;
         }
-
-
+        
         isReloading = false;
-     //   animator.SetBool("Reload", false);
     }
+
+    private void EmptyGunShot()
+    {
+        if (currentAmmo == 0 && maxReloadAmmo == 0 && Input.GetButton("Fire1"))
+        {
+            audioSource.clip = emptyGunSound;
+            audioSource.Play();
+        }
+    }
+
     [Client]
     private void Shoot()
     {
