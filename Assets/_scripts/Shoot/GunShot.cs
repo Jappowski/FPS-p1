@@ -13,13 +13,12 @@ public class GunShot : NetworkBehaviour
     private GameObject canvas;
     
     public int currentAmmo;
-    public int damage = 25;
-    public int fireRate = 15;
+    public int maxAmmo = 30; //in mag
+    public int maxReloadAmmo = 90;
+    public float fireRate = 15;
     public Camera fpsCam;
     public GameObject hitEffect;
     public static bool isReloading;
-    public readonly int maxAmmo = 30;
-    public int maxReloadAmmo = 90;
     public ParticleSystem muzzleFlash;
     public PlayerWeapon weapon;
     [SerializeField] private AudioSource audioSource;
@@ -32,14 +31,11 @@ public class GunShot : NetworkBehaviour
     private float nextShot;
     public float reloadTime = 3f;
     
+    
 
     private void Start()
     {
         currentAmmo = maxAmmo;
-    }
-
-    private void Awake()
-    {
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         var textTr = canvas.transform.Find("AmmoCount");
         ammoUi = textTr.GetComponent<Text>();
@@ -136,6 +132,6 @@ public class GunShot : NetworkBehaviour
     void CmdPlayerShot(string _playerID, int _damage)
     {
         Player _player = GameManager.GetPlayer(_playerID);
-        _player.TakeDamge(_damage);
+        _player.RpcTakeDamage(_damage);
     }
 }

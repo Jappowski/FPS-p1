@@ -10198,7 +10198,9 @@ MonoBehaviour:
   - {fileID: 7973049035333277563}
   playerBody: {fileID: 1415721940301841405}
   weapon: {fileID: 1551001987868405945}
+  TargetScript: {fileID: 0}
   weaponHierarchy: {fileID: 7397066736004910735}
+  remoteLayerName: RemotePlayer
 --- !u!114 &6239970858887315485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10211,14 +10213,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f891fbeb5f8014487d965ceebaf065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   currentAmmo: 30
-  damage: 10
-  fireRate: 10
+  maxAmmo: 30
+  maxReloadAmmo: 90
+  fireRate: 9
   fpsCam: {fileID: 7397066735184746251}
   hitEffect: {fileID: 6470172321951213, guid: c9293ad23ee17c84cae2ec5480a51a59, type: 3}
-  impactForce: 20
-  maxReloadAmmo: 90
   muzzleFlash: {fileID: 7397066735113701053}
+  weapon:
+    name: M4A1
+    damage: 10
+  audioSource: {fileID: 0}
+  shootingClips: []
+  reloadSound1: {fileID: 0}
+  reloadSound2: {fileID: 0}
+  reloadSound3: {fileID: 0}
+  emptyGunSound: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
   reloadTime: 1.5
 --- !u!114 &881942908458438668
 MonoBehaviour:
@@ -10234,8 +10249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  health: 100
-  Material: {fileID: 2100000, guid: e646a8461defabc4b946cddea8f3e6bf, type: 2}
+  maxhealth: 100
   disableOnDeath:
   - {fileID: 7397066735618302099}
   - {fileID: 6239970858887315485}
@@ -10263,6 +10277,8 @@ MonoBehaviour:
   slowWalkSpeed: 7
   walkingSpeed: 7.5
   animator: {fileID: 5257432314689442506}
+  audioSource: {fileID: 0}
+  jumpClips: []
 --- !u!1 &7397066736004910734
 GameObject:
   m_ObjectHideFlags: 0

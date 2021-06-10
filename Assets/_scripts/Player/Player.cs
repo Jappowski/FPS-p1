@@ -3,28 +3,17 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : GunShot
+public class Player : NetworkBehaviour
 {
     [SerializeField] private int maxhealth = 100;
     [SyncVar] private int currentHealth;
-    [SerializeField]
-    private Behaviour[] disableOnDeath;
-    private bool[] wasEnabled;
+    [SerializeField]private Behaviour[] disableOnDeath;
+    [SerializeField]private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
     private Text hp;
+    private GunShot _gunShot;
+    private PlayerWeapon weapon;
     
-   private void Start()
-   {
-       SetDefaults();
-       var canvas = GameObject.FindGameObjectWithTag("Canvas");
-       var textTr = canvas.transform.Find("Health");
-       hp = textTr.GetComponent<Text>();
-   }
-
-   private void Update()
-   {
-       _hpUpdate();
-   }
     [SyncVar] 
     private bool _isDead = false;
     public bool isDead
@@ -33,13 +22,29 @@ public class Player : GunShot
         protected set { _isDead = value; }
     }
 
-    private void _hpUpdate()
+    void Update()
     {
-        hp.text = currentHealth.ToString();
+        HpUpdate();
+        if (Input.GetKeyDown("k"))
+        {
+            Debug.Log("DMG");
+            RpcTakeDamage(30);
+        }
+    }
+
+    private void HpUpdate()
+    {
+        hp.text = "HP: " + currentHealth;
     }
 
     public void Setup()
     {
+        this.enabled = true;
+        _gunShot = GetComponent<GunShot>();
+        var canvas = GameObject.FindGameObjectWithTag("Canvas");
+        var textTr = canvas.transform.Find("Health");
+        hp = textTr.GetComponent<Text>();
+        
         wasEnabled = new bool[disableOnDeath.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {
@@ -48,7 +53,8 @@ public class Player : GunShot
 
         SetDefaults();
     }
-    public void TakeDamge(int _dmg)
+    [ClientRpc]
+    public void RpcTakeDamage(int _dmg)
     {
         if (isDead)
             return;
@@ -57,6 +63,7 @@ public class Player : GunShot
         blood.Play();
         if (currentHealth <= 0f)
             Die();
+
     }
 
     private void Die()
@@ -87,8 +94,14 @@ public class Player : GunShot
     {
         isDead = false;
         currentHealth = maxhealth;
-        currentAmmo = maxAmmo;
-        maxReloadAmmo = 90;
+
+        for (int i = 0; i < disableOnDeath.Length; i++)
+        {
+            disableOnDeath[i].enabled = wasEnabled[i];
+        }
+        Collider _col = GetComponent<Collider>();
+        if (_col != null)
+            _col.enabled = true;
     }
     
 }

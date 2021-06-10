@@ -4958,7 +4958,7 @@ GameObject:
   - component: {fileID: 361526337213395621}
   m_Layer: 8
   m_Name: Cube.001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10782,7 +10782,6 @@ GameObject:
   - component: {fileID: 9009687598911722127}
   - component: {fileID: 4534051876333142519}
   - component: {fileID: 7752838999890736596}
-  - component: {fileID: 3738044691481276563}
   - component: {fileID: -73378191043567747}
   m_Layer: 0
   m_Name: CharacterWithGun
@@ -11004,38 +11003,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  currentAmmo: 0
-  damage: 25
-  fireRate: 15
-  fpsCam: {fileID: 8055611513310967851}
-  hitEffect: {fileID: 4357809960162291852}
-  maxReloadAmmo: 90
-  muzzleFlash: {fileID: 2028723696877732702}
-  weapon:
-    name: M4A1
-    damage: 10
-    fireRate: 10
-  audioSource: {fileID: 4454094660379682397}
-  shootingClips:
-  - {fileID: 8300000, guid: fa751438966c4194c9dbaed4bfe9b89f, type: 3}
-  - {fileID: 8300000, guid: 3716e9a2732ff6f41b9caa4db00f32d9, type: 3}
-  - {fileID: 8300000, guid: b46cc1a667db805458838ffd7bb713b6, type: 3}
-  - {fileID: 8300000, guid: a25867985d38ce3468955ea43d7d8522, type: 3}
-  - {fileID: 8300000, guid: 792be95fee984744dbb896631dbadce4, type: 3}
-  - {fileID: 8300000, guid: db9338a6c647166469c818ec18fe0b7d, type: 3}
-  - {fileID: 8300000, guid: a7acab3c0cc68354395d22e08804a487, type: 3}
-  reloadSound1: {fileID: 8300000, guid: 1b6704267bdefcf459f098010d679913, type: 3}
-  reloadSound2: {fileID: 8300000, guid: 04171aaf020bb394990939135d93859f, type: 3}
-  reloadSound3: {fileID: 8300000, guid: 75b3dbbb73acebe48841684c0bcb077f, type: 3}
-  emptyGunSound: {fileID: 0}
-  mask:
-    serializedVersion: 2
-    m_Bits: 1024
-  reloadTime: 3
   maxhealth: 100
   disableOnDeath:
   - {fileID: 8055611513008903282}
   - {fileID: 4534051876333142519}
+  wasEnabled: 0101
   blood: {fileID: 5095339505508855119}
 --- !u!114 &4534051876333142519
 MonoBehaviour:
@@ -11052,16 +11024,15 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   currentAmmo: 30
-  damage: 10
+  maxAmmo: 30
+  maxReloadAmmo: 90
   fireRate: 9
   fpsCam: {fileID: 8055611513310967851}
   hitEffect: {fileID: 6470172321951213, guid: c9293ad23ee17c84cae2ec5480a51a59, type: 3}
-  maxReloadAmmo: 30
   muzzleFlash: {fileID: 2028723696877732702}
   weapon:
     name: M4A1
     damage: 10
-    fireRate: 0
   audioSource: {fileID: 4454094660379682397}
   shootingClips:
   - {fileID: 8300000, guid: fa751438966c4194c9dbaed4bfe9b89f, type: 3}
@@ -11100,27 +11071,12 @@ MonoBehaviour:
   - {fileID: 8055611513310967851}
   - {fileID: 5934423178072439759}
   - {fileID: 6733563573575506529}
+  - {fileID: 9009687598911722127}
   playerBody: {fileID: 1665545141943145582}
   weapon: {fileID: 6733563573575506558}
   TargetScript: {fileID: 9009687598911722127}
   weaponHierarchy: {fileID: 3743039360693849679}
   remoteLayerName: RemotePlayer
---- !u!114 &3738044691481276563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7136567328140716335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34c72405c4daa2440aabf2a167d626ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _camera: {fileID: 8055611513310967863}
-  recoilUp: {x: -0.1, y: 0, z: 0}
-  startRotation: {x: 0, y: 0, z: 0}
-  currentRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &-73378191043567747
 MonoBehaviour:
   m_ObjectHideFlags: 0
