@@ -19,8 +19,16 @@ public class GunShot : MonoBehaviour
     public float maxReloadAmmo = 90f;
     public ParticleSystem muzzleFlash;
 
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] shootingClips;
+    [SerializeField] private AudioClip reloadSound1;
+    [SerializeField] private AudioClip reloadSound2;
+    [SerializeField] private AudioClip reloadSound3;
+
     private float nextShoot;
     public float reloadTime = 3f;
+    
+    [SerializeField]
 
     private void start()
     {
@@ -56,10 +64,16 @@ public class GunShot : MonoBehaviour
     private IEnumerator Reload()
     {
         isReloading = true;
-     //   animator.SetBool("Reload", true);
+        audioSource.clip = reloadSound1;
+        audioSource.Play();
+        //   animator.SetBool("Reload", true);
         yield return new WaitForSeconds(reloadTime - .25f);
+        audioSource.clip = reloadSound2;
+        audioSource.Play();
      //   animator.SetBool("Reload", false);
         yield return new WaitForSeconds(.25f);
+        audioSource.clip = reloadSound3;
+        audioSource.Play();
 
 
         if (maxReloadAmmo >= 30)
@@ -86,6 +100,9 @@ public class GunShot : MonoBehaviour
         currentAmmo--;
         muzzleFlash.Play();
         RaycastHit hit;
+        int index = Random.Range(0, shootingClips.Length);
+        audioSource.clip = shootingClips[index];
+        audioSource.Play();
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
         {
             var target = hit.transform.GetComponent<Target>();

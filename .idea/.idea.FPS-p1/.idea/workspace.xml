@@ -20,9 +20,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot1.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot1.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot2.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot2.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot3.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot3.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot4.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot4.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot5.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot5.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot6.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot6.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot7.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Gunshot/gunshot7.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload1.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload1.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload2.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload2.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload3.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Sounds/Gun/Reload/reload3.ogg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/.idea/.idea.Shoot.dir/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/contentModel.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/riderModule.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/riderModule.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/CameraController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TimelineSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,26 +81,15 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkManagerLobby.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/PlayerSpawnPoint.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkGamePlayerLobby.cs" />
-        <option value="$PROJECT_DIR$/Assets/Lobby/menuScripts/NetworkManagerGame.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/GunShot.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
-        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" />
-      </list>
-    </option>
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+    </changedPaths>
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">
@@ -107,6 +135,7 @@
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -116,6 +145,7 @@
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -180,6 +210,7 @@
       <workItem from="1622208686073" duration="1056000" />
       <workItem from="1622468590067" duration="2051000" />
       <workItem from="1622488871289" duration="303000" />
+      <workItem from="1623321120044" duration="966000" />
     </task>
     <servers />
   </component>
@@ -202,15 +233,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="1500" y="367" key="SettingsEditor" timestamp="1621458545496">
-      <screen x="0" y="0" width="2498" height="1440" />
-    </state>
-    <state x="1500" y="367" key="SettingsEditor/0.0.2498.1440@0.0.2498.1440" timestamp="1621458545496" />
-    <state x="1468" y="384" width="672" height="678" key="search.everywhere.popup" timestamp="1621455610215">
-      <screen x="0" y="0" width="2498" height="1440" />
-    </state>
-    <state x="1468" y="384" width="672" height="678" key="search.everywhere.popup/0.0.2498.1440@0.0.2498.1440" timestamp="1621455610215" />
   </component>
 </project>

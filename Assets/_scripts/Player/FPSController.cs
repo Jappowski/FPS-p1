@@ -18,7 +18,7 @@ public class FPSController : NetworkBehaviour
     public float walkingSpeed = 11.5f;
 
     [SerializeField] private Animator animator;
-    
+
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
