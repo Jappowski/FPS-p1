@@ -28,9 +28,9 @@ public class Player : NetworkBehaviour
 
     void Start()
     {
-        deathCanvas = GameObject.FindGameObjectWithTag("deathCanvas");
-        var deathText = deathCanvas.transform.Find("Respawn");
-        deathMessage = deathText.GetComponent<Text>();
+        // deathCanvas = GameObject.FindGameObjectWithTag("deathCanvas");
+        // var deathText = deathCanvas.transform.Find("Respawn");
+        // deathMessage = deathText.GetComponent<Text>();
     }
     void Update()
     {
@@ -41,9 +41,9 @@ public class Player : NetworkBehaviour
             Debug.Log("DMG");
             RpcTakeDamage(30);
         }
-        if (!isDead)
-            deathCanvas.SetActive(false);
-        else deathCanvas.SetActive(true);
+        // if (!isDead)
+        //     deathCanvas.SetActive(false);
+        // else deathCanvas.SetActive(true);
     }
 
     private void HpUpdate()
@@ -94,10 +94,10 @@ public class Player : NetworkBehaviour
         if (_col != null)
             _col.enabled = false;
         
-        DeadCanvasActive();
-        StartCoroutine(Respawn());
-        StartCoroutine(StartCountdown(10));
-        DeadCanvasDeActive();
+        // DeadCanvasActive();
+        // StartCoroutine(Respawn());
+        // StartCoroutine(StartCountdown(10));
+        // DeadCanvasDeActive();
         
     }
 
