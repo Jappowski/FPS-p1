@@ -247,7 +247,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh45050
+  m_Name: pb_Mesh-4488
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -742,7 +742,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh45038
+  m_Name: pb_Mesh-4440
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1000,6 +1000,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &410796248 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 452757812183212513}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &426876293
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,7 +1040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 80, y: 54.5}
+  m_AnchoredPosition: {x: 135, y: 54.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &426876295
@@ -1050,7 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5254902}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.5254902}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1330,7 +1336,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737436691}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d98b2c0e3b84c4340bfb35a72c2d46a8, type: 3}
   m_Name: 
@@ -1343,7 +1349,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737436691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
@@ -1379,7 +1385,7 @@ MonoBehaviour:
   serverBatchInterval: 0
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 737436693}
+  transport: {fileID: 737436697}
   networkAddress: localhost
   maxConnections: 4
   disconnectInactiveConnections: 0
@@ -1415,7 +1421,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737436691}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
   m_Name: 
@@ -1427,7 +1433,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737436691}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea368fb6f27ec2f40a40e20977992b9c, type: 3}
   m_Name: 
@@ -1468,7 +1474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &994439057
 Transform:
   m_ObjectHideFlags: 0
@@ -1698,7 +1704,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh45000
+  m_Name: pb_Mesh-4452
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2117,7 +2123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1727338500
 Transform:
   m_ObjectHideFlags: 0
@@ -2340,6 +2346,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1727338499}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 410796248}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &2104147783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2384,7 +2414,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh44896
+  m_Name: pb_Mesh-4476
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2568,7 +2598,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh45014
+  m_Name: pb_Mesh-4464
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2746,6 +2776,90 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &452757812183212513
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 464.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 403.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_Name
+      value: DeathUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 452757812905702846, guid: e08a7ef760f584111afb3115895ca9b8,
+        type: 3}
+      propertyPath: m_TagString
+      value: deathCanvas
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e08a7ef760f584111afb3115895ca9b8, type: 3}
 --- !u!1001 &8411170026016445574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2753,6 +2867,47 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1727338500}
     m_Modifications:
+    - target: {fileID: 8411170026460871346, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300048, guid: db63fa1c2adceb141974024b30ffa6db,
+        type: 3}
+    - target: {fileID: 8411170026460871346, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.009995077
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170026460871346, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170026460871349, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170026460871349, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170027171247187, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.5754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170027171247187, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.5754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411170027171247187, guid: 26310b00ed3645944985c42a77d00ce3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.5754717
+      objectReference: {fileID: 0}
     - target: {fileID: 8411170027719984176, guid: 26310b00ed3645944985c42a77d00ce3,
         type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag

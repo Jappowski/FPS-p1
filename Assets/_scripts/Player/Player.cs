@@ -1,5 +1,6 @@
 using System.Collections;
 using Mirror;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,12 @@ public class Player : NetworkBehaviour
     [SerializeField]private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
     private Text hp;
+    private Text deathMessage;
+    private GameObject deathCanvas;
+    private GameObject canvas;
     private GunShot _gunShot;
     private PlayerWeapon weapon;
-    
+    float currCountdownValue;
     [SyncVar] 
     private bool _isDead = false;
     public bool isDead
@@ -22,6 +26,12 @@ public class Player : NetworkBehaviour
         protected set { _isDead = value; }
     }
 
+    void Start()
+    {
+        deathCanvas = GameObject.FindGameObjectWithTag("deathCanvas");
+        var deathText = deathCanvas.transform.Find("Respawn");
+        deathMessage = deathText.GetComponent<Text>();
+    }
     void Update()
     {
         if(isLocalPlayer)
@@ -31,6 +41,9 @@ public class Player : NetworkBehaviour
             Debug.Log("DMG");
             RpcTakeDamage(30);
         }
+        if (!isDead)
+            deathCanvas.SetActive(false);
+        else deathCanvas.SetActive(true);
     }
 
     private void HpUpdate()
@@ -41,11 +54,13 @@ public class Player : NetworkBehaviour
     public void Setup()
     {
         this.enabled = true;
-        _gunShot = GetComponent<GunShot>();
-        var canvas = GameObject.FindGameObjectWithTag("Canvas");
+        _gunShot = GetComponent<GunShot>(); 
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
         var textTr = canvas.transform.Find("Health");
         hp = textTr.GetComponent<Text>();
         
+        
+
         wasEnabled = new bool[disableOnDeath.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {
@@ -79,7 +94,11 @@ public class Player : NetworkBehaviour
         if (_col != null)
             _col.enabled = false;
         
+        DeadCanvasActive();
         StartCoroutine(Respawn());
+        StartCoroutine(StartCountdown(10));
+        DeadCanvasDeActive();
+        
     }
 
     private IEnumerator Respawn()
@@ -103,6 +122,28 @@ public class Player : NetworkBehaviour
         Collider _col = GetComponent<Collider>();
         if (_col != null)
             _col.enabled = true;
+    }
+
+    public void DeadCanvasActive()
+    {
+        deathCanvas.SetActive(true);
+        canvas.SetActive(false);
+    }
+    public void DeadCanvasDeActive()
+    {
+        deathCanvas.SetActive(false);
+        canvas.SetActive(true);
+    }
+    public IEnumerator StartCountdown(float countdownValue)
+    {
+        currCountdownValue = countdownValue;
+        while (currCountdownValue > 0)
+        {
+            deathMessage.text = ("Respawn in... " + currCountdownValue);
+            Debug.Log("Countdown: " + currCountdownValue);
+            yield return new WaitForSeconds(1.0f);
+            currCountdownValue--;
+        }
     }
     
 }

@@ -11002,13 +11002,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.48
   maxhealth: 100
   disableOnDeath:
   - {fileID: 8055611513008903282}
   - {fileID: 4534051876333142519}
   wasEnabled: 0101
   blood: {fileID: 5095339505508855119}
+  deathMessage: {fileID: 4211817839664687939, guid: 1a22a0428523c4bb89e02f937b91b24f,
+    type: 3}
+  deathCanvas: {fileID: 4231042781886944642, guid: d2e171022727a4f5d8046e59cd5dfc49,
+    type: 3}
+  canvas: {fileID: 0}
 --- !u!114 &4534051876333142519
 MonoBehaviour:
   m_ObjectHideFlags: 0
