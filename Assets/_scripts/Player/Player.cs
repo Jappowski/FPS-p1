@@ -94,7 +94,7 @@ public class Player : NetworkBehaviour
             _col.enabled = false;
         
         // DeadCanvasActive();
-        // StartCoroutine(Respawn());
+        StartCoroutine(Respawn());
         // StartCoroutine(StartCountdown(10));
         // DeadCanvasDeActive();
         
@@ -102,7 +102,7 @@ public class Player : NetworkBehaviour
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
         
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
