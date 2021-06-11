@@ -1000,12 +1000,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &410796248 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
-    type: 3}
-  m_PrefabInstance: {fileID: 452757812183212513}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &426876293
 GameObject:
   m_ObjectHideFlags: 0
@@ -2123,7 +2117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1727338500
 Transform:
   m_ObjectHideFlags: 0
@@ -2358,7 +2352,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 410796248}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -2369,7 +2363,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &2104147783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2776,90 +2770,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1001 &452757812183212513
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 464.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 403.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933112, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_Name
-      value: DeathUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812041933113, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 452757812905702846, guid: e08a7ef760f584111afb3115895ca9b8,
-        type: 3}
-      propertyPath: m_TagString
-      value: deathCanvas
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e08a7ef760f584111afb3115895ca9b8, type: 3}
 --- !u!1001 &8411170026016445574
 PrefabInstance:
   m_ObjectHideFlags: 0
