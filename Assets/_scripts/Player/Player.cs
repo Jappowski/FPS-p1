@@ -34,8 +34,7 @@ public class Player : NetworkBehaviour
     }
     void Update()
     {
-        if(isLocalPlayer)
-            HpUpdate();
+        HpUpdate();
         if (Input.GetKeyDown("k"))
         {
             Debug.Log("DMG");
