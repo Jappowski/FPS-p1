@@ -12,6 +12,7 @@ public class Player : NetworkBehaviour
     [SerializeField]private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
     [SerializeField] private  GameObject[] disableOnDeathGameObjects;
+    [SerializeField] private GameObject postproces;
     private Text hp;
     private Text deathMessage;
     private GameObject deathCanvas;
@@ -34,7 +35,7 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown("k"))
         {
             Debug.Log("DMG");
-            RpcTakeDamage(30);
+            RpcTakeDamage(5);
         }
         // if (!isDead)
         //     deathCanvas.SetActive(false);
@@ -69,7 +70,7 @@ public class Player : NetworkBehaviour
     {
         if (isDead)
             return;
-        
+        StartCoroutine(ShowVignette());
         currentHealth -= _dmg;
         blood.Play();
         if (currentHealth <= 0f)
@@ -97,6 +98,12 @@ public class Player : NetworkBehaviour
         
     }
 
+    private IEnumerator ShowVignette()
+    {
+        postproces.SetActive(true);
+        yield return new WaitForSeconds(0.25f);
+        postproces.SetActive(false);
+    }
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);
