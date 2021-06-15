@@ -15,12 +15,12 @@ public class CursorState : MonoBehaviour
   
     void Update()
     {
-        if (Input.GetButton("Cancel") && cursor == false)
+        if (Input.GetButtonDown("Cancel") && cursor == false)
         {
             Cursor.lockState = CursorLockMode.None;
             cursor = true;
         }     
-        else if (Input.GetButton("Cancel") && Cursor.visible == true)
+        else if (Input.GetButtonDown("Cancel") && Cursor.visible == true)
         {
             Cursor.lockState = CursorLockMode.Locked;
             cursor = false;

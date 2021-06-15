@@ -11004,16 +11004,12 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.48
   maxhealth: 100
-  disableOnDeath:
-  - {fileID: 8055611513008903282}
-  - {fileID: 4534051876333142519}
+  disableOnDeathScripts: []
   wasEnabled: 0101
   blood: {fileID: 5095339505508855119}
-  deathMessage: {fileID: 4211817839664687939, guid: 1a22a0428523c4bb89e02f937b91b24f,
-    type: 3}
-  deathCanvas: {fileID: 4231042781886944642, guid: d2e171022727a4f5d8046e59cd5dfc49,
-    type: 3}
-  canvas: {fileID: 0}
+  disableOnDeathGameObjects:
+  - {fileID: 1665545141943145582}
+  - {fileID: 6733563573575506558}
 --- !u!114 &4534051876333142519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11077,6 +11073,7 @@ MonoBehaviour:
   - {fileID: 5934423178072439759}
   - {fileID: 6733563573575506529}
   - {fileID: 9009687598911722127}
+  - {fileID: 7752838999890736596}
   playerBody: {fileID: 1665545141943145582}
   weapon: {fileID: 6733563573575506558}
   TargetScript: {fileID: 9009687598911722127}

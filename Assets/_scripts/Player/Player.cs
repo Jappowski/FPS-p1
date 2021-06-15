@@ -8,9 +8,10 @@ public class Player : NetworkBehaviour
 {
     [SerializeField] private int maxhealth = 100;
     [SyncVar] private int currentHealth;
-    [SerializeField]private Behaviour[] disableOnDeath;
+    [SerializeField]private Behaviour[] disableOnDeathScripts;
     [SerializeField]private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
+    [SerializeField] private  GameObject[] disableOnDeathGameObjects;
     private Text hp;
     private Text deathMessage;
     private GameObject deathCanvas;
@@ -25,16 +26,11 @@ public class Player : NetworkBehaviour
         get { return _isDead; }
         protected set { _isDead = value; }
     }
-
-    void Start()
-    {
-        // deathCanvas = GameObject.FindGameObjectWithTag("deathCanvas");
-        // var deathText = deathCanvas.transform.Find("Respawn");
-        // deathMessage = deathText.GetComponent<Text>();
-    }
+    
     void Update()
     {
-        HpUpdate();
+        if(isLocalPlayer)
+            HpUpdate();
         if (Input.GetKeyDown("k"))
         {
             Debug.Log("DMG");
@@ -60,10 +56,10 @@ public class Player : NetworkBehaviour
         
         
 
-        wasEnabled = new bool[disableOnDeath.Length];
+        wasEnabled = new bool[disableOnDeathScripts.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {
-            wasEnabled[i] = disableOnDeath[i].enabled;
+            wasEnabled[i] = disableOnDeathScripts[i].enabled = true;
         }
 
         SetDefaults();
@@ -84,15 +80,16 @@ public class Player : NetworkBehaviour
     private void Die()
     {
         isDead = true;
-        for (int i = 0; i < disableOnDeath.Length; i++)
+        for (int i = 0; i < disableOnDeathScripts.Length; i++)
         {
-            disableOnDeath[i].enabled = false;
+            disableOnDeathScripts[i].enabled = false;
         }
         
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = false;
-        
+        foreach (var gameObject in disableOnDeathGameObjects)
+        {
+            gameObject.SetActive(false);
+        }
+
         // DeadCanvasActive();
         StartCoroutine(Respawn());
         // StartCoroutine(StartCountdown(10));
@@ -114,13 +111,18 @@ public class Player : NetworkBehaviour
         isDead = false;
         currentHealth = maxhealth;
 
-        for (int i = 0; i < disableOnDeath.Length; i++)
+        for (int i = 0; i < disableOnDeathScripts.Length; i++)
         {
-            disableOnDeath[i].enabled = wasEnabled[i];
+            disableOnDeathScripts[i].enabled = wasEnabled[i];
         }
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = true;
+
+        if (!isLocalPlayer)
+        {
+            foreach (var gameObject in disableOnDeathGameObjects)
+            {
+                gameObject.SetActive(true);
+            }   
+        }
     }
 
     public void DeadCanvasActive()
