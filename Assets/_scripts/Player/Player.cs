@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mirror;
 using TMPro;
@@ -14,8 +15,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private  GameObject[] disableOnDeathGameObjects;
     [SerializeField] private GameObject postproces;
     private Text hp;
-    private Text deathMessage;
-    private GameObject deathCanvas;
+    [SerializeField] private TextMeshProUGUI deathMessage;
+    [SerializeField] private GameObject deathCanvas;
     private GameObject canvas;
     private GunShot _gunShot;
     private PlayerWeapon weapon;
@@ -35,7 +36,7 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown("k"))
         {
             Debug.Log("DMG");
-            RpcTakeDamage(5);
+            RpcTakeDamage(20);
         }
         // if (!isDead)
         //     deathCanvas.SetActive(false);
@@ -92,12 +93,11 @@ public class Player : NetworkBehaviour
         {
             gameObject.SetActive(false);
         }
-
-        // DeadCanvasActive();
+        if(isLocalPlayer)
+            DeadCanvasActive();
         StartCoroutine(Respawn());
-        // StartCoroutine(StartCountdown(10));
-        // DeadCanvasDeActive();
-        
+        StartCoroutine(StartCountdown(5));
+
     }
 
     private IEnumerator ShowVignette()
@@ -109,7 +109,7 @@ public class Player : NetworkBehaviour
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);
-        
+        DeadCanvasDeActive();
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
