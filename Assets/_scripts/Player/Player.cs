@@ -9,7 +9,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private int maxhealth = 100;
     [SyncVar] private int currentHealth;
     [SerializeField]private Behaviour[] disableOnDeathScripts;
-    [SerializeField]private bool[] wasEnabled;
+    private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
     [SerializeField] private  GameObject[] disableOnDeathGameObjects;
     [SerializeField] private GameObject postproces;
@@ -60,7 +60,7 @@ public class Player : NetworkBehaviour
         wasEnabled = new bool[disableOnDeathScripts.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {
-            wasEnabled[i] = disableOnDeathScripts[i].enabled = true;
+            wasEnabled[i] = disableOnDeathScripts[i].enabled;
         }
 
         SetDefaults();
@@ -70,7 +70,8 @@ public class Player : NetworkBehaviour
     {
         if (isDead)
             return;
-        StartCoroutine(ShowVignette());
+        if(isLocalPlayer)
+            StartCoroutine(ShowVignette());
         currentHealth -= _dmg;
         blood.Play();
         if (currentHealth <= 0f)
@@ -86,6 +87,7 @@ public class Player : NetworkBehaviour
             disableOnDeathScripts[i].enabled = false;
         }
         
+        if(!isLocalPlayer)
         foreach (var gameObject in disableOnDeathGameObjects)
         {
             gameObject.SetActive(false);
