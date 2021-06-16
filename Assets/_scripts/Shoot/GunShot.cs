@@ -106,14 +106,29 @@ public class GunShot : NetworkBehaviour
         }
     }
 
+    [Command]
+    void CmdOnShoot()
+    {
+        RpcDoMuzzleFlash();
+    }
+
+    [ClientRpc]
+    void RpcDoMuzzleFlash()
+    {
+        muzzleFlash.Play();
+    }
     [Client]
     private void Shoot()
     {
         currentAmmo--;
-        muzzleFlash.Play();
         int index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
+        
+        if (!isLocalPlayer)
+            return;
+        
+        CmdOnShoot();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
         {

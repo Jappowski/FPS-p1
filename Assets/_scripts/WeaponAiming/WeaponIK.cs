@@ -1,6 +1,7 @@
+using Mirror;
 using UnityEngine;
 
-public class WeaponIK : MonoBehaviour
+public class WeaponIK : NetworkBehaviour
 {
     [SerializeField] private Transform targetTransform;
     [SerializeField] private Transform aimTransform;
@@ -8,8 +9,11 @@ public class WeaponIK : MonoBehaviour
 
     private void Update()
     {
-        var targetPosition = targetTransform.position;
-        AimAtTarget(bone, targetPosition);
+        if (isLocalPlayer)
+        {
+            var targetPosition = targetTransform.position;
+            AimAtTarget(bone, targetPosition);
+        }
     }
 
     private void AimAtTarget(Transform bone, Vector3 targetPosition)
