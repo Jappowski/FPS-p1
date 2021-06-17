@@ -5209,7 +5209,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9103484930961366303, guid: 8c03c8cbfad60804db0a5f94bf6076b4, type: 3}
+  - {fileID: 2100000, guid: c5320f15e6f3c4586b59e046212d6569, type: 2}
   - {fileID: -2274090305892019849, guid: 8c03c8cbfad60804db0a5f94bf6076b4, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -11467,6 +11467,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a883ad423fc684faa52392cdbd7efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   targetTransform: {fileID: 4763345793728339991}
   aimTransform: {fileID: 4763345795038036649}
   bone: {fileID: 4253178021548397714}
