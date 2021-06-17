@@ -21,7 +21,6 @@
       <Path>ProjectSettings</Path>
     </explicitIncludes>
     <explicitExcludes>
-      <Path>.Build</Path>
       <Path>.git</Path>
       <Path>.idea</Path>
       <Path>Library</Path>
