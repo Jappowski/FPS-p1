@@ -20,23 +20,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/Ground2Arena1.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/Ground2Arena1.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/GroundArena1.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/GroundArena1.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/MiddleCovers.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/MiddleCovers.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/StairsPlatform.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/StairsPlatform.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/StairsPlatform3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/StairsPlatform3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/WallsArena1.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/WallsArena1.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/WaterArena1.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/WaterArena1.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Arena1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Arena1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Arena2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Arena2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
+<<<<<<< Updated upstream
+      <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Prefabs/LevelBase1.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_scripts/CursorState.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/PongWithListServer/Prefabs/Ball.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Mirror/Examples/Cloud/PongWithListServer/Prefabs/Ball.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FPS-p1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Backwards.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Left.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_Right.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/Character/Bean_Walk_forward.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/CharacterController.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Animations/CharacterController.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/New Animator Controller.controller" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Animations/New Animator Controller.controller.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_FBX/CharacterWithGun.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Prefabs/CharacterWithGun.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" afterDir="false" />
+>>>>>>> Stashed changes
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +63,46 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/CharacterAnimationSounds.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/Recoil.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Shoot/PlayerWeapon.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/Player/Player.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/PasswordNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_scripts/CsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Mirror-Multiplayer-Tutorials-master/Assets/Tutorials/Lobby/Scripts/NetworkManagerLobby.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@10.5.0/Runtime/Debugging/DebugUpdater.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
+<<<<<<< Updated upstream
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/_scripts/FPSController.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/CursorState.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/PlayerWeapon.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/PlayerSetup.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Target.cs" />
+        <option value="$PROJECT_DIR$/Assets/_scripts/Player/Player.cs" />
       </list>
     </option>
+=======
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/_scripts/Shoot/GunShot.cs" />
+      <option value="$PROJECT_DIR$/Assets/CharacterAnimationSounds.cs" />
+      <option value="$PROJECT_DIR$/Assets/_scripts/Player/FPSController.cs" />
+    </changedPaths>
+>>>>>>> Stashed changes
   </component>
   <component name="ProjectId" id="1mYnw8ishKG3R4BhoWsuEoBCQja" />
   <component name="ProjectViewState">
@@ -59,19 +110,55 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="Rider.SolutionExplorerActivator" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TWShift.3" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+  <component name="RunManager" selected=".NET Static Method.Steamworks.InteropHelp.TestIfAvailableClient">
+    <configuration name="Steamworks.InteropHelp.TestIfAvailableClient" type="DotNetStaticMethod" factoryName=".NET Static Method" temporary="true">
+      <option name="EXE_PATH" value="C:\Program Files\JetBrains\JetBrains Rider 2020.3.2\lib\ReSharperHost\JetLauncherILc.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/Mirror.csproj" />
+      <option name="PROJECT_TFM" value=".NETFramework,Version=v4.7.1" />
+      <option name="CLASS_NAME" value="Steamworks.InteropHelp" />
+      <option name="METHOD_NAME" value="TestIfAvailableClient" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../../Pulpit/GRA\FPS - p1.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\vikto\OneDrive\Pulpit\GRA" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="projectPathOnTarget" />
       <option name="selectedOptions">
-        <set />
+        <list />
       </option>
       <method v="2" />
     </configuration>
@@ -79,13 +166,22 @@
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
+      <option name="projectPathOnTarget" />
       <option name="selectedOptions">
-        <set />
+        <list />
       </option>
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue=".NET Static Method.Steamworks.InteropHelp.TestIfAvailableClient" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a0e698e5-695d-4789-8924-a16b5a2e1efe" name="Default Changelist" comment="" />
@@ -95,6 +191,49 @@
       <updated>1609679631363</updated>
       <workItem from="1609679641154" duration="673000" />
       <workItem from="1610095182060" duration="385000" />
+      <workItem from="1616710401651" duration="2018000" />
+      <workItem from="1617142362103" duration="4000" />
+      <workItem from="1617142405614" duration="4657000" />
+      <workItem from="1617206181665" duration="2315000" />
+      <workItem from="1617210727057" duration="748000" />
+      <workItem from="1617921183590" duration="3040000" />
+      <workItem from="1618408651713" duration="31000" />
+      <workItem from="1618409124766" duration="9610000" />
+      <workItem from="1618842895438" duration="13414000" />
+      <workItem from="1620664552626" duration="7240000" />
+      <workItem from="1620744900431" duration="9818000" />
+      <workItem from="1620764292976" duration="105000" />
+      <workItem from="1620764885649" duration="6575000" />
+      <workItem from="1620827396260" duration="11666000" />
+      <workItem from="1620841872770" duration="11798000" />
+      <workItem from="1620916892895" duration="992000" />
+      <workItem from="1620927955757" duration="8641000" />
+      <workItem from="1620943296873" duration="632000" />
+      <workItem from="1620981974986" duration="2422000" />
+      <workItem from="1621173652295" duration="20000" />
+      <workItem from="1621175252640" duration="3072000" />
+      <workItem from="1621179256915" duration="9470000" />
+      <workItem from="1621191395909" duration="434000" />
+      <workItem from="1621192266547" duration="251000" />
+      <workItem from="1621192900846" duration="845000" />
+      <workItem from="1621193824637" duration="22000" />
+      <workItem from="1621193938785" duration="246000" />
+      <workItem from="1621256759579" duration="413000" />
+      <workItem from="1621257290220" duration="15000" />
+      <workItem from="1621257423387" duration="66000" />
+      <workItem from="1621257970354" duration="54000" />
+      <workItem from="1621259126440" duration="27000" />
+      <workItem from="1621259194814" duration="35000" />
+      <workItem from="1621259284434" duration="13000" />
+      <workItem from="1621447810418" duration="13836000" />
+      <workItem from="1622067389380" duration="2907000" />
+      <workItem from="1622073867116" duration="379000" />
+      <workItem from="1622208686073" duration="1056000" />
+      <workItem from="1622468590067" duration="2051000" />
+      <workItem from="1622488871289" duration="303000" />
+      <workItem from="1623321120044" duration="2606000" />
+      <workItem from="1623328979644" duration="4574000" />
+      <workItem from="1623334794919" duration="45000" />
     </task>
     <servers />
   </component>
