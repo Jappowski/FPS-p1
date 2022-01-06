@@ -1,5 +1,7 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : NetworkBehaviour
@@ -20,7 +22,6 @@ public class FPSController : NetworkBehaviour
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] jumpClips;
-
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -77,6 +78,11 @@ public class FPSController : NetworkBehaviour
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameEvents.BroadcastOnEscClick();
         }
     }
 }

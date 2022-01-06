@@ -312,8 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca68c502b72449046833ab17acc08558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 0}
   landingPagePanel: {fileID: 6708773472839078781}
+  networkManager: {fileID: 0}
 --- !u!1 &1604053560944521592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,8 +1269,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4e7585fe2ebfb43aecee68328c1275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameInputField: {fileID: 3326111015039874649}
   ContinueButtton: {fileID: 2011666991208505564}
+  nameInputField: {fileID: 3326111015039874649}
 --- !u!1 &5912531630288539572
 GameObject:
   m_ObjectHideFlags: 0
@@ -2037,10 +2037,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f29ad63c382fc7044b35630722cbde16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 0}
-  landingPagePanel: {fileID: 6708773472839078781}
   ipAddressInputField: {fileID: 1929509740118520206}
   joinButton: {fileID: 4820867268843537413}
+  landingPagePanel: {fileID: 6708773472839078781}
+  networkManager: {fileID: 0}
 --- !u!1 &7037228202200961371
 GameObject:
   m_ObjectHideFlags: 0

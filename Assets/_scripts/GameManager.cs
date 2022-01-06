@@ -1,22 +1,58 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class GameManager : MonoBehaviour
 {
    public static GameManager instance;
-
+   
+   public GameState gameState;
+   [SerializeField] public HUD hud;
    void Awake()
    {
-      if (instance != null)
-      {
-         Debug.Log("More then one GameManager in scene.");
-      }
-      else
-      {
-         instance = this;
-      }
+      CheckForGameManagerInstance();
+      HandleEvents();
+      gameState = GameState.Start;
    }
+
+   private void OnDestroy()
+   {
+      UnhandleEvents();
+   }
+   
+   private void HandleEvents()
+   {
+      GameEvents.onGameStateChange += OnGameStateChangeHandler;
+   }
+   
+   private void UnhandleEvents()
+   {
+      GameEvents.onGameStateChange -= OnGameStateChangeHandler;
+   }
+
+   private void OnGameStateChangeHandler(GameState obj)
+   {
+      gameState = obj;
+   }
+
+   private void CheckForGameManagerInstance()
+   {
+      if (instance != null)
+         Debug.Log("More then one GameManager in scene.");
+      else
+         instance = this;
+   }
+
+   public void LeaveGame()
+   {
+      Application.Quit();
+   }
+   
    #region Player tracking
    private const string PLAYER_ID_PREFIX = "Player ";
    private static Dictionary<string, Player> players = new Dictionary<string, Player>();
@@ -50,4 +86,11 @@ public class GameManager : MonoBehaviour
    //    GUILayout.EndArea();
    // }
    #endregion
+
+   public enum GameState{
+      Start,
+      Lobby,
+      InGame,
+      Stop
+   }
 }
