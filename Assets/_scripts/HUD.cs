@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    [SerializeField] private GameObject StartUi;
-    [SerializeField] private GameObject StopUi;
-    [SerializeField] protected GameObject InGameHUD;
-
+    [SerializeField] public GameObject StartUi;
+    [SerializeField] public GameObject StopUi;
+    [SerializeField] public GameObject InGameHUD;
+    [SerializeField] public Text HP;
     private void Awake()
     {
         HandleEvents();
@@ -27,9 +28,25 @@ public class HUD : MonoBehaviour
 
     private void OnEscClickHandle()
     {
-        if (StopUi.activeSelf)
-            StopUi.SetActive(false);
-        StopUi.SetActive(true);
-        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.Stop);
+        if (GameManager.instance.gameState == GameManager.GameState.InGame)
+        {
+            if (StopUi.activeSelf)
+            {
+                StopUi.SetActive(false);
+                GameManager.instance.player.SetActive(true);
+            }
+
+            StopUi.SetActive(true);
+            GameManager.instance.player.SetActive(false);
+        }
+    }
+
+    public void HostLobbyButton()
+    {
+        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
+    }
+    public void LeaveGame()
+    {
+        Application.Quit();
     }
 }

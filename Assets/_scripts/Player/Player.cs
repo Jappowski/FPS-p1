@@ -33,11 +33,13 @@ public class Player : NetworkBehaviour
     {
         if(isLocalPlayer)
             HpUpdate();
+#if UNITY_EDITOR
         if (Input.GetKeyDown("k"))
         {
             Debug.Log("DMG");
             RpcTakeDamage(20);
         }
+#endif
         // if (!isDead)
         //     deathCanvas.SetActive(false);
         // else deathCanvas.SetActive(true);
@@ -53,11 +55,7 @@ public class Player : NetworkBehaviour
         this.enabled = true;
         _gunShot = GetComponent<GunShot>(); 
         canvas = GameObject.FindGameObjectWithTag("Canvas");
-        var textTr = canvas.transform.Find("Health");
-        hp = textTr.GetComponent<Text>();
-        
-        
-
+        hp = GameManager.instance.hud.HP;
         wasEnabled = new bool[disableOnDeathScripts.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {

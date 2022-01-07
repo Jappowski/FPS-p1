@@ -10,9 +10,8 @@ public class GunShot : NetworkBehaviour
 {
     private Text ammoUi;
    // public Animator animator;
-    private GameObject canvas;
-    
-    public int currentAmmo;
+
+   public int currentAmmo;
     public int maxAmmo = 30; //in mag
     public int maxReloadAmmo = 90;
     public float fireRate = 15;
@@ -36,9 +35,7 @@ public class GunShot : NetworkBehaviour
     private void Start()
     {
         currentAmmo = maxAmmo;
-        canvas = GameObject.FindGameObjectWithTag("Canvas");
-        var textTr = canvas.transform.Find("AmmoCount");
-        ammoUi = textTr.GetComponent<Text>();
+        ammoUi = GameManager.instance.hud.InGameHUD.GetComponentInChildren<Text>();
     }
 
     private void Update()
