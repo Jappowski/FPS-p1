@@ -30,10 +30,22 @@ public class PlayerSetup : NetworkBehaviour
                 child.gameObject.layer = LayerMask.NameToLayer("Weapon");
             }
         }
-        
+
+        GameEvents.onGameStateChange += OnGameStateChangeHandler;
         GetComponent<Player>().Setup();
     }
-    
+
+    private void OnGameStateChangeHandler(GameManager.GameState obj)
+    {
+        if(obj == GameManager.GameState.Stop)
+            DisableComponents();
+        else
+            foreach (var VARIABLE in componentsToDisable)
+            {
+                VARIABLE.enabled = true;
+            }
+    }
+
     void SetLayer(GameObject Weapon, int layer)
     {
         Weapon.layer = layer;

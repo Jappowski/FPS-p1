@@ -11269,7 +11269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7512565483028886421
 Transform:
   m_ObjectHideFlags: 0
@@ -11554,7 +11554,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   componentsToDisable:
-  - {fileID: 8055611513008903282}
   - {fileID: 4534051876333142519}
   - {fileID: 8055611513310967851}
   - {fileID: 5934423178072439759}
