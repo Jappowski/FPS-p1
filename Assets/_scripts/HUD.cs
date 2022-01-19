@@ -27,10 +27,12 @@ public class HUD : MonoBehaviour {
         if (GameManager.instance.gameState == GameManager.GameState.InGame) {
             GameEvents.BroadcastOnGameStateChange(GameManager.GameState.Stop);
             StopUi.SetActive(true);
+            Debug.Log("ON");
         }
-        else {
+        else  {
             GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
             StopUi.SetActive(false);
+            Debug.Log("OFF");
         }
     }
 
