@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using Mirror;
-using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class GunShot : NetworkBehaviour {
     private Text ammoUi;
@@ -25,7 +22,6 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
-    [SerializeField] private AudioClip hitmarkerSound;
     [SerializeField] private LayerMask mask;
     private float nextShot;
     public float reloadTime = 3f;
@@ -68,14 +64,16 @@ public class GunShot : NetworkBehaviour {
             yield break;
         }
 
-        audioSource.clip = reloadSound1;
-        audioSource.Play();
-        yield return new WaitForSeconds(reloadTime - .25f);
-        audioSource.clip = reloadSound2;
-        audioSource.Play();
-        yield return new WaitForSeconds(.25f);
-        audioSource.clip = reloadSound3;
-        audioSource.Play();
+        if (maxReloadAmmo != 0) {
+            audioSource.clip = reloadSound1;
+            audioSource.Play();
+            yield return new WaitForSeconds(reloadTime - .25f);
+            audioSource.clip = reloadSound2;
+            audioSource.Play();
+            yield return new WaitForSeconds(.25f);
+            audioSource.clip = reloadSound3;
+            audioSource.Play();
+        }
 
         if (maxReloadAmmo >= 30) {
             maxReloadAmmo -= maxAmmo - currentAmmo;
@@ -91,8 +89,10 @@ public class GunShot : NetworkBehaviour {
 
     private void EmptyGunShot() {
         if (currentAmmo == 0 && maxReloadAmmo == 0 && Input.GetButton("Fire1")) {
-            audioSource.clip = emptyGunSound;
-            audioSource.Play();
+            if (!audioSource.isPlaying) {
+                audioSource.clip = emptyGunSound;
+                audioSource.Play();
+            }
         }
     }
 
