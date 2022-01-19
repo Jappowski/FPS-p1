@@ -10794,7 +10794,6 @@ GameObject:
   - component: {fileID: 2716561656418872379}
   - component: {fileID: 880695924841570977}
   - component: {fileID: 6733563573575506529}
-  - component: {fileID: 7498407566279362533}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -10883,23 +10882,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   child: {fileID: 6733563573575506558}
   parent: {fileID: 1547570110664500463}
---- !u!114 &7498407566279362533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733563573575506558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 
-  hasSpawned: 0
 --- !u!1 &6832783739872597359
 GameObject:
   m_ObjectHideFlags: 0
@@ -11619,6 +11601,7 @@ MonoBehaviour:
   reloadSound2: {fileID: 8300000, guid: 04171aaf020bb394990939135d93859f, type: 3}
   reloadSound3: {fileID: 8300000, guid: 75b3dbbb73acebe48841684c0bcb077f, type: 3}
   emptyGunSound: {fileID: 8300000, guid: 9bf67e9c88b5a0147b6e15402c01b8c9, type: 3}
+  hitmarkerSound: {fileID: 8300000, guid: 3570e6baeb9721d4bb4f08b2fb8bfbc2, type: 3}
   mask:
     serializedVersion: 2
     m_Bits: 256
@@ -11808,7 +11791,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1666783855229497125}
   - component: {fileID: 6148638174838471886}
-  - component: {fileID: 5532087326312797414}
   - component: {fileID: 4171943498391104160}
   m_Layer: 0
   m_Name: minimap
@@ -11874,14 +11856,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5532087326312797414
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7515587764440823469}
-  m_Enabled: 1
 --- !u!114 &4171943498391104160
 MonoBehaviour:
   m_ObjectHideFlags: 0
