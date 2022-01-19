@@ -29,6 +29,11 @@ public class Player : NetworkBehaviour
         protected set { _isDead = value; }
     }
     
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip respawnSound;
+
+
     void Update()
     {
         if(isLocalPlayer)
@@ -85,6 +90,9 @@ public class Player : NetworkBehaviour
         {
             disableOnDeathScripts[i].enabled = false;
         }
+
+        audioSource.clip = deathSound;
+        audioSource.Play();
         
         if(!isLocalPlayer)
         foreach (var gameObject in disableOnDeathGameObjects)
@@ -112,6 +120,8 @@ public class Player : NetworkBehaviour
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
         transform.rotation = _spawnPoint.rotation;
+        audioSource.clip = respawnSound;
+        audioSource.Play();
     }
     public void SetDefaults()
     {
