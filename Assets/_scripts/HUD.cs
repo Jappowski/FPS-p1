@@ -8,11 +8,25 @@ public class HUD : MonoBehaviour {
     [SerializeField] public GameObject StartUi;
     [SerializeField] public GameObject StopUi;
     [SerializeField] public GameObject InGameHUD;
+    [SerializeField] private GameObject ambientMusic;
     [SerializeField] public Text HP;
 
     private void Awake() {
         HandleEvents();
         StartUi.SetActive(true);
+    }
+
+    private void Update() {
+        PlayAmbientMusicInGame();
+    }
+    
+    private void PlayAmbientMusicInGame() {
+        if ((GameManager.instance.gameState == GameManager.GameState.InGame) || (GameManager.instance.gameState == GameManager.GameState.Stop)) {
+            ambientMusic.SetActive(true);
+        }
+        else {
+            ambientMusic.SetActive(false);
+        }
     }
 
     private void HandleEvents() {
@@ -33,7 +47,7 @@ public class HUD : MonoBehaviour {
             StopUi.SetActive(false);
         }
     }
-
+    
     public void HostLobbyButton() {
         GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
     }
