@@ -4,6 +4,7 @@ using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
 {
@@ -29,10 +30,12 @@ public class Player : NetworkBehaviour
         protected set { _isDead = value; }
     }
     
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource deathRespawnAudioSource;
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip respawnSound;
-
+    
+    [SerializeField] private AudioSource gettingHitAudioSource;
+    [SerializeField] private AudioClip[] gettingHitSounds;
 
     void Update()
     {
@@ -78,6 +81,9 @@ public class Player : NetworkBehaviour
             StartCoroutine(ShowVignette());
         currentHealth -= _dmg;
         blood.Play();
+        var index = Random.Range(0, gettingHitSounds.Length);
+        gettingHitAudioSource.clip = gettingHitSounds[index];
+        gettingHitAudioSource.Play();
         if (currentHealth <= 0f)
             Die();
 
@@ -91,8 +97,8 @@ public class Player : NetworkBehaviour
             disableOnDeathScripts[i].enabled = false;
         }
 
-        audioSource.clip = deathSound;
-        audioSource.Play();
+        deathRespawnAudioSource.clip = deathSound;
+        deathRespawnAudioSource.Play();
         
         if(!isLocalPlayer)
         foreach (var gameObject in disableOnDeathGameObjects)
@@ -120,8 +126,8 @@ public class Player : NetworkBehaviour
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
         transform.rotation = _spawnPoint.rotation;
-        audioSource.clip = respawnSound;
-        audioSource.Play();
+        deathRespawnAudioSource.clip = respawnSound;
+        deathRespawnAudioSource.Play();
     }
     public void SetDefaults()
     {

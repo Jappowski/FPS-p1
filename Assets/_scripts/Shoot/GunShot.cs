@@ -109,7 +109,7 @@ public class GunShot : NetworkBehaviour {
     [Client]
     private void Shoot() {
         currentAmmo--;
-        int index = Random.Range(0, shootingClips.Length);
+        var index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
 
