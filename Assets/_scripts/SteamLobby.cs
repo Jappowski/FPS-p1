@@ -62,6 +62,8 @@ public class SteamLobby : MonoBehaviour
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
 
+        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
         buttons.SetActive(false);
+        GameManager.instance.hud.StartUi.SetActive(false);
     }
 }

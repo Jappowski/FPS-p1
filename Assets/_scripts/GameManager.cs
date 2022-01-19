@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
    //    GUILayout.EndArea();
    // }
    #endregion
+   
 
    public enum GameState{
       Start,

@@ -30,7 +30,7 @@ public class FPSController : NetworkBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.gameState == GameManager.GameState.InGame)
+        if (GameManager.instance.gameState == GameManager.GameState.InGame && isLocalPlayer)
         {
             var forward = transform.TransformDirection(Vector3.forward);
             var right = transform.TransformDirection(Vector3.right);
@@ -83,10 +83,12 @@ public class FPSController : NetworkBehaviour
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (isLocalPlayer)
         {
-            GameEvents.BroadcastOnEscClick();
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GameEvents.BroadcastOnEscClick();
+            }
         }
     }
 }
