@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour {
     [SerializeField] private int maxhealth = 100;
@@ -11,6 +13,7 @@ public class Player : NetworkBehaviour {
     private bool[] wasEnabled;
     [SerializeField] private ParticleSystem blood;
     [SerializeField] private GameObject[] disableOnDeathGameObjects;
+    private CharacterController controller;
     [SerializeField] private GameObject postproces;
     private Text hp;
     [SerializeField] private TextMeshProUGUI deathMessage;
@@ -32,6 +35,10 @@ public class Player : NetworkBehaviour {
 
     [SerializeField] private AudioSource gettingHitAudioSource;
     [SerializeField] private AudioClip[] gettingHitSounds;
+
+    private void Start() {
+        controller = GetComponent<CharacterController>();
+    }
 
     void Update() {
         if (isLocalPlayer)
@@ -85,6 +92,8 @@ public class Player : NetworkBehaviour {
             disableOnDeathScripts[i].enabled = false;
         }
 
+        controller.enabled = false;
+
         deathRespawnAudioSource.clip = deathSound;
         deathRespawnAudioSource.Play();
 
@@ -107,6 +116,7 @@ public class Player : NetworkBehaviour {
 
     private IEnumerator Respawn() {
         yield return new WaitForSeconds(5f);
+        controller.enabled = true;
         DeadCanvasDeActive();
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();

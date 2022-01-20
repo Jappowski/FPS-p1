@@ -11908,7 +11908,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7136567328140716335}
-  playerController: {fileID: 8055611513008903284}
   audioSource: {fileID: 58072604857473633}
   footstepClips:
   - {fileID: 8300000, guid: 48257f06ad2c6144fbdebd132c495a35, type: 3}
@@ -17089,7 +17088,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
