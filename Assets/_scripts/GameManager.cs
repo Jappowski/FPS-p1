@@ -1,95 +1,82 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
-public class GameManager : MonoBehaviour
-{
-   public static GameManager instance;
+public class GameManager : MonoBehaviour {
+    public static GameManager instance;
 
-   public GameObject player;
+    public GameObject player;
 
-   public GameState gameState;
-   [SerializeField] public HUD hud;
-   void Awake()
-   {
-      CheckForGameManagerInstance();
-      HandleEvents();
-      gameState = GameState.Start;
-      DontDestroyOnLoad(gameObject);
-   }
+    public GameState gameState;
+    [SerializeField] public HUD hud;
 
-   private void OnDestroy()
-   {
-      UnhandleEvents();
-   }
-   
-   private void HandleEvents()
-   {
-      GameEvents.onGameStateChange += OnGameStateChangeHandler;
-   }
-   
-   private void UnhandleEvents()
-   {
-      GameEvents.onGameStateChange -= OnGameStateChangeHandler;
-   }
+    void Awake() {
+        CheckForGameManagerInstance();
+        HandleEvents();
+        gameState = GameState.Start;
+        DontDestroyOnLoad(gameObject);
+    }
 
-   private void OnGameStateChangeHandler(GameState obj)
-   {
-      gameState = obj;
-   }
+    private void OnDestroy() {
+        UnhandleEvents();
+    }
 
-   private void CheckForGameManagerInstance()
-   {
-      if (instance != null)
-         Debug.Log("More then one GameManager in scene.");
-      else
-         instance = this;
-   }
+    private void HandleEvents() {
+        GameEvents.onGameStateChange += OnGameStateChangeHandler;
+    }
 
-   #region Player tracking
-   private const string PLAYER_ID_PREFIX = "Player ";
-   private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+    private void UnhandleEvents() {
+        GameEvents.onGameStateChange -= OnGameStateChangeHandler;
+    }
 
-   public static void RegisterPlayer(string _netID, Player _player)
-   {
-      string _playerID = PLAYER_ID_PREFIX + _netID;
-      players.Add(_playerID, _player);
-      _player.transform.name = _playerID;
-   }
+    private void OnGameStateChangeHandler(GameState obj) {
+        gameState = obj;
+    }
 
-   public static void UnRegisterPlayer(string _playerID)
-   {
-      players.Remove(_playerID);
-   }
+    private void CheckForGameManagerInstance() {
+        if (instance != null)
+            Debug.Log("More then one GameManager in scene.");
+        else
+            instance = this;
+    }
 
-   public static Player GetPlayer(string _playerID)
-   {
-      return players[_playerID];
-   }
+    #region Player tracking
 
-   // void OnGUI()
-   // {
-   //    GUILayout.BeginArea(new Rect(200, 200, 200, 500));
-   //    GUILayout.BeginVertical();
-   //    foreach (string _playerID in players.Keys)
-   //    {
-   //       GUILayout.Label(_playerID + "   -   "+ players[_playerID].transform.name);
-   //    }
-   //    GUILayout.EndVertical();
-   //    GUILayout.EndArea();
-   // }
-   #endregion
-   
+    private const string PLAYER_ID_PREFIX = "Player ";
+    private static Dictionary<string, Player> players = new Dictionary<string, Player>();
 
-   public enum GameState{
-      Start,
-      Lobby,
-      InGame,
-      Stop
-   }
+    public static void RegisterPlayer(string _netID, Player _player) {
+        string _playerID = PLAYER_ID_PREFIX + _netID;
+        players.Add(_playerID, _player);
+        _player.transform.name = _playerID;
+    }
+
+    public static void UnRegisterPlayer(string _playerID) {
+        players.Remove(_playerID);
+    }
+
+    public static Player GetPlayer(string _playerID) {
+        return players[_playerID];
+    }
+
+    // void OnGUI()
+    // {
+    //    GUILayout.BeginArea(new Rect(200, 200, 200, 500));
+    //    GUILayout.BeginVertical();
+    //    foreach (string _playerID in players.Keys)
+    //    {
+    //       GUILayout.Label(_playerID + "   -   "+ players[_playerID].transform.name);
+    //    }
+    //    GUILayout.EndVertical();
+    //    GUILayout.EndArea();
+    // }
+
+    #endregion
+
+
+    public enum GameState {
+        Start,
+        Lobby,
+        InGame,
+        Stop
+    }
 }

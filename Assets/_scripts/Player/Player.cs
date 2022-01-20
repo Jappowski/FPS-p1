@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour {
     [SerializeField] private int maxhealth = 100;

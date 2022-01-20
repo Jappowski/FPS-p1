@@ -1,10 +1,8 @@
-
 using Mirror;
 using UnityEngine;
 
 [RequireComponent(typeof(Player))]
-public class PlayerSetup : NetworkBehaviour
-{
+public class PlayerSetup : NetworkBehaviour {
     [SerializeField] Behaviour[] componentsToDisable;
     [SerializeField] private GameObject playerBody;
     [SerializeField] private GameObject weapon;
@@ -13,20 +11,16 @@ public class PlayerSetup : NetworkBehaviour
 
     [SerializeField] private string remoteLayerName = "RemotePlayer";
 
-    void Start()
-    {
-        if (!isLocalPlayer)
-        {
-          DisableComponents();
-          AssignRemoteLayer();
+    void Start() {
+        if (!isLocalPlayer) {
+            DisableComponents();
+            AssignRemoteLayer();
         }
-        else
-        {
+        else {
             playerBody.SetActive(false);
             TargetScript.enabled = false;
             weapon.layer = 9;
-            foreach (Transform child in weaponHierarchy.GetComponentsInChildren<Transform>(true))
-            {
+            foreach (Transform child in weaponHierarchy.GetComponentsInChildren<Transform>(true)) {
                 child.gameObject.layer = LayerMask.NameToLayer("Weapon");
             }
         }
@@ -35,46 +29,37 @@ public class PlayerSetup : NetworkBehaviour
         GetComponent<Player>().Setup();
     }
 
-    private void OnGameStateChangeHandler(GameManager.GameState obj)
-    {
-        if(obj == GameManager.GameState.Stop)
+    private void OnGameStateChangeHandler(GameManager.GameState obj) {
+        if (obj == GameManager.GameState.Stop)
             DisableComponents();
         else
-            foreach (var VARIABLE in componentsToDisable)
-            {
+            foreach (var VARIABLE in componentsToDisable) {
                 VARIABLE.enabled = true;
             }
     }
 
-    void SetLayer(GameObject Weapon, int layer)
-    {
+    void SetLayer(GameObject Weapon, int layer) {
         Weapon.layer = layer;
     }
 
-    void DisableComponents()
-    {
-        foreach (var component in componentsToDisable)
-        {
+    void DisableComponents() {
+        foreach (var component in componentsToDisable) {
             component.enabled = false;
         }
     }
 
-    void AssignRemoteLayer()
-    {
+    void AssignRemoteLayer() {
         gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
     }
 
-    public override void OnStartClient()
-    {
+    public override void OnStartClient() {
         base.OnStartClient();
         string _netID = GetComponent<NetworkIdentity>().netId.ToString();
         Player _player = GetComponent<Player>();
         GameManager.RegisterPlayer(_netID, _player);
     }
 
-    void OnDisable()
-    {
+    void OnDisable() {
         GameManager.UnRegisterPlayer(transform.name);
     }
 }
-

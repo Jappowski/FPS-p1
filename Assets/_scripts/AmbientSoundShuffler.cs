@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AmbientSoundShuffler : MonoBehaviour
-{
+public class AmbientSoundShuffler : MonoBehaviour {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] ambientClips;
-    
-    void Update()
-    {
+
+    void Update() {
         PlayAmbientMusic();
     }
 

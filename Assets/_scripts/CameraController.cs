@@ -1,19 +1,16 @@
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
-{
+public class CameraController : MonoBehaviour {
     public float mouseSpeed = 100f;
     public Transform player;
     private float xRotation;
     private float yRotation;
 
-    private void Start()
-    {
+    private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
-    {
+    private void Update() {
         var mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
         var mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
 
