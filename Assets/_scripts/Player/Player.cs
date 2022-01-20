@@ -55,7 +55,7 @@ public class Player : NetworkBehaviour {
     }
 
     private void HpUpdate() {
-        hp.text = "HP: " + currentHealth;
+        GameManager.instance.hud.HP.text = "HP: " + currentHealth;
     }
 
     public void Setup() {
@@ -143,12 +143,12 @@ public class Player : NetworkBehaviour {
 
     public void DeadCanvasActive() {
         deathCanvas.SetActive(true);
-        canvas.SetActive(false);
+        GameManager.instance.hud.InGameHUD.SetActive(false);
     }
 
     public void DeadCanvasDeActive() {
         deathCanvas.SetActive(false);
-        canvas.SetActive(true);
+        GameManager.instance.hud.InGameHUD.SetActive(true);
     }
 
     public IEnumerator StartCountdown(float countdownValue) {
