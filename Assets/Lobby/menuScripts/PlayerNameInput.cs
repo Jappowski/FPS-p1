@@ -1,10 +1,8 @@
-using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerNameInput : MonoBehaviour
-{
+public class PlayerNameInput : MonoBehaviour {
     private const string PlayerPrefsNameKey = "PlayerName";
     [SerializeField] private Button ContinueButtton;
 
@@ -12,13 +10,11 @@ public class PlayerNameInput : MonoBehaviour
 
     public static string DisplayName { get; private set; }
 
-    private void start()
-    {
+    private void start() {
         SetUpInputField();
     }
 
-    private void SetUpInputField()
-    {
+    private void SetUpInputField() {
         if (!PlayerPrefs.HasKey(PlayerPrefsNameKey)) return;
 
         var defaultName = PlayerPrefs.GetString(PlayerPrefsNameKey);
@@ -26,13 +22,11 @@ public class PlayerNameInput : MonoBehaviour
         setPlayerName(defaultName);
     }
 
-    public void setPlayerName(string name)
-    {
+    public void setPlayerName(string name) {
         ContinueButtton.interactable = !string.IsNullOrEmpty(name);
     }
 
-    public void SavePlayerName()
-    {
+    public void SavePlayerName() {
         DisplayName = nameInputField.text;
         PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
     }

@@ -1,11 +1,8 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(CharacterController))]
-public class FPSController : NetworkBehaviour
-{
+public class FPSController : NetworkBehaviour {
     [HideInInspector] public bool canMove = true;
 
     private CharacterController characterController;
@@ -22,16 +19,14 @@ public class FPSController : NetworkBehaviour
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] jumpClips;
-    private void Start()
-    {
+
+    private void Start() {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (GameManager.instance.gameState == GameManager.GameState.InGame && isLocalPlayer)
-        {
+    private void Update() {
+        if (GameManager.instance.gameState == GameManager.GameState.InGame && isLocalPlayer) {
             var forward = transform.TransformDirection(Vector3.forward);
             var right = transform.TransformDirection(Vector3.right);
 
@@ -41,33 +36,28 @@ public class FPSController : NetworkBehaviour
             var movementDirectionY = moveDirection.y;
             moveDirection = forward * curSpeedX + right * curSpeedY;
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
+            if (Input.GetKeyDown(KeyCode.LeftShift)) {
                 animator.SetBool("SlowWalk", true);
             }
 
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
+            if (Input.GetKeyUp(KeyCode.LeftShift)) {
                 animator.SetBool("SlowWalk", false);
             }
 
             animator.SetFloat("Vertical", Input.GetAxis("Vertical"));
             animator.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
 
-            if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
-            {
+            if (Input.GetButton("Jump") && canMove && characterController.isGrounded) {
                 moveDirection.y = jumpSpeed;
                 var index = Random.Range(0, jumpClips.Length);
                 audioSource.clip = jumpClips[index];
                 audioSource.Play();
             }
-            else
-            {
+            else {
                 moveDirection.y = movementDirectionY;
             }
 
-            if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
-            {
+            if (Input.GetButton("Jump") && canMove && characterController.isGrounded) {
                 animator.SetTrigger("Jump");
             }
 
@@ -75,18 +65,16 @@ public class FPSController : NetworkBehaviour
 
             characterController.Move(moveDirection * Time.deltaTime);
 
-            if (canMove)
-            {
+            if (canMove) {
                 rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
                 rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
                 playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
             }
         }
-        if (isLocalPlayer)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
+
+        if (isLocalPlayer) {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
                 GameEvents.BroadcastOnEscClick();
             }
         }

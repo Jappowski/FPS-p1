@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +16,10 @@ public class HUD : MonoBehaviour {
     private void Update() {
         PlayAmbientMusicInGame();
     }
-    
+
     private void PlayAmbientMusicInGame() {
-        if ((GameManager.instance.gameState == GameManager.GameState.InGame) || (GameManager.instance.gameState == GameManager.GameState.Stop)) {
+        if ((GameManager.instance.gameState == GameManager.GameState.InGame) ||
+            (GameManager.instance.gameState == GameManager.GameState.Stop)) {
             ambientMusic.SetActive(true);
         }
         else {
@@ -43,13 +41,13 @@ public class HUD : MonoBehaviour {
             StopUi.SetActive(true);
             Debug.Log("ON");
         }
-        else  {
+        else {
             GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
             StopUi.SetActive(false);
             Debug.Log("OFF");
         }
     }
-    
+
     public void HostLobbyButton() {
         GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
     }

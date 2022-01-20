@@ -2,8 +2,7 @@ using Mirror;
 using Steamworks;
 using UnityEngine;
 
-public class SteamLobby : MonoBehaviour
-{
+public class SteamLobby : MonoBehaviour {
     [SerializeField] private GameObject buttons = null;
     private NetworkManager networkManager;
     protected Callback<LobbyCreated_t> lobbyCreated;
@@ -11,12 +10,10 @@ public class SteamLobby : MonoBehaviour
     protected Callback<LobbyEnter_t> lobbyEntered;
     private const string HostAddresKey = "HostAddress";
 
-    private void Start()
-    {
+    private void Start() {
         networkManager = GetComponent<NetworkManager>();
 
-        if (!SteamManager.Initialized)
-        {
+        if (!SteamManager.Initialized) {
             return;
         }
 
@@ -25,16 +22,13 @@ public class SteamLobby : MonoBehaviour
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
 
-    public void HostLobby()
-    {
+    public void HostLobby() {
         buttons.SetActive(false);
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
     }
 
-    private void OnLobbyCreated(LobbyCreated_t callBack)
-    {
-        if (callBack.m_eResult != EResult.k_EResultOK)
-        {
+    private void OnLobbyCreated(LobbyCreated_t callBack) {
+        if (callBack.m_eResult != EResult.k_EResultOK) {
             buttons.SetActive(true);
             return;
         }
@@ -45,15 +39,12 @@ public class SteamLobby : MonoBehaviour
             SteamUser.GetSteamID().ToString());
     }
 
-    private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
-    {
+    private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback) {
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
-    private void OnLobbyEntered(LobbyEnter_t callback)
-    {
-        if (NetworkServer.active)
-        {
+    private void OnLobbyEntered(LobbyEnter_t callback) {
+        if (NetworkServer.active) {
             return;
         }
 

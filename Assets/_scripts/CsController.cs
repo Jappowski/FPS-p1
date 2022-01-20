@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class CsController : MonoBehaviour
-{
+public class CsController : MonoBehaviour {
     private float accel;
     private float accelspeed;
     private float addspeed;
@@ -68,14 +67,12 @@ public class CsController : MonoBehaviour
     public float ZVelocity;
 
 
-    private void Start()
-    {
+    private void Start() {
         lastPos = player.position;
     }
 
 
-    private void Update()
-    {
+    private void Update() {
         #region
 
         moved = player.position - lastPos;
@@ -110,28 +107,24 @@ public class CsController : MonoBehaviour
             playerTopVelocity = udp.magnitude;
     }
 
-    public void SetMovementDir()
-    {
+    public void SetMovementDir() {
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
     }
 
 
-    private void QueueJump()
-    {
+    private void QueueJump() {
         if (Input.GetButtonDown("Jump") && IsGrounded) wishJump = true;
 
         if (!IsGrounded && Input.GetButtonDown("Jump")) JumpQueue = true;
-        if (IsGrounded && JumpQueue)
-        {
+        if (IsGrounded && JumpQueue) {
             wishJump = true;
             JumpQueue = false;
         }
     }
 
 
-    public void Accelerate(Vector3 wishdir, float wishspeed, float accel)
-    {
+    public void Accelerate(Vector3 wishdir, float wishspeed, float accel) {
         currentspeed = Vector3.Dot(playerVelocity, wishdir);
         addspeed = wishspeed - currentspeed;
         if (addspeed <= 0)
@@ -145,8 +138,7 @@ public class CsController : MonoBehaviour
     }
 
 
-    public void AirMove()
-    {
+    public void AirMove() {
         SetMovementDir();
 
         wishdir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -167,8 +159,7 @@ public class CsController : MonoBehaviour
             accel = airAcceleration;
 
 
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") != 0)
-        {
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") != 0) {
             if (wishspeed > sideStrafeSpeed)
                 wishspeed = sideStrafeSpeed;
             accel = sideStrafeAcceleration;
@@ -187,8 +178,7 @@ public class CsController : MonoBehaviour
             * 'sluggish' when it comes to cornering.
             */
 
-        void AirControl(Vector3 wishdir, float wishspeed)
-        {
+        void AirControl(Vector3 wishdir, float wishspeed) {
             if (Input.GetAxis("Horizontal") == 0 || wishspeed == 0)
                 return;
 
@@ -203,8 +193,7 @@ public class CsController : MonoBehaviour
             k *= airControl * dot * dot * Time.deltaTime;
 
 
-            if (dot > 0)
-            {
+            if (dot > 0) {
                 playerVelocity.x = playerVelocity.x * speed + wishdir.x * k;
                 playerVelocity.y = playerVelocity.y * speed + wishdir.y * k;
                 playerVelocity.z = playerVelocity.z * speed + wishdir.z * k;
@@ -222,8 +211,7 @@ public class CsController : MonoBehaviour
     /**
 		* Called every frame when the engine detects that the player is on the ground
 		*/
-    public void GroundMove()
-    {
+    public void GroundMove() {
         if (!wishJump)
             ApplyFriction(1.0f);
         else
@@ -244,8 +232,7 @@ public class CsController : MonoBehaviour
 
         playerVelocity.y = 0;
 
-        if (wishJump)
-        {
+        if (wishJump) {
             playerVelocity.y = jumpSpeed;
             wishJump = false;
         }
@@ -253,16 +240,14 @@ public class CsController : MonoBehaviour
         /**
             * Applies friction to the player, called in both the air and on the ground
             */
-        void ApplyFriction(float t)
-        {
+        void ApplyFriction(float t) {
             vec = playerVelocity;
             vec.y = 0f;
             speed = vec.magnitude;
             drop = 0f;
 
             /* Only if the player is on the ground then apply friction */
-            if (controller.isGrounded)
-            {
+            if (controller.isGrounded) {
                 control = speed < runDeacceleration ? runDeacceleration : speed;
                 drop = control * friction * Time.deltaTime * t;
             }
