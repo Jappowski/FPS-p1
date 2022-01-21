@@ -34,6 +34,8 @@ public class PlayerSetup : NetworkBehaviour {
         {
             if (obj == GameManager.GameState.Stop)
                 DisableComponents();
+            else if (obj == GameManager.GameState.Options)
+                DisableComponents();
             else
                 foreach (var VARIABLE in componentsToDisable)
                 {

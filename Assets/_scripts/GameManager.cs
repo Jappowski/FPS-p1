@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour {
         Start,
         Lobby,
         InGame,
-        Stop
+        Stop,
+        Options
     }
 }
