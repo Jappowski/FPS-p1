@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GunShot : NetworkBehaviour {
-    private Text ammoUi;
-    // public Animator animator;
-
+    private const string RELOAD = "reload";
+    
+    private Text ammoUi;    
     public int currentAmmo;
     public int maxAmmo = 30; //in mag
     public int maxReloadAmmo = 90;
@@ -22,6 +24,7 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
+    [SerializeField] private Animator fpAnimator;
     [SerializeField] private LayerMask mask;
     private float nextShot;
     public float reloadTime = 3f;
@@ -62,40 +65,51 @@ public class GunShot : NetworkBehaviour {
 
     private IEnumerator Reload() {
         isReloading = true;
+        if (maxReloadAmmo != 0) {
+            fpAnimator.SetTrigger(RELOAD);
+            yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
+        }
+
         if (currentAmmo == maxAmmo) {
             isReloading = false;
             yield break;
         }
-
-        if (maxReloadAmmo != 0) {
-            audioSource.clip = reloadSound1;
-            audioSource.Play();
-            yield return new WaitForSeconds(reloadTime - .25f);
-            audioSource.clip = reloadSound2;
-            audioSource.Play();
-            yield return new WaitForSeconds(.25f);
-            audioSource.clip = reloadSound3;
-            audioSource.Play();
-        }
-
-        if (maxReloadAmmo >= 30) {
-            maxReloadAmmo -= maxAmmo - currentAmmo;
-            currentAmmo = maxAmmo;
-        }
-        else if (maxReloadAmmo < 30 && maxReloadAmmo > 0) {
-            if (currentAmmo + maxReloadAmmo > 30) {
+        
+            if (maxReloadAmmo >= 30) {
                 maxReloadAmmo -= maxAmmo - currentAmmo;
                 currentAmmo = maxAmmo;
             }
-            else {
-                currentAmmo += maxReloadAmmo;
-                maxReloadAmmo = 0;
+            else if (maxReloadAmmo < 30 && maxReloadAmmo > 0) {
+                if (currentAmmo + maxReloadAmmo > 30) {
+                    maxReloadAmmo -= maxAmmo - currentAmmo;
+                    currentAmmo = maxAmmo;
+                }
+                else {
+                    currentAmmo += maxReloadAmmo;
+                    maxReloadAmmo = 0;
+                }
             }
-        }
 
-        isReloading = false;
+            isReloading = false;
     }
 
+    public void ReloadSoundPlay(int music) {
+        switch (music) {
+            case 1:
+                audioSource.clip = reloadSound1;
+                audioSource.Play();
+                break;
+            case 2:
+                audioSource.clip = reloadSound2;
+                audioSource.Play();
+                break;
+            case 3:
+                audioSource.clip = reloadSound3;
+                audioSource.Play();
+                break;
+        }
+        
+    }
     private void EmptyGunShot() {
         if (currentAmmo == 0 && maxReloadAmmo == 0 && Input.GetButton("Fire1")) {
             if (!audioSource.isPlaying) {
