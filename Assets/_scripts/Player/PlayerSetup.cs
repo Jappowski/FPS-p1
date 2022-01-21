@@ -19,10 +19,6 @@ public class PlayerSetup : NetworkBehaviour {
         else {
             playerBody.SetActive(false);
             TargetScript.enabled = false;
-            weapon.layer = 9;
-            foreach (Transform child in weaponHierarchy.GetComponentsInChildren<Transform>(true)) {
-                child.gameObject.layer = LayerMask.NameToLayer("Weapon");
-            }
         }
 
         GameEvents.onGameStateChange += OnGameStateChangeHandler;
