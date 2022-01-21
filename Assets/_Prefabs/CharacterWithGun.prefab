@@ -11817,6 +11817,7 @@ MonoBehaviour:
   disableOnDeathGameObjects:
   - {fileID: 1665545141943145582}
   - {fileID: 6733563573575506558}
+  - {fileID: 8055611513310967863}
   postproces: {fileID: 1649216162530576930}
   deathMessage: {fileID: 6106432923335951486}
   deathCanvas: {fileID: 6916538867505037612}
@@ -11885,11 +11886,11 @@ MonoBehaviour:
   syncInterval: 0.1
   componentsToDisable:
   - {fileID: 4534051876333142519}
-  - {fileID: 8055611513310967851}
   - {fileID: 5934423178072439759}
   - {fileID: 6733563573575506529}
   - {fileID: 9009687598911722127}
   - {fileID: 7752838999890736596}
+  - {fileID: 8055611513310967851}
   playerBody: {fileID: 1665545141943145582}
   weapon: {fileID: 6733563573575506558}
   TargetScript: {fileID: 9009687598911722127}

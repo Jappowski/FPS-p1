@@ -11,7 +11,7 @@ public class PlayerSetup : NetworkBehaviour {
 
     [SerializeField] private string remoteLayerName = "RemotePlayer";
 
-    void Start() {
+     void Start() {
         if (!isLocalPlayer) {
             DisableComponents();
             AssignRemoteLayer();
@@ -30,12 +30,16 @@ public class PlayerSetup : NetworkBehaviour {
     }
 
     private void OnGameStateChangeHandler(GameManager.GameState obj) {
-        if (obj == GameManager.GameState.Stop)
-            DisableComponents();
-        else
-            foreach (var VARIABLE in componentsToDisable) {
-                VARIABLE.enabled = true;
-            }
+        if (isLocalPlayer)
+        {
+            if (obj == GameManager.GameState.Stop)
+                DisableComponents();
+            else
+                foreach (var VARIABLE in componentsToDisable)
+                {
+                    VARIABLE.enabled = true;
+                }
+        }
     }
 
     void SetLayer(GameObject Weapon, int layer) {

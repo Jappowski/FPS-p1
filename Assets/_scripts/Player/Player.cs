@@ -10,7 +10,8 @@ public class Player : NetworkBehaviour {
     [SerializeField] private int maxhealth = 100;
     [SyncVar] private int currentHealth;
     [SerializeField] private Behaviour[] disableOnDeathScripts;
-    private bool[] wasEnabled;
+    private bool[] wasEnabledSrcipts;
+    private bool[] wasEnabledGO;
     [SerializeField] private ParticleSystem blood;
     [SerializeField] private GameObject[] disableOnDeathGameObjects;
     private CharacterController controller;
@@ -63,12 +64,13 @@ public class Player : NetworkBehaviour {
         _gunShot = GetComponent<GunShot>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         hp = GameManager.instance.hud.HP;
-        wasEnabled = new bool[disableOnDeathScripts.Length];
-        for (int i = 0; i < wasEnabled.Length; i++) {
-            wasEnabled[i] = disableOnDeathScripts[i].enabled;
-        }
-
-        SetDefaults();
+        
+            wasEnabledSrcipts = new bool[disableOnDeathScripts.Length];
+            for (int i = 0; i < wasEnabledSrcipts.Length; i++)
+            {
+                wasEnabledSrcipts[i] = disableOnDeathScripts[i].enabled;
+            }
+            SetDefaults();
     }
 
     [ClientRpc]
@@ -126,14 +128,14 @@ public class Player : NetworkBehaviour {
         deathRespawnAudioSource.Play();
     }
 
-    public void SetDefaults() {
+    public void SetDefaults()
+    {
         isDead = false;
         currentHealth = maxhealth;
-
-        for (int i = 0; i < disableOnDeathScripts.Length; i++) {
-            disableOnDeathScripts[i].enabled = wasEnabled[i];
-        }
-
+        for (int i = 0; i < disableOnDeathScripts.Length; i++)
+            {
+                disableOnDeathScripts[i].enabled = wasEnabledSrcipts[i];
+            }
         if (!isLocalPlayer) {
             foreach (var gameObject in disableOnDeathGameObjects) {
                 gameObject.SetActive(true);
