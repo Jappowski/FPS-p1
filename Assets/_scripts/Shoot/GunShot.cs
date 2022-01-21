@@ -80,8 +80,14 @@ public class GunShot : NetworkBehaviour {
             currentAmmo = maxAmmo;
         }
         else if (maxReloadAmmo < 30 && maxReloadAmmo > 0) {
-            currentAmmo = maxReloadAmmo;
-            maxReloadAmmo = 0;
+            if (currentAmmo + maxReloadAmmo > 30) {
+                maxReloadAmmo -= maxAmmo - currentAmmo;
+                currentAmmo = maxAmmo;
+            }
+            else {
+                currentAmmo += maxReloadAmmo;
+                maxReloadAmmo = 0;
+            }
         }
 
         isReloading = false;
