@@ -1,33 +1,40 @@
 using UnityEngine;
 
 public class Recoil : MonoBehaviour {
-    [SerializeField] private GameObject _camera;
 
-    [SerializeField] private Vector3 recoilUp;
-    public Vector3 startRotation;
-    public Vector3 currentRotation;
+    [SerializeField] private Player playerScript;
+
+    private bool isAiming;
+    
+    private Vector3 currentRotation;
+    private Vector3 targetRotation;
+
+    //Hipfire Recoil
+    [SerializeField] private float recoilX;
+    [SerializeField] private float recoilY;
+    [SerializeField] private float recoilZ;
+    
+    //ADS Recoil
+    [SerializeField] private float aimRecoilX;
+    [SerializeField] private float aimRecoilY;
+    [SerializeField] private float aimRecoilZ;
+
+    [SerializeField] private float snappiness;
+    [SerializeField] private float returnSpeed;
+
 
     void Start() {
-        startRotation = _camera.transform.localEulerAngles;
+        
     }
 
     void Update() {
-        if (Input.GetButton("Fire1") && !GunShot.isReloading) {
-            AddRecoil();
-        }
-
-        if (Input.GetButtonUp("Fire1")) {
-            StopRecoil();
-        }
+        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.fixedDeltaTime);
+        transform.localRotation = Quaternion.Euler(currentRotation);
     }
 
-    public void AddRecoil() {
-        currentRotation += recoilUp;
-        _camera.transform.localEulerAngles += currentRotation;
-    }
-
-    public void StopRecoil() {
-        currentRotation = startRotation;
-        _camera.transform.localEulerAngles = startRotation;
+    public void RecoilFire() {
+        if (isAiming) targetRotation += new Vector3(aimRecoilX, Random.Range(-aimRecoilY, aimRecoilY), Random.Range(-aimRecoilZ, aimRecoilZ));
+        else targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
     }
 }

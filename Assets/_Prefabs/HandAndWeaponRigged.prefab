@@ -62,6 +62,36 @@ Transform:
   m_Father: {fileID: 8135951017694736543}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &282917212335440541
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8578800879038395964}
+  m_Layer: 0
+  m_Name: Recoil
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8578800879038395964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282917212335440541}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -418.3666, y: -293.62173, z: -62.18173}
+  m_LocalScale: {x: 1.2694213, y: 1.2694213, z: 1.2694213}
+  m_Children: []
+  m_Father: {fileID: 2241519067716805234}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &369579829248909534
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,8 +217,9 @@ Transform:
   - {fileID: 2480425638630973544}
   - {fileID: 7182024133443433196}
   - {fileID: 6783766937356243560}
-  - {fileID: 8890831833936731600}
   - {fileID: 6216236325526373792}
+  - {fileID: 8890831833936731600}
+  - {fileID: 8578800879038395964}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -249,11 +280,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1763349297896133621}
   m_LocalRotation: {x: 1.0587913e-22, y: -0.00000005960465, z: -1.256074e-15, w: 1}
-  m_LocalPosition: {x: -0.33535278, y: 0.7618897, z: -0.57668936}
+  m_LocalPosition: {x: -0.3353578, y: 0.7619016, z: -0.57669437}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 2241519067716805234}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &9140542783255896371
 Camera:
@@ -1387,7 +1418,7 @@ Transform:
   m_LocalScale: {x: 71.924164, y: 71.924164, z: 71.924164}
   m_Children: []
   m_Father: {fileID: 2241519067716805234}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8149214542695660541
 SkinnedMeshRenderer:

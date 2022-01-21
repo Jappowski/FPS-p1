@@ -29,12 +29,15 @@ public class GunShot : NetworkBehaviour {
     private Image hitmarkerImage;
     private float hitmarkerDuration = 0.5f;
 
+    private Recoil recoilScript;
+
 
     private void Start() {
         currentAmmo = maxAmmo;
         ammoUi = GameManager.instance.hud.InGameHUD.GetComponentInChildren<Text>();
         hitmarkerImage = GameObject.Find("Hitmarker/Image").GetComponent<Image>();
         hitmarkerImage.color = new Color(1, 1, 1, 0);
+        recoilScript = transform.Find("Recoil").GetComponent<Recoil>();
     }
 
     private void Update() {
@@ -118,6 +121,8 @@ public class GunShot : NetworkBehaviour {
         var index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
+        
+        recoilScript.RecoilFire();
 
         if (!isLocalPlayer)
             return;
