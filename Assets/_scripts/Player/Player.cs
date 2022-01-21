@@ -120,6 +120,8 @@ public class Player : NetworkBehaviour {
         yield return new WaitForSeconds(5f);
         controller.enabled = true;
         DeadCanvasDeActive();
+        _gunShot.currentAmmo = 30;
+        _gunShot.maxReloadAmmo = 90;
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
