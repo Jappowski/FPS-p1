@@ -5676,7 +5676,7 @@ Transform:
   m_LocalScale: {x: 1.2694215, y: 1.2694215, z: 1.2694213}
   m_Children: []
   m_Father: {fileID: 3743039360693849679}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &4337071060795928195
 ParticleSystem:
@@ -10833,7 +10833,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4763345795038036649}
-  - {fileID: 2054030086289143516}
   - {fileID: 1507905603708201636}
   m_Father: {fileID: 5130847591492178587}
   m_RootOrder: 1
@@ -12114,7 +12113,7 @@ GameObject:
   - component: {fileID: 2054030086289143516}
   - component: {fileID: 2028723696877732702}
   - component: {fileID: 2583480739947791301}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MuzzleFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12129,11 +12128,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7565499368384155068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.05, y: -0.65, z: 3.49}
+  m_LocalPosition: {x: -0.157, y: 0.511, z: 2.484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3743039360693849679}
-  m_RootOrder: 1
+  m_Father: {fileID: 8815820249115985218}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2028723696877732702
 ParticleSystem:
@@ -12218,7 +12217,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 0.1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -12763,7 +12762,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 90
+    angle: 15.05
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -13522,7 +13521,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   UVModule:
     serializedVersion: 2
-    enabled: 0
+    enabled: 1
     mode: 0
     timeMode: 0
     fps: 30
@@ -13633,8 +13632,8 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     speedRange: {x: 0, y: 1}
-    tilesX: 1
-    tilesY: 1
+    tilesX: 8
+    tilesY: 4
     animationType: 0
     rowIndex: 0
     cycles: 1
@@ -16919,7 +16918,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9f3080141f1f64197825663e067f94f8, type: 2}
+  - {fileID: 2100000, guid: 3bfa2f095c911d649bf4cb92a55ac974, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17975,12 +17974,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3555b184d7701024fbdb4cd819ba5eb8, type: 3}
---- !u!1 &8148073177335029752 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1463855815918500040, guid: 3555b184d7701024fbdb4cd819ba5eb8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7296795091384362800}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8815820249115985218 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2241519067716805234, guid: 3555b184d7701024fbdb4cd819ba5eb8,
@@ -17996,6 +17989,12 @@ GameObject:
 --- !u!20 &1989138864693642755 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 9140542783255896371, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7296795091384362800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8148073177335029752 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1463855815918500040, guid: 3555b184d7701024fbdb4cd819ba5eb8,
     type: 3}
   m_PrefabInstance: {fileID: 7296795091384362800}
   m_PrefabAsset: {fileID: 0}
