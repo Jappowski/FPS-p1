@@ -11370,8 +11370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerScript: {fileID: 9009687598911722127}
-  recoilX: -2
-  recoilY: 2
+  recoilX: -1.5
+  recoilY: 1.5
   recoilZ: 0.35
   aimRecoilX: -1.5
   aimRecoilY: 1
