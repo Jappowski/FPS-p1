@@ -8,6 +8,8 @@ public class OptionsMenu : MonoBehaviour {
     [SerializeField] private AudioMixer ambientMixer;
     private Slider overallSlider;
     private Slider ambientSlider;
+    
+    private float soundOffValue = -80.0f;
 
     private void Start() {
         overallSlider = GameObject.Find("OptionsUI/Background/OverallVolumeSlider").GetComponent<Slider>();
@@ -15,21 +17,11 @@ public class OptionsMenu : MonoBehaviour {
     }
 
     public void SetOverallVolume(float volume) {
-        if (volume > overallSlider.minValue) {
-            mainMixer.SetFloat("Overall", volume);
-        }
-        else {
-            mainMixer.SetFloat("Overall", -80.0f);
-        }
+        mainMixer.SetFloat("Overall", volume > overallSlider.minValue ? volume : soundOffValue);
     }
 
     public void SetAmbientVolume(float volume) {
-        if (volume > ambientSlider.minValue) {
-            ambientMixer.SetFloat("Ambient", volume);
-        }
-        else {
-            ambientMixer.SetFloat("Ambient", -80.0f);
-        }
+        ambientMixer.SetFloat("Ambient", volume > ambientSlider.minValue ? volume : soundOffValue);
     }
 
     public void SetFullscreen(bool isFullscreen) {
