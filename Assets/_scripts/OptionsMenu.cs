@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class OptionsMenu : MonoBehaviour {
     [SerializeField] private AudioMixer mainMixer;
     [SerializeField] private AudioMixer ambientMixer;
+    
     private Slider overallSlider;
     private Slider ambientSlider;
     
@@ -26,9 +27,5 @@ public class OptionsMenu : MonoBehaviour {
 
     public void SetFullscreen(bool isFullscreen) {
         Screen.fullScreen = isFullscreen;
-    }
-
-    public void SetQuality(int qualityIndex) {
-        QualitySettings.SetQualityLevel(qualityIndex);
     }
 }

@@ -35,7 +35,11 @@
             <e p="WeaponIK.cs" t="Include" />
           </e>
         </e>
+        <e p="AnimationHandler.cs" t="Include" />
         <e p="CharacterAnimationSounds.cs" t="Include" />
+        <e p="Fantasy Skybox FREE" t="Include">
+          <e p="README.txt" t="Include" />
+        </e>
         <e p="Lobby" t="Include">
           <e p="menuScripts" t="Include">
             <e p="JoinLobbyMenu.cs" t="Include" />
@@ -644,6 +648,7 @@
           <e p="55-Mirror__Network Room Player-NewNetworkRoomPlayer.cs.txt" t="Include" />
           <e p="56-Mirror__Network Discovery-NewNetworkDiscovery.cs.txt" t="Include" />
         </e>
+        <e p="SkyboxManager.cs" t="Include" />
         <e p="TextMesh Pro" t="Include">
           <e p="Examples &amp; Extras" t="Include">
             <e p="Fonts" t="Include">

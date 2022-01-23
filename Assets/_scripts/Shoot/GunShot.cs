@@ -28,7 +28,6 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private Animator fpAnimator;
     [SerializeField] private LayerMask mask;
     private float nextShot;
-    public float reloadTime = 3f;
 
     private Image hitmarkerImage;
     private float hitmarkerDuration = 0.5f;
@@ -67,6 +66,7 @@ public class GunShot : NetworkBehaviour {
     private IEnumerator Reload() {
         isReloading = true;
         if (maxReloadAmmo != 0) {
+            fpAnimator.speed = 1;
             fpAnimator.SetTrigger(RELOAD);
             yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
         }
@@ -134,10 +134,12 @@ public class GunShot : NetworkBehaviour {
     private void Shoot() {
         currentAmmo--;
         var index = Random.Range(0, shootingClips.Length);
-        fpAnimator.SetTrigger(SHOOT);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
         
+        fpAnimator.SetTrigger(SHOOT);
+        fpAnimator.speed = 7;
+
         recoilScript.RecoilFire();
 
         if (!isLocalPlayer)

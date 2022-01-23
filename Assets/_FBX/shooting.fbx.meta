@@ -1,11 +1,14 @@
 fileFormatVersion: 2
-guid: c41b3ad416df3134b8467c36f242dbab
+guid: 7c40def8070840f43b08140184ba1dd8
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: -623603649343465320
-    second: Scene
+      74: 6652763523632262317
+    second: Armature|Shot
+  - first:
+      74: 6397333496345123807
+    second: Armature.001|Shot
   externalObjects: {}
   materials:
     materialImportMode: 2

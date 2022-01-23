@@ -11530,7 +11530,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.7083333
+  - time: 0.75
     functionName: PlayMusic
     data: 
     objectReferenceParameter: {fileID: 0}
