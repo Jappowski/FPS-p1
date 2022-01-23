@@ -11843,6 +11843,7 @@ MonoBehaviour:
   weapon: {fileID: 6733563573575506558}
   TargetScript: {fileID: 9009687598911722127}
   weaponHierarchy: {fileID: 8815820249115985218}
+  playerHands: {fileID: 8148073177335029752}
   remoteLayerName: RemotePlayer
 --- !u!114 &-73378191043567747
 MonoBehaviour:

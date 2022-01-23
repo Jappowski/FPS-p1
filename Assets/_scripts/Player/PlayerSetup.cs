@@ -8,16 +8,19 @@ public class PlayerSetup : NetworkBehaviour {
     [SerializeField] private GameObject weapon;
     [SerializeField] private Behaviour TargetScript;
     [SerializeField] private Transform weaponHierarchy;
+    [SerializeField] private GameObject playerHands;
 
     [SerializeField] private string remoteLayerName = "RemotePlayer";
 
      void Start() {
         if (!isLocalPlayer) {
             DisableComponents();
+            playerHands.SetActive(false);
             AssignRemoteLayer();
         }
         else {
             playerBody.SetActive(false);
+            weapon.SetActive(false);
             TargetScript.enabled = false;
         }
 
