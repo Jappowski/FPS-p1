@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class GunShot : NetworkBehaviour {
     private const string RELOAD = "reload";
+    private const string SHOOT = "shoot";
     
     private Text ammoUi;    
     public int currentAmmo;
@@ -52,7 +53,7 @@ public class GunShot : NetworkBehaviour {
             return;
         }
 
-        if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R)) {
+        if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
             StartCoroutine(Reload());
             return;
         }
@@ -75,22 +76,22 @@ public class GunShot : NetworkBehaviour {
             yield break;
         }
         
-            if (maxReloadAmmo >= 30) {
+        if (maxReloadAmmo >= 30) { 
+            maxReloadAmmo -= maxAmmo - currentAmmo;
+            currentAmmo = maxAmmo;
+        }
+        else if (maxReloadAmmo < 30 && maxReloadAmmo > 0) {
+            if (currentAmmo + maxReloadAmmo > 30) {
                 maxReloadAmmo -= maxAmmo - currentAmmo;
                 currentAmmo = maxAmmo;
             }
-            else if (maxReloadAmmo < 30 && maxReloadAmmo > 0) {
-                if (currentAmmo + maxReloadAmmo > 30) {
-                    maxReloadAmmo -= maxAmmo - currentAmmo;
-                    currentAmmo = maxAmmo;
-                }
-                else {
-                    currentAmmo += maxReloadAmmo;
-                    maxReloadAmmo = 0;
-                }
+            else {
+                currentAmmo += maxReloadAmmo;
+                maxReloadAmmo = 0;
             }
+        }
 
-            isReloading = false;
+        isReloading = false;
     }
 
     public void ReloadSoundPlay(int music) {
@@ -133,6 +134,7 @@ public class GunShot : NetworkBehaviour {
     private void Shoot() {
         currentAmmo--;
         var index = Random.Range(0, shootingClips.Length);
+        fpAnimator.SetTrigger(SHOOT);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
         
