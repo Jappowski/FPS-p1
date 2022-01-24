@@ -158,8 +158,10 @@ public class GunShot : NetworkBehaviour {
                 Invoke(nameof(HitDisable), hitmarkerDuration);
             }
 
-            var ImpactGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(ImpactGO, 3f);
+            if (!hit.collider.CompareTag("Ceiling")) {
+                var ImpactGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(ImpactGO, 3f);
+            }
         }
     }
 
