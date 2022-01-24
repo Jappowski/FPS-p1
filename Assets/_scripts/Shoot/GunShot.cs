@@ -52,21 +52,25 @@ public class GunShot : NetworkBehaviour {
             return;
         }
 
-        if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
-            StartCoroutine(Reload());
-            return;
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Shoot")) {
+            if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
+                StartCoroutine(Reload());
+                return;
+            }
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= nextShot) {
-            nextShot = Time.time + 1f / fireRate;
-            Shoot();
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Reload")) {
+            if (Input.GetButton("Fire1") && Time.time >= nextShot) {
+                nextShot = Time.time + 1f / fireRate;
+                Shoot();
+            }
         }
     }
 
     private IEnumerator Reload() {
         isReloading = true;
         if (maxReloadAmmo != 0) {
-            fpAnimator.speed = 1;
+            fpAnimator.speed = 2;
             fpAnimator.SetTrigger(RELOAD);
             yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
         }
@@ -138,13 +142,13 @@ public class GunShot : NetworkBehaviour {
         audioSource.Play();
         
         fpAnimator.SetTrigger(SHOOT);
-        fpAnimator.speed = 7;
+        fpAnimator.speed = 6;
 
         recoilScript.RecoilFire();
 
         if (!isLocalPlayer)
             return;
-
+        
         CmdOnShoot();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)) {
