@@ -11373,8 +11373,8 @@ MonoBehaviour:
   recoilX: -1.5
   recoilY: 1.5
   recoilZ: 0.35
-  aimRecoilX: -1.5
-  aimRecoilY: 1
+  aimRecoilX: -1
+  aimRecoilY: 0.75
   aimRecoilZ: 0.3
   snappiness: 6
   returnSpeed: 3
@@ -11814,10 +11814,9 @@ MonoBehaviour:
   reloadSound3: {fileID: 8300000, guid: 75b3dbbb73acebe48841684c0bcb077f, type: 3}
   emptyGunSound: {fileID: 8300000, guid: 9bf67e9c88b5a0147b6e15402c01b8c9, type: 3}
   fpAnimator: {fileID: 925579611258892712}
-  mask:
-    serializedVersion: 2
-    m_Bits: 256
-  reloadTime: 1.5
+  handAndWeaponRigged: {fileID: 6644535564954527610}
+  inGameUI: {fileID: 5700646343098662606, guid: 3b3ef2b2e4194ac44942abfbbe5956a3,
+    type: 3}
 --- !u!114 &7752838999890736596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12133,7 +12132,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8815820249115985218}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2028723696877732702
 ParticleSystem:
@@ -17757,10 +17756,20 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3963972259955604995, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4029443052815097653, guid: 3555b184d7701024fbdb4cd819ba5eb8,
         type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140300772939595850, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+        type: 3}
+      propertyPath: m_Name
+      value: HandAndWeapon
       objectReference: {fileID: 0}
     - target: {fileID: 4179555767726396903, guid: 3555b184d7701024fbdb4cd819ba5eb8,
         type: 3}
@@ -17928,11 +17937,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6683304236034666076, guid: aba293c57e21c0c4aaca394bf209670b,
         type: 3}
-    - target: {fileID: 8578800879038395964, guid: 3555b184d7701024fbdb4cd819ba5eb8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 8646105894865188347, guid: 3555b184d7701024fbdb4cd819ba5eb8,
         type: 3}
       propertyPath: m_Layer
@@ -17947,11 +17951,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8890831833936731600, guid: 3555b184d7701024fbdb4cd819ba5eb8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9140542783255896371, guid: 3555b184d7701024fbdb4cd819ba5eb8,
         type: 3}
@@ -17975,9 +17974,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3555b184d7701024fbdb4cd819ba5eb8, type: 3}
---- !u!4 &8815820249115985218 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2241519067716805234, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+--- !u!1 &8148073177335029752 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1463855815918500040, guid: 3555b184d7701024fbdb4cd819ba5eb8,
     type: 3}
   m_PrefabInstance: {fileID: 7296795091384362800}
   m_PrefabAsset: {fileID: 0}
@@ -17993,9 +17992,15 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 7296795091384362800}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8148073177335029752 stripped
+--- !u!1 &6644535564954527610 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1463855815918500040, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+  m_CorrespondingSourceObject: {fileID: 4140300772939595850, guid: 3555b184d7701024fbdb4cd819ba5eb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7296795091384362800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8815820249115985218 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2241519067716805234, guid: 3555b184d7701024fbdb4cd819ba5eb8,
     type: 3}
   m_PrefabInstance: {fileID: 7296795091384362800}
   m_PrefabAsset: {fileID: 0}

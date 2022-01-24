@@ -8,8 +8,9 @@ using Random = UnityEngine.Random;
 public class GunShot : NetworkBehaviour {
     private const string RELOAD = "reload";
     private const string SHOOT = "shoot";
-    
-    private Text ammoUi;    
+    private const string ZOOM = "zoom";
+
+    private Text ammoUi;
     public int currentAmmo;
     public int maxAmmo = 30; //in mag
     public int maxReloadAmmo = 90;
@@ -26,8 +27,11 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
     [SerializeField] private Animator fpAnimator;
-    [SerializeField] private LayerMask mask;
+    [SerializeField] private GameObject handAndWeaponRigged;
+    [SerializeField] private GameObject inGameUI;
     private float nextShot;
+
+    private Coroutine coroutine;
 
     private Image hitmarkerImage;
     private float hitmarkerDuration = 0.5f;
@@ -52,18 +56,22 @@ public class GunShot : NetworkBehaviour {
             return;
         }
 
-        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Shoot")) {
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(SHOOT)) {
             if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
                 StartCoroutine(Reload());
                 return;
             }
         }
 
-        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Reload")) {
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(RELOAD)) {
             if (Input.GetButton("Fire1") && Time.time >= nextShot) {
                 nextShot = Time.time + 1f / fireRate;
                 Shoot();
             }
+        }
+
+        if (coroutine == null) {
+            coroutine = StartCoroutine(Zoom());
         }
     }
 
@@ -79,8 +87,8 @@ public class GunShot : NetworkBehaviour {
             isReloading = false;
             yield break;
         }
-        
-        if (maxReloadAmmo >= 30) { 
+
+        if (maxReloadAmmo >= 30) {
             maxReloadAmmo -= maxAmmo - currentAmmo;
             currentAmmo = maxAmmo;
         }
@@ -113,8 +121,8 @@ public class GunShot : NetworkBehaviour {
                 audioSource.Play();
                 break;
         }
-        
     }
+
     private void EmptyGunShot() {
         if (currentAmmo == 0 && maxReloadAmmo == 0 && Input.GetButton("Fire1")) {
             if (!audioSource.isPlaying) {
@@ -140,7 +148,7 @@ public class GunShot : NetworkBehaviour {
         var index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
-        
+
         fpAnimator.SetTrigger(SHOOT);
         fpAnimator.speed = 6;
 
@@ -148,7 +156,7 @@ public class GunShot : NetworkBehaviour {
 
         if (!isLocalPlayer)
             return;
-        
+
         CmdOnShoot();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)) {
@@ -163,6 +171,24 @@ public class GunShot : NetworkBehaviour {
                 Destroy(ImpactGO, 3f);
             }
         }
+    }
+
+    [Client]
+    private IEnumerator Zoom() {
+        if (Input.GetKey(KeyCode.Mouse1)) {
+            fpAnimator.speed = 2.5f;
+            fpAnimator.SetBool(ZOOM, true);
+            yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.05f);
+            inGameUI.SetActive(false);
+            handAndWeaponRigged.SetActive(false);
+        }
+        else {
+            handAndWeaponRigged.SetActive(true);
+            inGameUI.SetActive(true);
+            fpAnimator.SetBool(ZOOM, false);
+        }
+
+        coroutine = null;
     }
 
     private void HitActive() {
