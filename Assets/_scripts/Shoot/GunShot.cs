@@ -25,6 +25,8 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
+    [SerializeField] private AudioClip zoomIn;
+    [SerializeField] private AudioClip zoomOut;
     [SerializeField] private Animator fpAnimator;
     [SerializeField] private GameObject handAndWeapon;
     private Image crosshair;
@@ -39,6 +41,8 @@ public class GunShot : NetworkBehaviour {
     private float smooth = 20;
 
     [SerializeField] private GameObject zoomScope;
+
+    private float rightMouseClickTimer;
 
     private Recoil recoilScript;
     
@@ -76,9 +80,13 @@ public class GunShot : NetworkBehaviour {
             }
         }
 
+        MeasureRightMouseButtonClickDuration();
+
+        PlayZoomInSound();
+        
         if (!isReloading) {
-            if (Input.GetKeyDown(KeyCode.Mouse1)) {
-                StartCoroutine(ZoomIn());
+            if (Input.GetKey(KeyCode.Mouse1)) {
+                ZoomIn();
             }
             else if (Input.GetKeyUp(KeyCode.Mouse1)) {
                 ZoomOut();
@@ -164,15 +172,19 @@ public class GunShot : NetworkBehaviour {
         var index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
-
         if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM) &&
             !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)) {
             fpAnimator.SetTrigger(SHOOT);
             fpAnimator.speed = 6;
             CmdOnShoot();
         }
-
-        recoilScript.RecoilFire();
+        
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM)) {
+            recoilScript.RecoilFire();
+        }
+        else {
+            recoilScript.RecoilFireZoom();
+        }
 
         if (!isLocalPlayer)
             return;
@@ -192,17 +204,36 @@ public class GunShot : NetworkBehaviour {
         }
     }
 
-    private IEnumerator ZoomIn() {
+    private void MeasureRightMouseButtonClickDuration() {
+        if (!isReloading) {
+            if (Input.GetKey(KeyCode.Mouse1)) {
+                rightMouseClickTimer += Time.deltaTime;
+            }
+            else {
+                rightMouseClickTimer = 0;
+            }
+        }
+    }
+
+    private void PlayZoomInSound() {
+        if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            audioSource.PlayOneShot(zoomIn);
+        }
+    }
+
+    private void ZoomIn() {
         fpAnimator.speed = 2.5f;
         fpAnimator.SetBool(ZOOM, true);
-        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.03f);
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
-        handAndWeapon.SetActive(false);
-        crosshair.color = new Color(1, 1, 1, 0);
-        zoomScope.SetActive(true);
+        if (rightMouseClickTimer >= fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.05f) {
+            camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
+            handAndWeapon.SetActive(false);
+            crosshair.color = new Color(1, 1, 1, 0);
+            zoomScope.SetActive(true);
+        }
     }
 
     private void ZoomOut() {
+        audioSource.PlayOneShot(zoomOut);
         zoomScope.SetActive(false);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);
         fpAnimator.SetBool(ZOOM, false);
