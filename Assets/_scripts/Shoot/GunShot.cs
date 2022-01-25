@@ -38,9 +38,10 @@ public class GunShot : NetworkBehaviour {
     private int zoomCameraFOV = 30;
     private float smooth = 20;
 
+    [SerializeField] private GameObject zoomScope;
+
     private Recoil recoilScript;
-
-
+    
     private void Start() {
         currentAmmo = maxAmmo;
         ammoUi = GameManager.instance.hud.InGameHUD.GetComponentInChildren<Text>();
@@ -90,6 +91,7 @@ public class GunShot : NetworkBehaviour {
     }
 
     private IEnumerator Reload() {
+        zoomScope.SetActive(false);
         isReloading = true;
         if (maxReloadAmmo != 0) {
             fpAnimator.speed = 2;
@@ -197,9 +199,11 @@ public class GunShot : NetworkBehaviour {
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
         handAndWeapon.SetActive(false);
         crosshair.color = new Color(1, 1, 1, 0);
+        zoomScope.SetActive(true);
     }
 
     private void ZoomOut() {
+        zoomScope.SetActive(false);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);
         fpAnimator.SetBool(ZOOM, false);
         handAndWeapon.SetActive(true);
