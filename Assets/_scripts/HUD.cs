@@ -7,6 +7,10 @@ public class HUD : MonoBehaviour {
     [SerializeField] public GameObject OptionsUi;
     [SerializeField] public GameObject InGameHUD;
     [SerializeField] private GameObject ambientMusic;
+    [SerializeField] public GameObject ZoomCrosshair;
+    [SerializeField] public Text ammoUi;
+    [SerializeField] public Image hitmarkerImage;
+    [SerializeField] public Image crosshair;
     [SerializeField] public Text HP;
 
     private bool isLobby;
