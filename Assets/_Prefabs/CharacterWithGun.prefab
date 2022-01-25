@@ -11369,8 +11369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c72405c4daa2440aabf2a167d626ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerScript: {fileID: 9009687598911722127}
-  isAiming: 0
   recoilX: -1.5
   recoilY: 1.5
   recoilZ: 0.35
@@ -11814,12 +11812,12 @@ MonoBehaviour:
   reloadSound2: {fileID: 8300000, guid: 04171aaf020bb394990939135d93859f, type: 3}
   reloadSound3: {fileID: 8300000, guid: 75b3dbbb73acebe48841684c0bcb077f, type: 3}
   emptyGunSound: {fileID: 8300000, guid: 9bf67e9c88b5a0147b6e15402c01b8c9, type: 3}
+  zoomIn: {fileID: 8300000, guid: 20e0d9aafd619f44193b221bc870710b, type: 3}
+  zoomOut: {fileID: 8300000, guid: 849fd84b379c2194cb0830f196dde572, type: 3}
   fpAnimator: {fileID: 925579611258892712}
   handAndWeapon: {fileID: 6644535564954527610}
   recoilScript: {fileID: 8650845232250101618}
   camera: {fileID: 8055611513310967851}
-  zoomScope: {fileID: 2010720715476692822, guid: 6a885f1a52cb62a4fae7070bb5d672dc,
-    type: 3}
 --- !u!114 &7752838999890736596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13163,8 +13161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c72405c4daa2440aabf2a167d626ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerScript: {fileID: 0}
-  isAiming: 0
   recoilX: -2
   recoilY: 2
   recoilZ: 0.35

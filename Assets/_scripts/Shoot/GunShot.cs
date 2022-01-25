@@ -26,6 +26,8 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound2;
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
+    [SerializeField] private AudioClip zoomIn;
+    [SerializeField] private AudioClip zoomOut;
     [SerializeField] private Animator fpAnimator;
     [SerializeField] private GameObject handAndWeapon;
     [SerializeField] private Recoil recoilScript;
@@ -179,7 +181,12 @@ public class GunShot : NetworkBehaviour {
             CmdOnShoot();
         }
 
-        recoilScript.RecoilFire();
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM)) {
+            recoilScript.RecoilFire();
+        }
+        else {
+            recoilScript.RecoilFireZoom();
+        }
 
         if (!isLocalPlayer)
             return;
@@ -201,11 +208,11 @@ public class GunShot : NetworkBehaviour {
 
     private IEnumerator ZoomIn() {
         isZoomActive = true;
-        fpAnimator.speed = 2.5f;
+        fpAnimator.speed = 3f;
         fpAnimator.SetBool(ZOOM, true);
-        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length);
+        audioSource.PlayOneShot(zoomIn);
+        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.1f);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
-        
         handAndWeapon.SetActive(false);
         GameManager.instance.hud.crosshair.color = new Color(1, 1, 1, 0);
         GameManager.instance.hud.ZoomCrosshair.SetActive(true);
@@ -214,12 +221,12 @@ public class GunShot : NetworkBehaviour {
     }
 
     private IEnumerator ZoomOut() {
+        audioSource.PlayOneShot(zoomOut);
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);
         fpAnimator.SetBool(ZOOM, false);
         handAndWeapon.SetActive(true);
         GameManager.instance.hud.crosshair.color = Color.white;
-
         isZoomActive = false;
         yield return null;
         zoomOutCor = null;
