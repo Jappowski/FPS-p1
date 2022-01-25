@@ -4,7 +4,7 @@ public class Recoil : MonoBehaviour {
 
     [SerializeField] private Player playerScript;
 
-    private bool isAiming;
+    public bool isAiming;
     
     private Vector3 currentRotation;
     private Vector3 targetRotation;

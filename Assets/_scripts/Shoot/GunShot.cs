@@ -1,14 +1,13 @@
-using System;
 using System.Collections;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class GunShot : NetworkBehaviour {
     private const string RELOAD = "reload";
     private const string SHOOT = "shoot";
     private const string ZOOM = "zoom";
+    private const string ZOOM_OUT = "zoomout";
 
     private Text ammoUi;
     public int currentAmmo;
@@ -27,14 +26,17 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip reloadSound3;
     [SerializeField] private AudioClip emptyGunSound;
     [SerializeField] private Animator fpAnimator;
-    [SerializeField] private GameObject handAndWeaponRigged;
-    [SerializeField] private GameObject inGameUI;
+    [SerializeField] private GameObject handAndWeapon;
+    private Image crosshair;
     private float nextShot;
-
-    private Coroutine coroutine;
 
     private Image hitmarkerImage;
     private float hitmarkerDuration = 0.5f;
+
+    [SerializeField] private Camera camera;
+    private int normalCameraFOV = 60;
+    private int zoomCameraFOV = 30;
+    private float smooth = 20;
 
     private Recoil recoilScript;
 
@@ -45,6 +47,7 @@ public class GunShot : NetworkBehaviour {
         hitmarkerImage = GameObject.Find("Hitmarker/Image").GetComponent<Image>();
         hitmarkerImage.color = new Color(1, 1, 1, 0);
         recoilScript = transform.Find("Recoil").GetComponent<Recoil>();
+        crosshair = GameObject.Find("IngameHUD/Crosshair").GetComponent<Image>();
     }
 
     private void Update() {
@@ -56,22 +59,33 @@ public class GunShot : NetworkBehaviour {
             return;
         }
 
-        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(SHOOT)) {
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM)
+            && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)
+            && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(SHOOT)) {
             if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
                 StartCoroutine(Reload());
                 return;
             }
         }
 
-        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(RELOAD)) {
+        if (!isReloading && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)) {
             if (Input.GetButton("Fire1") && Time.time >= nextShot) {
                 nextShot = Time.time + 1f / fireRate;
                 Shoot();
             }
         }
 
-        if (coroutine == null) {
-            coroutine = StartCoroutine(Zoom());
+        if (!isReloading) {
+            if (Input.GetKeyDown(KeyCode.Mouse1)) {
+                StartCoroutine(ZoomIn());
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1)) {
+                ZoomOut();
+            }
+            else if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
+                ZoomOut();
+                StartCoroutine(Reload());
+            }
         }
     }
 
@@ -149,15 +163,18 @@ public class GunShot : NetworkBehaviour {
         audioSource.clip = shootingClips[index];
         audioSource.Play();
 
-        fpAnimator.SetTrigger(SHOOT);
-        fpAnimator.speed = 6;
+        if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM) &&
+            !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)) {
+            fpAnimator.SetTrigger(SHOOT);
+            fpAnimator.speed = 6;
+            CmdOnShoot();
+        }
 
         recoilScript.RecoilFire();
 
         if (!isLocalPlayer)
             return;
 
-        CmdOnShoot();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)) {
             if (hit.collider.CompareTag("Player")) {
@@ -173,22 +190,20 @@ public class GunShot : NetworkBehaviour {
         }
     }
 
-    [Client]
-    private IEnumerator Zoom() {
-        if (Input.GetKey(KeyCode.Mouse1)) {
-            fpAnimator.speed = 2.5f;
-            fpAnimator.SetBool(ZOOM, true);
-            yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.05f);
-            inGameUI.SetActive(false);
-            handAndWeaponRigged.SetActive(false);
-        }
-        else {
-            handAndWeaponRigged.SetActive(true);
-            inGameUI.SetActive(true);
-            fpAnimator.SetBool(ZOOM, false);
-        }
+    private IEnumerator ZoomIn() {
+        fpAnimator.speed = 2.5f;
+        fpAnimator.SetBool(ZOOM, true);
+        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.03f);
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
+        handAndWeapon.SetActive(false);
+        crosshair.color = new Color(1, 1, 1, 0);
+    }
 
-        coroutine = null;
+    private void ZoomOut() {
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);
+        fpAnimator.SetBool(ZOOM, false);
+        handAndWeapon.SetActive(true);
+        crosshair.color = Color.white;
     }
 
     private void HitActive() {

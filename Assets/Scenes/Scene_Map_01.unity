@@ -4810,6 +4810,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 114
       objectReference: {fileID: 0}
+    - target: {fileID: 8281367304007697355, guid: f1f2d3542c2f411438f73f53491cd8f2,
+        type: 3}
+      propertyPath: m_Name
+      value: IngameHUD
+      objectReference: {fileID: 0}
     - target: {fileID: 8281367304007697357, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
       propertyPath: m_UiScaleMode
@@ -4829,6 +4834,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281367304963145034, guid: f1f2d3542c2f411438f73f53491cd8f2,
+        type: 3}
+      propertyPath: m_Name
+      value: Crosshair
       objectReference: {fileID: 0}
     - target: {fileID: 8281367304963145035, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
@@ -4859,17 +4869,17 @@ PrefabInstance:
     - target: {fileID: 8281367304963145036, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.8773585
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8281367304963145036, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.41618294
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8281367304963145036, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8371721438221512321, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
