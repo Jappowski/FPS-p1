@@ -11816,9 +11816,10 @@ MonoBehaviour:
   emptyGunSound: {fileID: 8300000, guid: 9bf67e9c88b5a0147b6e15402c01b8c9, type: 3}
   fpAnimator: {fileID: 925579611258892712}
   handAndWeapon: {fileID: 6644535564954527610}
+  recoilScript: {fileID: 8650845232250101618}
+  camera: {fileID: 8055611513310967851}
   zoomScope: {fileID: 2010720715476692822, guid: 6a885f1a52cb62a4fae7070bb5d672dc,
     type: 3}
-  camera: {fileID: 8055611513310967851}
 --- !u!114 &7752838999890736596
 MonoBehaviour:
   m_ObjectHideFlags: 0
