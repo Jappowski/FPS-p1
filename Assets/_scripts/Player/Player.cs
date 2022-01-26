@@ -36,9 +36,10 @@ public class Player : NetworkBehaviour {
 
     [SerializeField] private AudioSource gettingHitAudioSource;
     [SerializeField] private AudioClip[] gettingHitSounds;
-
+    private Transform startpos;
     private void Start() {
         controller = GetComponent<CharacterController>();
+        NetworkManager.RegisterStartPosition(transform);
     }
 
     void Update() {
@@ -118,14 +119,13 @@ public class Player : NetworkBehaviour {
 
     private IEnumerator Respawn() {
         yield return new WaitForSeconds(5f);
-        controller.enabled = true;
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
         SetDefaults();
-        Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = _spawnPoint.position;
-        transform.rotation = _spawnPoint.rotation;
+        var _spawnPoint = NetworkManager.singleton.GetStartPosition();
+        yield return transform.position = _spawnPoint.position;
+        controller.enabled = true;
         deathRespawnAudioSource.clip = respawnSound;
         deathRespawnAudioSource.Play();
     }
