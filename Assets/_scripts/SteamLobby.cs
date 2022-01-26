@@ -56,5 +56,6 @@ public class SteamLobby : MonoBehaviour {
         GameEvents.BroadcastOnGameStateChange(GameManager.GameState.InGame);
         buttons.SetActive(false);
         GameManager.instance.hud.StartUi.SetActive(false);
+        GameManager.instance.hud.InGameHUD.SetActive(true);
     }
 }

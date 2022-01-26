@@ -29,7 +29,7 @@ public class GunShot : NetworkBehaviour {
     [SerializeField] private AudioClip emptyGunSound;
     [SerializeField] private AudioClip zoomIn;
     [SerializeField] private AudioClip zoomOut;
-    [SerializeField] private Animator fpAnimator;
+    [SerializeField] public Animator fpAnimator;
     [SerializeField] private GameObject handAndWeapon;
     [SerializeField] private Recoil recoilScript;
     private float nextShot;
@@ -64,8 +64,7 @@ public class GunShot : NetworkBehaviour {
         }
 
         if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM)
-            && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)
-            && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(SHOOT)) {
+            && !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)) {
             if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
                 StartCoroutine(Reload());
                 return;
@@ -104,7 +103,8 @@ public class GunShot : NetworkBehaviour {
     private IEnumerator Reload() {
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         isReloading = true;
-
+        if (currentAmmo == 0 && currentReloadAmmo == 0)
+            yield break;
         if (currentReloadAmmo != 0) {
             fpAnimator.SetTrigger(RELOAD);
             yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length - 0.5f);
