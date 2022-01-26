@@ -1410,6 +1410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMixer: {fileID: 24100000, guid: 05f92dca829e7d6438cb5cc9b4be1c39, type: 2}
   ambientMixer: {fileID: 24100000, guid: 82d343fb0b6d2d2499c2861a52756464, type: 2}
+  fpsController: {fileID: 0}
 --- !u!1 &6675949671130944777
 GameObject:
   m_ObjectHideFlags: 0

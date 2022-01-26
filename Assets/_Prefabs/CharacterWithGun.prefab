@@ -11643,6 +11643,8 @@ MonoBehaviour:
   jumpClips:
   - {fileID: 8300000, guid: b0ee32e54bd9ee9448c493240e12689b, type: 3}
   - {fileID: 8300000, guid: 8723ddc68bb63ea4d8ba3cf11c5b32c3, type: 3}
+  sensitivitySlider: {fileID: 4101322934514823658, guid: a104372f23adf204187e4ca9a5082ada,
+    type: 3}
 --- !u!114 &1515187778335380746
 MonoBehaviour:
   m_ObjectHideFlags: 0
