@@ -4286,6 +4286,11 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3710207300764557847, guid: f1f2d3542c2f411438f73f53491cd8f2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3837109613199297970, guid: f1f2d3542c2f411438f73f53491cd8f2,
         type: 3}
       propertyPath: m_SizeDelta.x
