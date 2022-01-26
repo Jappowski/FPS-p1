@@ -7,6 +7,10 @@ TagManager:
   - Canvas
   - deathCanvas
   - Ceiling
+  - Pickup
+  - Undefined
+  - Health
+  - Ammo
   layers:
   - Default
   - TransparentFX
@@ -20,7 +24,7 @@ TagManager:
   - Weapon
   - RemotePlayer
   - PostProcess
-  - 
+  - Pickup
   - 
   - 
   - 

@@ -7,8 +7,8 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour {
-    [SerializeField] private int maxhealth = 100;
-    [SyncVar] private int currentHealth;
+    [SerializeField] public int maxHealth = 100;
+    [SyncVar] public int currentHealth;
     [SerializeField] private Behaviour[] disableOnDeathScripts;
     private bool[] wasEnabledSrcipts;
     private bool[] wasEnabledGO;
@@ -121,7 +121,7 @@ public class Player : NetworkBehaviour {
         controller.enabled = true;
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
-        _gunShot.maxReloadAmmo = 90;
+        _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
@@ -133,7 +133,7 @@ public class Player : NetworkBehaviour {
     public void SetDefaults()
     {
         isDead = false;
-        currentHealth = maxhealth;
+        currentHealth = maxHealth;
         for (int i = 0; i < disableOnDeathScripts.Length; i++)
             {
                 disableOnDeathScripts[i].enabled = wasEnabledSrcipts[i];
@@ -163,5 +163,10 @@ public class Player : NetworkBehaviour {
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
+    }
+
+    public void Heal(int healthAmount) {
+        currentHealth += healthAmount;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
     }
 }
