@@ -11633,7 +11633,7 @@ MonoBehaviour:
   gravity: 20
   jumpSpeed: 8
   lookSpeed: 2
-  lookXLimit: 45
+  lookXLimit: 90
   playerCamera: {fileID: 8055611513310967851}
   slowWalkSpeed: 7
   walkingSpeed: 11.5
@@ -11673,7 +11673,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.48
-  maxhealth: 100
+  maxHealth: 100
+  currentHealth: 0
   disableOnDeathScripts:
   - {fileID: 8055611513008903282}
   - {fileID: 4534051876333142519}
@@ -11709,6 +11710,7 @@ MonoBehaviour:
   syncInterval: 0.1
   currentAmmo: 30
   maxAmmo: 30
+  currentReloadAmmo: 0
   maxReloadAmmo: 90
   fireRate: 9
   fpsCam: {fileID: 8055611513310967851}
@@ -12501,7 +12503,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3071659568797561961, guid: e074ad7d3f93f954a894300fd91b9168,
         type: 3}
+      propertyPath: m_RendererIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071659568797561961, guid: e074ad7d3f93f954a894300fd91b9168,
+        type: 3}
       propertyPath: m_Cameras.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071659568797561961, guid: e074ad7d3f93f954a894300fd91b9168,
+        type: 3}
+      propertyPath: m_RenderPostProcessing
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3071659568797561961, guid: e074ad7d3f93f954a894300fd91b9168,
@@ -12509,6 +12521,16 @@ PrefabInstance:
       propertyPath: m_Cameras.Array.data[0]
       value: 
       objectReference: {fileID: 1989138864693642755}
+    - target: {fileID: 3071659568797561961, guid: e074ad7d3f93f954a894300fd91b9168,
+        type: 3}
+      propertyPath: m_Cameras.Array.data[1]
+      value: 
+      objectReference: {fileID: 1989138864693642755}
+    - target: {fileID: 3071659568797561963, guid: e074ad7d3f93f954a894300fd91b9168,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 383
+      objectReference: {fileID: 0}
     - target: {fileID: 3071659568797561974, guid: e074ad7d3f93f954a894300fd91b9168,
         type: 3}
       propertyPath: m_RootOrder
