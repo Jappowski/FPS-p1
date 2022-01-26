@@ -16,7 +16,7 @@ public class FPSController : NetworkBehaviour {
     public float slowWalkSpeed = 7f;
     public float walkingSpeed = 11.5f;
     [SerializeField] private Animator animator;
-
+    [SerializeField] private Animator fpAnimator;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] jumpClips;
 
@@ -43,10 +43,17 @@ public class FPSController : NetworkBehaviour {
             if (Input.GetKeyUp(KeyCode.LeftShift)) {
                 animator.SetBool("SlowWalk", false);
             }
-
+            
             animator.SetFloat("Vertical", Input.GetAxis("Vertical"));
             animator.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
-
+            fpAnimator.SetFloat("Vertical", curSpeedX);
+            fpAnimator.SetFloat("Horizontal", curSpeedY);
+            if (curSpeedX != 0 || curSpeedY != 0) {
+                fpAnimator.SetFloat("Walk", 1);
+            }
+            else 
+                fpAnimator.SetFloat("Walk", 0);
+            
             if (Input.GetButton("Jump") && canMove && characterController.isGrounded) {
                 moveDirection.y = jumpSpeed;
                 var index = Random.Range(0, jumpClips.Length);

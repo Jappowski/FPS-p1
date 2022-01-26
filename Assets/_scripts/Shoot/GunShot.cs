@@ -103,7 +103,6 @@ public class GunShot : NetworkBehaviour {
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         isReloading = true;
         if (maxReloadAmmo != 0) {
-            fpAnimator.speed = 2;
             fpAnimator.SetTrigger(RELOAD);
             yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
         }
@@ -173,11 +172,9 @@ public class GunShot : NetworkBehaviour {
         var index = Random.Range(0, shootingClips.Length);
         audioSource.clip = shootingClips[index];
         audioSource.Play();
-
         if (!fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM) &&
             !fpAnimator.GetCurrentAnimatorStateInfo(0).IsTag(ZOOM_OUT)) {
             fpAnimator.SetTrigger(SHOOT);
-            fpAnimator.speed = 6;
             CmdOnShoot();
         }
 
@@ -208,10 +205,9 @@ public class GunShot : NetworkBehaviour {
 
     private IEnumerator ZoomIn() {
         isZoomActive = true;
-        fpAnimator.speed = 3f;
         fpAnimator.SetBool(ZOOM, true);
         audioSource.PlayOneShot(zoomIn);
-        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.1f);
+        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.6f);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
         handAndWeapon.SetActive(false);
         GameManager.instance.hud.crosshair.color = new Color(1, 1, 1, 0);
@@ -229,6 +225,7 @@ public class GunShot : NetworkBehaviour {
         GameManager.instance.hud.crosshair.color = Color.white;
         isZoomActive = false;
         yield return null;
+       // fpAnimator.speed = 1f;
         zoomOutCor = null;
     }
 

@@ -11720,6 +11720,7 @@ MonoBehaviour:
   slowWalkSpeed: 7
   walkingSpeed: 11.5
   animator: {fileID: 8055611513008903283}
+  fpAnimator: {fileID: 925579611258892712}
   audioSource: {fileID: 5837667334275936926}
   jumpClips:
   - {fileID: 8300000, guid: b0ee32e54bd9ee9448c493240e12689b, type: 3}
@@ -13179,7 +13180,7 @@ Animator:
   m_GameObject: {fileID: 8148073177335029752}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e96a50b457ca53745907ac85445399ca, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6e46ffdb5982fee45b38d52fdb164785, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
