@@ -9,7 +9,7 @@ public class OptionsMenu : MonoBehaviour {
     
     private Slider overallSlider;
     private Slider ambientSlider;
-    
+
     private float soundOffValue = -80.0f;
 
     private void Start() {
