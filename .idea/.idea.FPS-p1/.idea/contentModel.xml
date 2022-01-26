@@ -8,6 +8,7 @@
       <e p="Assets" t="Include">
         <e p="_scripts" t="Include">
           <e p="AmbientSoundShuffler.cs" t="Include" />
+          <e p="BounceAnimation.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
           <e p="CsController.cs" t="Include" />
           <e p="CursorState.cs" t="Include" />
@@ -35,11 +36,13 @@
             <e p="WeaponIK.cs" t="Include" />
           </e>
         </e>
+        <e p="AmmoPickup.cs" t="Include" />
         <e p="AnimationHandler.cs" t="Include" />
         <e p="CharacterAnimationSounds.cs" t="Include" />
         <e p="Fantasy Skybox FREE" t="Include">
           <e p="README.txt" t="Include" />
         </e>
+        <e p="HealthPickup.cs" t="Include" />
         <e p="Lobby" t="Include">
           <e p="menuScripts" t="Include">
             <e p="JoinLobbyMenu.cs" t="Include" />
