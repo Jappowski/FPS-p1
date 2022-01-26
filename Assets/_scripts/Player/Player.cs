@@ -41,6 +41,7 @@ public class Player : NetworkBehaviour {
 
     private void Start() {
         controller = GetComponent<CharacterController>();
+        NetworkManager.RegisterStartPosition(transform);
     }
 
     void Update() {
@@ -92,7 +93,6 @@ public class Player : NetworkBehaviour {
 
     private void Die() {
         firstPersonAnimator.enabled = false;
-        // GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         isDead = true;
         for (int i = 0; i < disableOnDeathScripts.Length; i++) {
             disableOnDeathScripts[i].enabled = false;
@@ -123,14 +123,13 @@ public class Player : NetworkBehaviour {
     private IEnumerator Respawn() {
         yield return new WaitForSeconds(5f);
         firstPersonAnimator.enabled = true;
-        controller.enabled = true;
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
         SetDefaults();
-        Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = _spawnPoint.position;
-        transform.rotation = _spawnPoint.rotation;
+        var _spawnPoint = NetworkManager.singleton.GetStartPosition();
+        yield return transform.position = _spawnPoint.position;
+        controller.enabled = true;
         deathRespawnAudioSource.clip = respawnSound;
         deathRespawnAudioSource.Play();
     }
