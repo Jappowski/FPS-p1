@@ -93,7 +93,7 @@ public class GunShot : NetworkBehaviour {
 
                 }
             }
-            if (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo) {
+            if (isZoomActive && (currentAmmo == 0 || Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)) {
                 if(zoomOutCor == null)
                     zoomOutCor =  StartCoroutine(ZoomOut()); 
                 StartCoroutine(Reload());

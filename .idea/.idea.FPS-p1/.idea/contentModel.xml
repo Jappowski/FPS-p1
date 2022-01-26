@@ -43,6 +43,10 @@
           <e p="README.txt" t="Include" />
         </e>
         <e p="HealthPickup.cs" t="Include" />
+        <e p="KawaseBlur" t="Include">
+          <e p="KawaseBlur.cs" t="Include" />
+          <e p="KawaseBlur.shader" t="Include" />
+        </e>
         <e p="Lobby" t="Include">
           <e p="menuScripts" t="Include">
             <e p="JoinLobbyMenu.cs" t="Include" />

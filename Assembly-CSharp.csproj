@@ -119,6 +119,7 @@
      <Compile Include="Assets\PlayerHealth.cs" />
      <Compile Include="Assets\_scripts\Player\Player.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
+     <Compile Include="Assets\KawaseBlur\KawaseBlur.cs" />
      <Compile Include="Assets\_scripts\BounceAnimation.cs" />
      <Compile Include="Assets\HealthPickup.cs" />
      <Compile Include="Assets\AmmoPickup.cs" />
@@ -126,6 +127,7 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\ScriptTemplates\51-Mirror__Network Authenticator-NewNetworkAuthenticator.cs.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\KawaseBlur\KawaseBlur.shader" />
      <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
      <None Include="Assets\ScriptTemplates\53-Mirror__Network Observer-NewNetworkObserver.cs.txt" />
      <None Include="Assets\Fantasy Skybox FREE\Readme.txt" />
