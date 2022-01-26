@@ -207,7 +207,7 @@ public class GunShot : NetworkBehaviour {
         isZoomActive = true;
         fpAnimator.SetBool(ZOOM, true);
         audioSource.PlayOneShot(zoomIn);
-        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.6f);
+        yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length -0.1f);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
         handAndWeapon.SetActive(false);
         GameManager.instance.hud.crosshair.color = new Color(1, 1, 1, 0);
