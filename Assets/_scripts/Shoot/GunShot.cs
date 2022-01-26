@@ -107,7 +107,7 @@ public class GunShot : NetworkBehaviour {
 
         if (currentReloadAmmo != 0) {
             fpAnimator.SetTrigger(RELOAD);
-            yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
+            yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length - 0.5f);
         }
 
         if (currentAmmo == maxAmmo) {
