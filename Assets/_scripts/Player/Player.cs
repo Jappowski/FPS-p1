@@ -121,7 +121,7 @@ public class Player : NetworkBehaviour {
         controller.enabled = true;
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
-        _gunShot.maxReloadAmmo = 90;
+        _gunShot.reloadAmmo = 90;
         SetDefaults();
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
@@ -163,5 +163,10 @@ public class Player : NetworkBehaviour {
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
+    }
+
+    public void Heal(int healthAmount) {
+        currentHealth += healthAmount;
+        currentHealth = Mathf.Min(currentHealth, maxhealth);
     }
 }
