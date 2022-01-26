@@ -13,7 +13,7 @@ public class GunShot : NetworkBehaviour {
     
     public int currentAmmo;
     public int maxAmmo = 30; //in mag
-    public int reloadAmmo;
+    public int currentReloadAmmo;
     public int maxReloadAmmo = 90;
     public float fireRate = 15;
     public Camera fpsCam;
@@ -48,17 +48,17 @@ public class GunShot : NetworkBehaviour {
     private void Start() {
         isZoomActive = false;
         currentAmmo = maxAmmo;
-        reloadAmmo = maxReloadAmmo;
+        currentReloadAmmo = maxReloadAmmo;
         ammoUi = GameManager.instance.hud.ammoUi;
         hitmarkerImage = GameManager.instance.hud.hitmarkerImage;
         hitmarkerImage.color = new Color(1, 1, 1, 0);
     }
 
     private void Update() {
-        ammoUi.text = currentAmmo + " / " + reloadAmmo;
+        ammoUi.text = currentAmmo + " / " + currentReloadAmmo;
         if (isReloading)
             return;
-        if (currentAmmo == 0 && reloadAmmo == 0) {
+        if (currentAmmo == 0 && currentReloadAmmo == 0) {
             EmptyGunShot();
             return;
         }
@@ -104,7 +104,7 @@ public class GunShot : NetworkBehaviour {
     private IEnumerator Reload() {
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         isReloading = true;
-        if (reloadAmmo != 0) {
+        if (currentReloadAmmo != 0) {
             fpAnimator.speed = 2;
             fpAnimator.SetTrigger(RELOAD);
             yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[0].length);
@@ -115,18 +115,18 @@ public class GunShot : NetworkBehaviour {
             yield break;
         }
 
-        if (reloadAmmo >= 30) {
-            reloadAmmo -= maxAmmo - currentAmmo;
+        if (currentReloadAmmo >= 30) {
+            currentReloadAmmo -= maxAmmo - currentAmmo;
             currentAmmo = maxAmmo;
         }
-        else if (reloadAmmo < 30 && reloadAmmo > 0) {
-            if (currentAmmo + reloadAmmo > 30) {
-                reloadAmmo -= maxAmmo - currentAmmo;
+        else if (currentReloadAmmo < 30 && currentReloadAmmo > 0) {
+            if (currentAmmo + currentReloadAmmo > 30) {
+                currentReloadAmmo -= maxAmmo - currentAmmo;
                 currentAmmo = maxAmmo;
             }
             else {
-                currentAmmo += reloadAmmo;
-                reloadAmmo = 0;
+                currentAmmo += currentReloadAmmo;
+                currentReloadAmmo = 0;
             }
         }
 
@@ -151,7 +151,7 @@ public class GunShot : NetworkBehaviour {
     }
 
     private void EmptyGunShot() {
-        if (currentAmmo == 0 && reloadAmmo == 0 && Input.GetButton("Fire1")) {
+        if (currentAmmo == 0 && currentReloadAmmo == 0 && Input.GetButton("Fire1")) {
             if (!audioSource.isPlaying) {
                 audioSource.clip = emptyGunSound;
                 audioSource.Play();
@@ -249,7 +249,7 @@ public class GunShot : NetworkBehaviour {
     }
 
     public void AddAmmo(int ammoAmount) {
-        reloadAmmo += ammoAmount;
-        reloadAmmo = Mathf.Min(reloadAmmo, maxReloadAmmo);
+        currentReloadAmmo += ammoAmount;
+        currentReloadAmmo = Mathf.Min(currentReloadAmmo, maxReloadAmmo);
     }
 }

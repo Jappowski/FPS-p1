@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class BounceAnimation : MonoBehaviour {
     [SerializeField] private float bounceSpeed = 5;
-    [SerializeField] private float bounceAmplitude = 0.6f;
+    [SerializeField] private float bounceAmplitude = 0.1f;
     [SerializeField] private float rotationSpeed = 50;
 
     private float startingHeight;
