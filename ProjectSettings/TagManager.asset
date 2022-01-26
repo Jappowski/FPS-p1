@@ -7,6 +7,8 @@ TagManager:
   - Canvas
   - deathCanvas
   - Ceiling
+  - Pickup
+  - Undefined
   - Health
   - Ammo
   layers:
