@@ -9,7 +9,7 @@ public class FPSController : NetworkBehaviour {
     private CharacterController characterController;
     public float gravity = 20.0f;
     public float jumpSpeed = 8.0f;
-    private float currentLookSpeed = 2f;
+    public float currentLookSpeed = 2f;
     public float lookXLimit = 90.0f;
     private Vector3 moveDirection = Vector3.zero;
     public Camera playerCamera;

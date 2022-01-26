@@ -219,7 +219,7 @@ public class GunShot : NetworkBehaviour {
         zoomInCor = null;
     }
 
-    private IEnumerator ZoomOut() {
+    public IEnumerator ZoomOut() {
         audioSource.PlayOneShot(zoomOut);
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);

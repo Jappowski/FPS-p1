@@ -11491,13 +11491,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 4.1
+  m_Height: 4
   m_Radius: 1.32
   m_SlopeLimit: 90
   m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.94, z: -0.1}
+  m_Center: {x: 0, y: 2.1, z: -0.1}
 --- !u!95 &8055611513008903283
 Animator:
   serializedVersion: 3
@@ -11632,7 +11632,7 @@ MonoBehaviour:
   canMove: 1
   gravity: 20
   jumpSpeed: 8
-  lookSpeed: 2
+  currentLookSpeed: 2
   lookXLimit: 90
   playerCamera: {fileID: 8055611513310967851}
   slowWalkSpeed: 7
@@ -11643,8 +11643,6 @@ MonoBehaviour:
   jumpClips:
   - {fileID: 8300000, guid: b0ee32e54bd9ee9448c493240e12689b, type: 3}
   - {fileID: 8300000, guid: 8723ddc68bb63ea4d8ba3cf11c5b32c3, type: 3}
-  sensitivitySlider: {fileID: 4101322934514823658, guid: a104372f23adf204187e4ca9a5082ada,
-    type: 3}
 --- !u!114 &1515187778335380746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11697,6 +11695,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: be9919fb57da281448692cf8c59696b1, type: 3}
   - {fileID: 8300000, guid: 505c919158b56ed44a09b62557b932dc, type: 3}
   - {fileID: 8300000, guid: 98e60d3af2b193b40bb489e71b4d1c5a, type: 3}
+  firstPersonAnimator: {fileID: 925579611258892712}
 --- !u!114 &4534051876333142519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11741,6 +11740,7 @@ MonoBehaviour:
   handAndWeapon: {fileID: 6644535564954527610}
   recoilScript: {fileID: 8650845232250101618}
   camera: {fileID: 8055611513310967851}
+  isZoomActive: 0
 --- !u!114 &7752838999890736596
 MonoBehaviour:
   m_ObjectHideFlags: 0
