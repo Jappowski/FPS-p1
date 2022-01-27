@@ -1,17 +1,11 @@
 fileFormatVersion: 2
-guid: 4b79039fe3c654b4ab38a8dc837aeaf3
+guid: 6bd6ba2028d798342813c1f857a69fdc
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -4001339956696165983
     second: Bean|BeanAction
-  - first:
-      74: 3086313620220185643
-    second: Bean|CubeAction
-  - first:
-      74: -3999578356269874737
-    second: Cube|CubeAction
   externalObjects: {}
   materials:
     materialImportMode: 2
