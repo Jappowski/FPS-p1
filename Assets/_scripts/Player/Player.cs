@@ -26,6 +26,9 @@ public class Player : NetworkBehaviour {
     float currCountdownValue;
     [SyncVar] private bool _isDead = false;
 
+    [SerializeField] private GameObject deadModel;
+    [SerializeField] private ParticleSystem confettiParticles;
+
     public bool isDead {
         get { return _isDead; }
         protected set { _isDead = value; }
@@ -110,11 +113,14 @@ public class Player : NetworkBehaviour {
         deathRespawnAudioSource.clip = deathSound;
         deathRespawnAudioSource.Play();
 
-        if (!isLocalPlayer)
+        if (!isLocalPlayer) {
             foreach (var gameObject in disableOnDeathGameObjects) {
                 gameObject.SetActive(false);
             }
-
+        }
+        deadModel.SetActive(true);
+        confettiParticles.Play();
+        
         if (isLocalPlayer)
             DeadCanvasActive();
         StartCoroutine(Respawn());
@@ -128,7 +134,9 @@ public class Player : NetworkBehaviour {
     }
 
     private IEnumerator Respawn() {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
+        deadModel.SetActive(false);
+        yield return new WaitForSeconds(2f);
         if (isLocalPlayer) {
             handAndWeapon.SetActive(true);
             _gunShot.camera.fieldOfView = Mathf.Lerp(_gunShot.camera.fieldOfView, _gunShot.normalCameraFOV, _gunShot.transition);

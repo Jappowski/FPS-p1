@@ -52,7 +52,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: New State
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -64,7 +64,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -4001339956696165983, guid: 4b79039fe3c654b4ab38a8dc837aeaf3,
+  m_Motion: {fileID: -4001339956696165983, guid: 6bd6ba2028d798342813c1f857a69fdc,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
