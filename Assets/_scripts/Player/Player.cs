@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Mirror;
 using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -38,6 +39,7 @@ public class Player : NetworkBehaviour {
     [SerializeField] private AudioClip[] gettingHitSounds;
 
     [SerializeField] private Animator firstPersonAnimator;
+    [SerializeField] private GameObject handAndWeapon;
 
     private void Start() {
         controller = GetComponent<CharacterController>();
@@ -92,7 +94,8 @@ public class Player : NetworkBehaviour {
     }
 
     private void Die() {
-        firstPersonAnimator.enabled = false;
+        handAndWeapon.SetActive(false);
+        GameManager.instance.hud.ZoomCrosshair.SetActive(false);
         isDead = true;
         for (int i = 0; i < disableOnDeathScripts.Length; i++) {
             disableOnDeathScripts[i].enabled = false;
@@ -122,7 +125,8 @@ public class Player : NetworkBehaviour {
 
     private IEnumerator Respawn() {
         yield return new WaitForSeconds(5f);
-        firstPersonAnimator.enabled = true;
+        GameManager.instance.hud.ZoomCrosshair.SetActive(true);
+        handAndWeapon.SetActive(true);
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;

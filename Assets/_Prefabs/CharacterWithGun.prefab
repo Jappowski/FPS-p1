@@ -11696,6 +11696,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 505c919158b56ed44a09b62557b932dc, type: 3}
   - {fileID: 8300000, guid: 98e60d3af2b193b40bb489e71b4d1c5a, type: 3}
   firstPersonAnimator: {fileID: 925579611258892712}
+  handAndWeapon: {fileID: 8148073177335029752}
 --- !u!114 &4534051876333142519
 MonoBehaviour:
   m_ObjectHideFlags: 0
