@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CharacterAnimationSounds : MonoBehaviour {
+public class CharacterAnimationSounds : NetworkBehaviour {
     private CharacterController playerController;
     [SerializeField] private GameObject player;
     [SerializeField] private AudioSource audioSource;
@@ -13,9 +14,13 @@ public class CharacterAnimationSounds : MonoBehaviour {
     private void Start() {
         playerController = GetComponent<CharacterController>();
     }
+    [Command(requiresAuthority = false)]
+    private void PlayerFootstepSound() {
+        RpcPlayFootStepsSound();
+    }
     
-    private void PlayerFootstepSound()
-    {
+    [ClientRpc]
+    private void RpcPlayFootStepsSound() {
         if (playerController.isGrounded && player.GetComponent<Player>().isDead == false) {
             var index = Random.Range(0, footstepClips.Length);
             audioSource.clip = footstepClips[index];
