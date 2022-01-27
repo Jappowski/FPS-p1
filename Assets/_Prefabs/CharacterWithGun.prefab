@@ -11779,6 +11779,7 @@ MonoBehaviour:
   TargetScript: {fileID: 9009687598911722127}
   weaponHierarchy: {fileID: 8815820249115985218}
   playerHands: {fileID: 8148073177335029752}
+  sounds: {fileID: -73378191043567747}
   remoteLayerName: RemotePlayer
 --- !u!114 &-73378191043567747
 MonoBehaviour:
@@ -11794,7 +11795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  player: {fileID: 7136567328140716335}
+  playerGO: {fileID: 7136567328140716335}
   audioSource: {fileID: 58072604857473633}
   footstepClips:
   - {fileID: 8300000, guid: 48257f06ad2c6144fbdebd132c495a35, type: 3}

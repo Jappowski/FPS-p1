@@ -9,6 +9,7 @@ public class PlayerSetup : NetworkBehaviour {
     [SerializeField] private Behaviour TargetScript;
     [SerializeField] private Transform weaponHierarchy;
     [SerializeField] private GameObject playerHands;
+    [SerializeField] private CharacterAnimationSounds sounds;
 
     [SerializeField] private string remoteLayerName = "RemotePlayer";
 

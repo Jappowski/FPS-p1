@@ -43,9 +43,6 @@ public class GameManager : MonoBehaviour {
 
     private const string PLAYER_ID_PREFIX = "Player ";
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-
-    private static Dictionary<Player, CharacterAnimationSounds> footsteps =
-        new Dictionary<Player, CharacterAnimationSounds>();
     public static void RegisterPlayer(string _netID, Player _player) {
         string _playerID = PLAYER_ID_PREFIX + _netID;
         players.Add(_playerID, _player);
@@ -58,10 +55,6 @@ public class GameManager : MonoBehaviour {
 
     public static Player GetPlayer(string _playerID) {
         return players[_playerID];
-    }
-
-    public static CharacterAnimationSounds GetFootsteps(Player player) {
-        return footsteps[player];
     }
 
     // void OnGUI()
