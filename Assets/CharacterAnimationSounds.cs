@@ -15,12 +15,20 @@ public class CharacterAnimationSounds : NetworkBehaviour {
         playerController = GetComponent<CharacterController>();
     }
     
-    [Command(requiresAuthority = false)]
+    
     private void PlayerFootstepSound() {
+        if(isServer)
+            RpcPlayFootStepsSound();
+        else {
+            CmdPlayFootstepsSound();
+        }
+    }
+    [Command]
+    private void CmdPlayFootstepsSound() {
         RpcPlayFootStepsSound();
     }
-    
-    [TargetRpc]
+
+    [ClientRpc]
     private void RpcPlayFootStepsSound() {
         if (playerController.isGrounded && playerGO.GetComponent<Player>().isDead == false) {
             var index = Random.Range(0, footstepClips.Length);
