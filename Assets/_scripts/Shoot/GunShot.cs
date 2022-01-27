@@ -37,10 +37,10 @@ public class GunShot : NetworkBehaviour {
     private Text ammoUi;
     private float hitmarkerDuration = 0.5f;
 
-    [SerializeField] private Camera camera;
-    private int normalCameraFOV = 60;
+    [SerializeField] public Camera camera;
+    public int normalCameraFOV = 60;
     private int zoomCameraFOV = 30;
-    private float smooth = 20;
+    public float transition = 20;
     public bool isZoomActive;
     private Coroutine zoomOutCor;
     private Coroutine zoomInCor;
@@ -211,7 +211,7 @@ public class GunShot : NetworkBehaviour {
         fpAnimator.SetBool(ZOOM, true);
         audioSource.PlayOneShot(zoomIn);
         yield return new WaitForSeconds(fpAnimator.runtimeAnimatorController.animationClips[4].length - 0.1f);
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, smooth);
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomCameraFOV, transition);
         handAndWeapon.SetActive(false);
         GameManager.instance.hud.crosshair.color = new Color(1, 1, 1, 0);
         GameManager.instance.hud.ZoomCrosshair.SetActive(true);
@@ -222,7 +222,7 @@ public class GunShot : NetworkBehaviour {
     public IEnumerator ZoomOut() {
         audioSource.PlayOneShot(zoomOut);
         GameManager.instance.hud.ZoomCrosshair.SetActive(false);
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, smooth);
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalCameraFOV, transition);
         fpAnimator.SetBool(ZOOM, false);
         handAndWeapon.SetActive(true);
         GameManager.instance.hud.crosshair.color = Color.white;
