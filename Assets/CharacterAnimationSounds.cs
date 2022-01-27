@@ -17,19 +17,6 @@ public class CharacterAnimationSounds : NetworkBehaviour {
     
     
     private void PlayerFootstepSound() {
-        if(isServer)
-            RpcPlayFootStepsSound();
-        else {
-            CmdPlayFootstepsSound();
-        }
-    }
-    [Command]
-    private void CmdPlayFootstepsSound() {
-        RpcPlayFootStepsSound();
-    }
-
-    [ClientRpc]
-    private void RpcPlayFootStepsSound() {
         if (playerController.isGrounded && playerGO.GetComponent<Player>().isDead == false) {
             var index = Random.Range(0, footstepClips.Length);
             audioSource.clip = footstepClips[index];
