@@ -64,7 +64,7 @@ public class PlayerSetup : NetworkBehaviour {
         GameManager.RegisterPlayer(_netID, _player);
     }
 
-    void OnDisable() {
+    public override void OnStopClient() {
         GameManager.UnRegisterPlayer(transform.name);
     }
 }
