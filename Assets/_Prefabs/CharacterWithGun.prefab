@@ -11688,7 +11688,7 @@ MonoBehaviour:
   deathMessage: {fileID: 6106432923335951486}
   deathCanvas: {fileID: 6916538867505037612}
   deathRespawnAudioSource: {fileID: 5734276499289733192}
-  deathSound: {fileID: 8300000, guid: 676c9c7865fea91448e14129533d7029, type: 3}
+  deathSound: {fileID: 8300000, guid: 0566e9d153f009345b898c42944e48cf, type: 3}
   respawnSound: {fileID: 8300000, guid: 0fe3d1743d893a5459a9ee4dfe0463e1, type: 3}
   gettingHitAudioSource: {fileID: 873535768448323921}
   gettingHitSounds:
