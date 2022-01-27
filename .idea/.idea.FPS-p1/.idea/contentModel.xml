@@ -39,7 +39,6 @@
         <e p="AmmoPickup.cs" t="Include" />
         <e p="AnimationHandler.cs" t="Include" />
         <e p="CharacterAnimationSounds.cs" t="Include" />
-        <e p="ConsoleToGUI.cs" t="Include" />
         <e p="Fantasy Skybox FREE" t="Include">
           <e p="README.txt" t="Include" />
         </e>
