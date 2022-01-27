@@ -82,17 +82,14 @@ public class HUD : MonoBehaviour {
         }
     }
 
+    public void BackToMenu() {
+        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.Start);
+    }
+
     private void EscKeyClick() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             BackFromOptions();
         }
-    }
-
-    public void GoToMainMenu() {
-        if (GameManager.instance.gameState != GameManager.GameState.Stop) return;
-        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.Start);
-        StopUi.SetActive(false);
-        StartUi.SetActive(true);
     }
 
     public void ResumeButton() {
