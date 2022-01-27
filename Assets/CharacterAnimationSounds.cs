@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using Mirror;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class CharacterAnimationSounds : NetworkBehaviour {
     private CharacterController playerController;

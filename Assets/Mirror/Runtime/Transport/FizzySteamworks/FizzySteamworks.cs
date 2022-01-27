@@ -1,6 +1,6 @@
-using Steamworks;
 using System;
 using System.IO;
+using Steamworks;
 using UnityEngine;
 
 namespace Mirror.FizzySteam
