@@ -82,10 +82,6 @@ public class HUD : MonoBehaviour {
         }
     }
 
-    public void BackToMenu() {
-        GameEvents.BroadcastOnGameStateChange(GameManager.GameState.Start);
-    }
-
     private void EscKeyClick() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             BackFromOptions();
