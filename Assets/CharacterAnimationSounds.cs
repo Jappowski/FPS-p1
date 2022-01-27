@@ -15,8 +15,11 @@ public class CharacterAnimationSounds : NetworkBehaviour {
         playerController = GetComponent<CharacterController>();
     }
     [Command(requiresAuthority = false)]
-    private void PlayerFootstepSound() {
-        RpcPlayFootStepsSound();
+    private void PlayerFootstepSound(string playerId) {
+        var player = GameManager.GetPlayer(playerId);
+        var playerfootsteps = GameManager.GetFootsteps(player);
+        
+        playerfootsteps.RpcPlayFootStepsSound();
     }
     
     [ClientRpc]
