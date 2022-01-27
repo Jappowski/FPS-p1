@@ -1,6 +1,5 @@
 ﻿using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : NetworkBehaviour {
@@ -36,7 +35,7 @@ public class FPSController : NetworkBehaviour {
 
     private void Update() {
         currentLookSpeed = gunShot.isZoomActive ? zoomSpeed : lookSpeed;
-        
+
         if (GameManager.instance.gameState == GameManager.GameState.InGame && isLocalPlayer) {
             var forward = transform.TransformDirection(Vector3.forward);
             var right = transform.TransformDirection(Vector3.right);
@@ -50,11 +49,11 @@ public class FPSController : NetworkBehaviour {
             if (Input.GetKeyDown(KeyCode.LeftShift)) {
                 animator.SetBool("SlowWalk", true);
             }
-            
+
             if (Input.GetKeyUp(KeyCode.LeftShift)) {
                 animator.SetBool("SlowWalk", false);
             }
-            
+
             animator.SetFloat("Vertical", Input.GetAxis("Vertical"));
             animator.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
             fpAnimator.SetFloat("Vertical", curSpeedX);
@@ -62,15 +61,13 @@ public class FPSController : NetworkBehaviour {
             if (curSpeedX != 0 || curSpeedY != 0) {
                 fpAnimator.SetFloat("Walk", 1);
                 isMoving = true;
-
             }
             else {
                 fpAnimator.SetFloat("Walk", 0);
                 isMoving = false;
             }
-                
 
-            
+
             if (Input.GetButton("Jump") && canMove && characterController.isGrounded) {
                 moveDirection.y = jumpSpeed;
                 var index = Random.Range(0, jumpClips.Length);
