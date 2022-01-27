@@ -11741,6 +11741,8 @@ MonoBehaviour:
   handAndWeapon: {fileID: 6644535564954527610}
   recoilScript: {fileID: 8650845232250101618}
   camera: {fileID: 8055611513310967851}
+  normalCameraFOV: 60
+  transition: 20
   isZoomActive: 0
 --- !u!114 &7752838999890736596
 MonoBehaviour:
@@ -11781,6 +11783,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3e4fe6304ff1a14abcdcf72bf09a950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   player: {fileID: 7136567328140716335}
   audioSource: {fileID: 58072604857473633}
   footstepClips:
