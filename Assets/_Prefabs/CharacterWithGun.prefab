@@ -5297,6 +5297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6296249247589797331}
   - component: {fileID: 361526337213395621}
+  - component: {fileID: 7004496579684475528}
   m_Layer: 8
   m_Name: Cube.001
   m_TagString: Player
@@ -5389,6 +5390,19 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.39325118, y: 0.6878779, z: 0.20721924}
     m_Extent: {x: 2.0593922, y: 2.2326555, z: 1.886885}
   m_DirtyAABB: 0
+--- !u!114 &7004496579684475528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665545141943145582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd3168228e497647a3aca8417c9f428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: c5320f15e6f3c4586b59e046212d6569, type: 2}
 --- !u!1 &1860209940974274071
 GameObject:
   m_ObjectHideFlags: 0
@@ -11640,7 +11654,8 @@ MonoBehaviour:
   canMove: 1
   gravity: 20
   jumpSpeed: 8
-  currentLookSpeed: 2
+  lookSpeed: 2
+  zoomSpeed: 1.25
   lookXLimit: 90
   playerCamera: {fileID: 8055611513310967851}
   slowWalkSpeed: 7

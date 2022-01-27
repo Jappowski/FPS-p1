@@ -22,6 +22,7 @@
             <e p="FPSController.cs" t="Include" />
             <e p="Player.cs" t="Include" />
             <e p="PlayerSetup.cs" t="Include" />
+            <e p="RandomBeanColor.cs" t="Include" />
           </e>
           <e p="Shoot" t="Include">
             <e p="GunShot.cs" t="Include" />
