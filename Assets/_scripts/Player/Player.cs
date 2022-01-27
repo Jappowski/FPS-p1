@@ -94,8 +94,12 @@ public class Player : NetworkBehaviour {
     }
 
     private void Die() {
-        handAndWeapon.SetActive(false);
-        GameManager.instance.hud.ZoomCrosshair.SetActive(false);
+        if (isLocalPlayer) {
+            handAndWeapon.SetActive(false);
+            if (_gunShot.isZoomActive) {
+                GameManager.instance.hud.ZoomCrosshair.SetActive(false);
+            }
+        }
         isDead = true;
         for (int i = 0; i < disableOnDeathScripts.Length; i++) {
             disableOnDeathScripts[i].enabled = false;
@@ -125,8 +129,10 @@ public class Player : NetworkBehaviour {
 
     private IEnumerator Respawn() {
         yield return new WaitForSeconds(5f);
-        GameManager.instance.hud.ZoomCrosshair.SetActive(true);
-        handAndWeapon.SetActive(true);
+        if (isLocalPlayer) {
+            handAndWeapon.SetActive(true);
+            _gunShot.camera.fieldOfView = Mathf.Lerp(_gunShot.camera.fieldOfView, _gunShot.normalCameraFOV, _gunShot.transition);
+        }
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
