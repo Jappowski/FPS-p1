@@ -9,7 +9,9 @@ public class FPSController : NetworkBehaviour {
     private CharacterController characterController;
     public float gravity = 20.0f;
     public float jumpSpeed = 8.0f;
-    public float currentLookSpeed = 2f;
+    [SerializeField] private float lookSpeed = 2f;
+    [SerializeField] private float zoomSpeed = 1.25f;
+    private float currentLookSpeed;
     public float lookXLimit = 90.0f;
     private Vector3 moveDirection = Vector3.zero;
     public Camera playerCamera;
@@ -23,12 +25,17 @@ public class FPSController : NetworkBehaviour {
 
     public bool isMoving;
 
+    private GunShot gunShot;
+
     private void Start() {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        gunShot = GetComponent<GunShot>();
+        currentLookSpeed = lookSpeed;
     }
 
     private void Update() {
+        currentLookSpeed = gunShot.isZoomActive ? zoomSpeed : lookSpeed;
         
         if (GameManager.instance.gameState == GameManager.GameState.InGame && isLocalPlayer) {
             var forward = transform.TransformDirection(Vector3.forward);
