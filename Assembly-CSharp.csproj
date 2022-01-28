@@ -89,6 +89,7 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
      <Compile Include="Assets\Lobby\menuScripts\MainMenu.cs" />
+     <Compile Include="Assets\ConsoleToGUI.cs" />
      <Compile Include="Assets\_scripts\Shoot\PlayerWeapon.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
      <Compile Include="Assets\_scripts\GameManager.cs" />
@@ -112,6 +113,7 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
      <Compile Include="Assets\HealthPickup.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
+     <Compile Include="Assets\_scripts\Player\RandomBeanColor.cs" />
      <Compile Include="Assets\_scripts\Shoot\GunShot.cs" />
      <Compile Include="Assets\_scripts\Granade.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -123,8 +125,6 @@
      <Compile Include="Assets\PlayerHealth.cs" />
      <Compile Include="Assets\_scripts\Player\Player.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-     <Compile Include="Assets\ConsoleToGUI.cs" />
-     <Compile Include="Assets\_scripts\Player\RandomBeanColor.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\ScriptTemplates\51-Mirror__Network Authenticator-NewNetworkAuthenticator.cs.txt" />

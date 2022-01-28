@@ -72,13 +72,13 @@ public class Player : NetworkBehaviour {
         _gunShot = GetComponent<GunShot>();
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         hp = GameManager.instance.hud.HP;
-        
-            wasEnabledSrcipts = new bool[disableOnDeathScripts.Length];
-            for (int i = 0; i < wasEnabledSrcipts.Length; i++)
-            {
-                wasEnabledSrcipts[i] = disableOnDeathScripts[i].enabled;
-            }
-            SetDefaults();
+
+        wasEnabledSrcipts = new bool[disableOnDeathScripts.Length];
+        for (int i = 0; i < wasEnabledSrcipts.Length; i++) {
+            wasEnabledSrcipts[i] = disableOnDeathScripts[i].enabled;
+        }
+
+        SetDefaults();
     }
 
     [ClientRpc]
@@ -93,16 +93,16 @@ public class Player : NetworkBehaviour {
         gettingHitAudioSource.clip = gettingHitSounds[index];
         gettingHitAudioSource.Play();
         if (currentHealth <= 0f)
-            Die();
+            StartCoroutine(Die());
     }
 
-    private void Die() {
+    private IEnumerator Die() {
         if (isLocalPlayer) {
-            handAndWeapon.SetActive(false);
             if (_gunShot.isZoomActive) {
                 GameManager.instance.hud.ZoomCrosshair.SetActive(false);
             }
         }
+
         isDead = true;
         for (int i = 0; i < disableOnDeathScripts.Length; i++) {
             disableOnDeathScripts[i].enabled = false;
@@ -118,13 +118,22 @@ public class Player : NetworkBehaviour {
                 gameObject.SetActive(false);
             }
         }
+
         deadModel.SetActive(true);
         confettiParticles.Play();
-        
+
         if (isLocalPlayer)
             DeadCanvasActive();
         StartCoroutine(Respawn());
         StartCoroutine(StartCountdown(5));
+
+        if (isLocalPlayer) {
+            if (!firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("reload")) {
+                yield return new WaitForSeconds(2.15f);
+                firstPersonAnimator.enabled = false;
+                handAndWeapon.SetActive(false);
+            }
+        }
     }
 
     private IEnumerator ShowVignette() {
@@ -139,8 +148,12 @@ public class Player : NetworkBehaviour {
         yield return new WaitForSeconds(2f);
         if (isLocalPlayer) {
             handAndWeapon.SetActive(true);
-            _gunShot.camera.fieldOfView = Mathf.Lerp(_gunShot.camera.fieldOfView, _gunShot.normalCameraFOV, _gunShot.transition);
+            firstPersonAnimator.enabled = true;
+            if (_gunShot.isZoomActive) {
+                GameManager.instance.hud.ZoomCrosshair.SetActive(true);
+            }
         }
+
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
@@ -152,14 +165,13 @@ public class Player : NetworkBehaviour {
         deathRespawnAudioSource.Play();
     }
 
-    public void SetDefaults()
-    {
+    public void SetDefaults() {
         isDead = false;
         currentHealth = maxHealth;
-        for (int i = 0; i < disableOnDeathScripts.Length; i++)
-            {
-                disableOnDeathScripts[i].enabled = wasEnabledSrcipts[i];
-            }
+        for (int i = 0; i < disableOnDeathScripts.Length; i++) {
+            disableOnDeathScripts[i].enabled = wasEnabledSrcipts[i];
+        }
+
         if (!isLocalPlayer) {
             foreach (var gameObject in disableOnDeathGameObjects) {
                 gameObject.SetActive(true);
