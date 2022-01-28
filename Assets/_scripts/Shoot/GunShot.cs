@@ -199,7 +199,9 @@ public class GunShot : NetworkBehaviour {
                 Invoke(nameof(HitDisable), hitmarkerDuration);
             }
 
-            if (!hit.collider.CompareTag("Ceiling") && !hit.collider.CompareTag("Health") && !hit.collider.CompareTag("Ammo")) {
+            if (!hit.collider.CompareTag("Ceiling") && !hit.collider.CompareTag("Health") 
+                                                    && !hit.collider.CompareTag("Ammo") 
+                                                    && !hit.collider.CompareTag("Dead")) {
                 var ImpactGO = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(ImpactGO, 3f);
             }
