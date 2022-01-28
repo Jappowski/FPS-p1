@@ -93,16 +93,10 @@ public class Player : NetworkBehaviour {
         gettingHitAudioSource.clip = gettingHitSounds[index];
         gettingHitAudioSource.Play();
         if (currentHealth <= 0f)
-            StartCoroutine(Die());
+            Die();
     }
 
-    private IEnumerator Die() {
-        if (isLocalPlayer) {
-            if (_gunShot.isZoomActive) {
-                GameManager.instance.hud.ZoomCrosshair.SetActive(false);
-            }
-        }
-
+    private void Die() {
         isDead = true;
         for (int i = 0; i < disableOnDeathScripts.Length; i++) {
             disableOnDeathScripts[i].enabled = false;
@@ -126,19 +120,6 @@ public class Player : NetworkBehaviour {
             DeadCanvasActive();
         StartCoroutine(Respawn());
         StartCoroutine(StartCountdown(5));
-
-        if (isLocalPlayer) {
-            if (firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("reload")) {
-                yield return new WaitForSeconds(2.20f);
-                firstPersonAnimator.enabled = false;
-                handAndWeapon.SetActive(false);
-            } else if (firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("zoom")) {
-                yield return new WaitForSeconds(0.50f);
-                GameManager.instance.hud.ZoomCrosshair.SetActive(false);
-                firstPersonAnimator.enabled = false;
-                handAndWeapon.SetActive(false);
-            }
-        }
     }
 
     private IEnumerator ShowVignette() {
@@ -151,21 +132,13 @@ public class Player : NetworkBehaviour {
         yield return new WaitForSeconds(3f);
         deadModel.SetActive(false);
         yield return new WaitForSeconds(2f);
-        if (isLocalPlayer) {
-            handAndWeapon.SetActive(true);
-            firstPersonAnimator.enabled = true;
-            if (_gunShot.isZoomActive) {
-                GameManager.instance.hud.ZoomCrosshair.SetActive(true);
-            }
-        }
-
+        controller.enabled = true;
         DeadCanvasDeActive();
         _gunShot.currentAmmo = _gunShot.maxAmmo;
         _gunShot.currentReloadAmmo = _gunShot.maxReloadAmmo;
         SetDefaults();
         var _spawnPoint = NetworkManager.singleton.GetStartPosition();
         yield return transform.position = _spawnPoint.position;
-        controller.enabled = true;
         deathRespawnAudioSource.clip = respawnSound;
         deathRespawnAudioSource.Play();
     }
