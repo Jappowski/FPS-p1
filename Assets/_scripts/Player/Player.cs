@@ -128,8 +128,13 @@ public class Player : NetworkBehaviour {
         StartCoroutine(StartCountdown(5));
 
         if (isLocalPlayer) {
-            if (!firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("reload")) {
-                yield return new WaitForSeconds(2.15f);
+            if (firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("reload")) {
+                yield return new WaitForSeconds(2.20f);
+                firstPersonAnimator.enabled = false;
+                handAndWeapon.SetActive(false);
+            } else if (firstPersonAnimator.GetCurrentAnimatorStateInfo(0).IsTag("zoom")) {
+                yield return new WaitForSeconds(0.50f);
+                GameManager.instance.hud.ZoomCrosshair.SetActive(false);
                 firstPersonAnimator.enabled = false;
                 handAndWeapon.SetActive(false);
             }
