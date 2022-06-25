@@ -113,7 +113,6 @@ public class Player : NetworkBehaviour {
             }
         }
 
-        deadModel.transform.position = controller.transform.position;
         deadModel.SetActive(true);
         confettiParticles.Play();
 
